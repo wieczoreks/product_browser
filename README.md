@@ -1,3 +1,5 @@
+Product Browser App created for Updating products in numerous languages
+
 <<<<<<< HEAD
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
