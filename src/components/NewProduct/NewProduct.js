@@ -19,6 +19,9 @@ class NewProduct extends Component {
         message:""
     }
     }
+    componentDidMount(){
+      console.log("componentDidMount NewProduct")
+  }
 
  newProductInputHandler = (e) =>{
    const prod = {...this.state.product}
@@ -49,66 +52,52 @@ class NewProduct extends Component {
           this.setState({product:prod});
       break;
       default:
-          this.setState=({
-            
-            product:{
-            prodName:" ",
-            prodCID:'',
-            prodUrl:'',
-            prodDescription:'',
-            catName:'',
-            categoryUrl:''
-          },
-          notification:false,
-          message:""
-        }) 
-      }}
+      return null
+  }
+}
  
-clearHandler = () => {
- console.log("clicked") 
-
-  this.setState({
-    product:{
-    product:{
-    prodName:" ",
-    prodCID:'',
-    prodUrl:'',
-    prodDescription:'',
-    catName:'',
-    categoryUrl:'',
-    
-  },
-  notification:false,
-  message:""
-}})
+  clearHandler = () => {
+     this.setState({
+        product:{
+          prodName:"",
+          prodCID:'',
+          prodUrl:'',
+          prodDescription:'',
+          catName:'',
+          categoryUrl:'',
+      },
+      notification:false,
+      message:""
+    })
 }
 
 notificationHandler = (message) => {
-  
- this.setState({message:message})
+ this.setState({ message:message, notification:true })
 }
 
-submitHandler = () => {
-const prod = this.state.product
-this.setState({notification:true})
-this.notificationHandler(` ${this.state.product.prodCID} `); 
-setTimeout(()=>{
-
-  
-  this.props.newProductSubmitHandler(prod);
-
+submitHandler = (e) => {
+    e.preventDefault();
+    const prod = this.state.product
+    this.notificationHandler(`${this.state.product.prodCID}`); 
+    setTimeout(()=>{
+      this.props.newProductSubmitHandler(prod);
+      this.props.timesNewProductHandler()
+      this.clearHandler();
  },3000)  
  
   }
 
 render(){
-  console.log("render NewProduct", this.state.message, this.state.message)
+  let message = this.state.message
+ 
      return (
       <Aux className="card">
         <form>
             <div className="form-group d-flex justify-content-end">
-              {this.state.notification ? <div className={classes.Notification+" d-flex justify-content-center align-items-center"} >Product <span className="font-weight-bold">{this.state.message} </span> added</div>:null}
-            <a href="#" onClick={this.timesNewProductHandler}><i style={{color:"red"}} className="fas fa-times fa-2x"></i></a>
+              {
+                this.state.notification ? <div className={classes.Notification + " d-flex justify-content-center align-items-center"} >Product <span className="font-weight-bold" > &nbsp;{` ${message} `}&nbsp; </span> added</div>:null
+              }
+            <a href="#" onClick={this.props.timesNewProductHandler}><i style={{color:"red"}} className="fas fa-times fa-2x"></i></a>
             </div>
             <div className="form-group d-flex flex-column align-items-start">
               <label htmlFor="prodName">Product name</label>

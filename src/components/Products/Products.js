@@ -3,7 +3,7 @@ import React from 'react';
 
 const Products = (props) => {
     
-    const prodArr = props.prodObj.products.map(el=>{
+    const prodArrr = props.prodArr.map(el=>{
         return  (<div className="card m-2 shadow" style={{width:"20rem"}} key={el.cid}>
 <a onClick={()=> props.productEditHandler(el)} href="#" style={{color:"lightgrey"}}><i className="fas fa-edit" style={{position:"absolute",top:"5px",right:"5px"}}></i></a>
 <div className="card-body">
@@ -22,7 +22,7 @@ const Products = (props) => {
      return (
         <div className="d-flex flex-wrap w-100 p-1 justify-content-center bg-light my-4" style={{margin:"0 auto"}}>
             
-        {prodArr}
+        {prodArrr}
       
       </div>
      )
