@@ -104,7 +104,7 @@ class ProductSummary extends Component {
     <input onChange={this.productUpdateHandler} type="text" className="form-control" id="catUrl"  value={this.state.product.categoryUrl} / >
   </div>
   <div className="form-group d-flex justify-content-around">
-    <button onClick={this.submitHandler} type="submit" className="btn btn-success">Save</button>
+    <button onClick={this.submitHandler} type="submit" className="btn btn-success">Update</button>
     <button onClick={()=> this.props.deleteProductHandler(this.state.product.prodCID)} type="submit" className="btn btn-danger">Delete</button>
   </div>
 </div>

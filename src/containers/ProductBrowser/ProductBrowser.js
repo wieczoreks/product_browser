@@ -108,7 +108,8 @@ class ProductBrowser extends Component {
             product:null,
             modalClicked:false,
             newProdClicked:false,
-            searchName:''
+            searchName:'',
+            searchType:''
         } 
     }
    
@@ -179,9 +180,9 @@ class ProductBrowser extends Component {
         })
         this.setState({prodArr:copyArr})
     }
-    searchProdHandler = (name) => {
-        console.log("searchProdHandle name",name)
-        this.setState({searchName:name})
+    searchProdHandler = (name,type) => {
+       
+        this.setState({searchName:name,searchBy:type})
        
     }
     render(){ 
@@ -189,10 +190,24 @@ class ProductBrowser extends Component {
         let filteredProducts = prodArr
         
         if(searchName.length>0){
-           
-            filteredProducts = prodArr.filter( el => {
-               return el.name.toLowerCase().includes(searchName.toLowerCase())      
-            })
+           switch(this.state.searchBy){
+              case "name":
+              filteredProducts = prodArr.filter( el => {
+                return el.name.toLowerCase().includes(searchName.toLowerCase())      
+              });
+              break;
+              case "cid":
+              filteredProducts = prodArr.filter( el => {
+                return el.cid.toLowerCase().includes(searchName.toLowerCase())      
+              });
+              break;
+              case "category":
+              filteredProducts = prodArr.filter( el => {
+                return el.subcategory[0].name.toLowerCase().includes(searchName.toLowerCase())      
+              });
+              
+           }
+            
           }
      return (
       <Auxx> 
