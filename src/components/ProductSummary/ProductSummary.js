@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Aux from '../../hoc/Aux';
+import Auxx from '../../hoc/Auxx';
 import classes from "./ProductSummary.module.css"
 
 class ProductSummary extends Component {
@@ -70,7 +70,7 @@ class ProductSummary extends Component {
  render(){
   let message = this.state.message
      return (
-      <Aux className="card">
+      <Auxx className="card">
         <div>
         <div className="form-group d-flex justify-content-end">
               {
@@ -108,7 +108,7 @@ class ProductSummary extends Component {
     <button onClick={()=> this.props.deleteProductHandler(this.state.product.prodCID)} type="submit" className="btn btn-danger">Delete</button>
   </div>
 </div>
-      </Aux>
+      </Auxx>
       );
  }
 }

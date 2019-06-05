@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Aux from '../../hoc/Aux'; 
+import Auxx from '../../hoc/Auxx'; 
 import {products} from '../../assets/products';
 import Pagination from "../../components/Pagination/Pagination";
 import Products from "../../components/Products/Products";
@@ -187,25 +187,15 @@ class ProductBrowser extends Component {
     render(){ 
         const {prodArr,searchName } = this.state;
         let filteredProducts = prodArr
-        console.log(filteredProducts,"filteredProducts")
+        
         if(searchName.length>0){
            
             filteredProducts = prodArr.filter( el => {
-                console.log(el.name,"el.name")
-                console.log(searchName.toLowerCase(),"searchName.toLowerCase()")
-                console.log(el.name.toLowerCase().includes(searchName.toLowerCase()),"el.name.toLowerCase().includes(searchName.toLowerCase())")
-                return el.name.toLowerCase().includes(searchName.toLowerCase())      
+               return el.name.toLowerCase().includes(searchName.toLowerCase())      
             })
-            console.log(filteredProducts,"filteredProducts AFTERFILTER")
-        }
-    
-        
-        
-        
-      
-
+          }
      return (
-      <Aux> 
+      <Auxx> 
             
           <Modal show={this.state.modalClicked} clicked={this.backdropModalTimesHandler}>
                 {this.state.modalClicked ?
@@ -225,16 +215,15 @@ class ProductBrowser extends Component {
                     timesNewProductHandler={this.backdropModalTimesHandler}
                      />
             </Modal>
-
                 <Search 
                     newProdHandler={this.newProdHandler}
                     searchProdHandler={this.searchProdHandler}
                     />
                 <Products 
-                productEditHandler={this.productEditHandler} prodArr={filteredProducts}/>
+                productEditHandler={this.productEditHandler} 
+                prodArr={filteredProducts}/>
                 < Pagination /> 
-
-      </Aux>
+      </Auxx>
       );
     }
 }

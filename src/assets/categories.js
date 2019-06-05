@@ -1,6 +1,4 @@
-export const categories = {
-      "header": "Categories",
-      "cat0": [
+export const categories = [
       { "name": "Actuators", "url": "http://new.abb.com/products/measurement-products/actuators",
         "cat1": [
         { "name": "Electrical Actuators", "url": "http://new.abb.com/products/measurement-products/actuators/electrical-actuators",
@@ -106,5 +104,5 @@ export const categories = {
         }
         ]
       }
-      ]
-    };
+      ];
+    

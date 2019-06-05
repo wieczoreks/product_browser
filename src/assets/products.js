@@ -1,6 +1,4 @@
-export const products = {
-    "header": "Products",
-    "products": [
+export const products = [
       {
         "name": "PME120",
         "cid":"9AAC204083", 
@@ -92,4 +90,4 @@ export const products = {
         ]
       }
     ]
- }
+ 
