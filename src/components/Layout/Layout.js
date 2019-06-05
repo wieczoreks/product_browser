@@ -2,6 +2,7 @@ import React from 'react';
 import Auxx from '../../hoc/Auxx';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
 import ToolbarAlt from '../../components/Navigation/ToolbarAlt/ToolbarAlt';
+import SideDrawer from '../Navigation/SideDrawer/SideDrawer';
 
 const Layout = (props) => {
  
@@ -9,6 +10,7 @@ const Layout = (props) => {
       <Auxx>
             <div className="bg-secondary">
                   <ToolbarAlt />
+                  <SideDrawer />
             </div>
             <main className="p-3 bg-light mt-5">
                   {props.children} 

@@ -5,7 +5,9 @@ const Logo = (props) => {
  
 return (
 
-<div><img src={image} width="50px" height="auto" /></div>
+<div>
+    <img src={image} width={props.width} height={props.height} />
+</div>
 
 );
 }
