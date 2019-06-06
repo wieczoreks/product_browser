@@ -6,17 +6,21 @@
     left:0;
     box-sizing:border-box;
     z-index:90;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background-color: #6c757d;
+    position:fixed;
+    
     }
-    .Toolbar nav {
-        height:100%;
-        
-    }
-    .uList {
-        margin:0;
-        padding:0;
-        list-style:none;
-        display:flex;
-        align-items:center;
-        height:100%;
-    }
-   
+   .Toolbar nav{
+       height: 100%
+   }
+   @media (max-width:499px){
+       .ToolbarAlt {
+           
+       }
+       .DesktopOnly{
+           display:none
+       }
+   }

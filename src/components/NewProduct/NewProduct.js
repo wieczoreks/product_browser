@@ -19,9 +19,7 @@ class NewProduct extends Component {
         message:""
     }
     }
-    componentDidMount(){
-      console.log("componentDidMount NewProduct")
-  }
+
 
  newProductInputHandler = (e) =>{
    const prod = {...this.state.product}
@@ -89,7 +87,7 @@ submitHandler = (e) => {
 
 render(){
   let message = this.state.message
- 
+  console.log("NewProduct render")
      return (
       <Auxx className="card">
         <form>

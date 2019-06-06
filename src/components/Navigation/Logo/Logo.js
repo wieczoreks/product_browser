@@ -5,7 +5,7 @@ const Logo = (props) => {
  
 return (
 
-<div>
+<div className="ml-2">
     <img src={image} width={props.width} height={props.height} />
 </div>
 

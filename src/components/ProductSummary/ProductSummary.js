@@ -68,6 +68,7 @@ class ProductSummary extends Component {
 
 
  render(){
+   console.log("ProductSummary render")
   let message = this.state.message
      return (
       <Auxx className="card">

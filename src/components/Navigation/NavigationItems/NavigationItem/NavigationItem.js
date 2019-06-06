@@ -1,9 +1,9 @@
 import React from 'react';
-import classes from './ToolItem.module.css';
-const ToolItem = (props) => {
+import classes from './NavigationItem.module.css';
+const NavigationItem = (props) => {
  
      return (
-        <li className={classes.ToolItem}>
+        <li className={classes.NavigationItem}>
         <a 
         href={props.link}
         className={props.active ? classes.active:null}>{props.children}</a>
@@ -11,4 +11,4 @@ const ToolItem = (props) => {
       );
 }
  
-export default ToolItem;
+export default NavigationItem;
