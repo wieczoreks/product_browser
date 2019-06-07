@@ -19,7 +19,9 @@ class NewProduct extends Component {
         message:""
     }
     }
-
+componentWillUpdate(){
+  console.log("UPDATING NEW PRODUCT")
+}
 
  newProductInputHandler = (e) =>{
    const prod = {...this.state.product}
@@ -91,11 +93,11 @@ render(){
      return (
       <Auxx className="card">
         <form>
-            <div className="form-group d-flex justify-content-end">
+            <div className="form-group d-flex justify-content-end ml-5">
               {
                 this.state.notification ? <div className={classes.Notification + " d-flex justify-content-center align-items-center"} >Product <span className="font-weight-bold" > &nbsp;{` ${message} `}&nbsp; </span> added</div>:null
               }
-            <a href="#" onClick={this.props.timesNewProductHandler}><i style={{color:"red"}} className="fas fa-times fa-2x"></i></a>
+            <span onClick={this.props.closedModal}><i style={{color:"red"}} className="fas fa-times fa-2x"></i></span>
             </div>
             <div className="form-group d-flex flex-column align-items-start">
               <label htmlFor="prodName">Product name</label>

@@ -77,7 +77,7 @@ class ProductSummary extends Component {
               {
                 this.state.notification ? <div className={classes.Notification + " d-flex justify-content-center align-items-center"} >Product <span className="font-weight-bold" > &nbsp;{` ${message} `}&nbsp; </span> updated</div>:null
               }
-            <a href="#" onClick={this.props.timesHandler}><i style={{color:"red"}} className="fas fa-times fa-2x"></i></a>
+            <span onClick={this.props.timesHandler}><i style={{color:"red"}} className="fas fa-times fa-2x"></i></span>
             </div>
   <div className="form-group d-flex flex-column align-items-start">
     <label htmlFor="prodName">Product name</label>
