@@ -19,9 +19,7 @@ class NewProduct extends Component {
         message:""
     }
     }
-componentWillUpdate(){
-  console.log("UPDATING NEW PRODUCT")
-}
+
 
  newProductInputHandler = (e) =>{
    const prod = {...this.state.product}
@@ -81,7 +79,7 @@ submitHandler = (e) => {
     this.notificationHandler(`${this.state.product.prodCID}`); 
     setTimeout(()=>{
       this.props.newProductSubmitHandler(prod);
-      this.props.timesNewProductHandler()
+      this.props.closedModal()
       this.clearHandler();
  },3000)  
  
@@ -89,7 +87,7 @@ submitHandler = (e) => {
 
 render(){
   let message = this.state.message
-  console.log("NewProduct render")
+ 
      return (
       <Auxx className="card">
         <form>

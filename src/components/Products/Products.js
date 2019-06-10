@@ -2,8 +2,12 @@ import React from 'react';
 
 
 const Products = (props) => {
-    
+    if(props.prodArr.length==0){
+      return null;
+    }
+    console.log(props.prodArr,"props.prodArr")
     const prodArrr = props.prodArr.map(el=>{
+      
         return  (
         <div className="card m-2 shadow" style={{width:"20rem"}} key={el.cid}>
           <span 

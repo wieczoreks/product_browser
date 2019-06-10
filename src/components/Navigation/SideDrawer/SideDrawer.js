@@ -13,7 +13,7 @@ const SideDrawer = (props) => {
     if(props.open){
         attachedClasses = [classes.SideDrawer,"bg-secondary",classes.Open]
     }
-    console.log(attachedClasses,"attachedClasses")
+   
     return (
         <Auxx>
             <Backdrop show={props.open} clicked={props.closed} />

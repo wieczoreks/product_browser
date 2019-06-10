@@ -7,6 +7,7 @@ class ProductSummary extends Component {
    super(props);
    this.state={
     product:{
+        prodId:props.product.id,
         prodName:props.product.name,
         prodCID:props.product.cid,
         prodUrl:props.product.url,
@@ -15,8 +16,8 @@ class ProductSummary extends Component {
         categoryUrl:props.product.subcategory[0].url
     },
     notification:false,
-    message:""
-}
+    message:"",
+  }
  }
  productUpdateHandler = (e) =>{
   const prod = {...this.state.product}
@@ -57,7 +58,7 @@ class ProductSummary extends Component {
  submitHandler = (e) => {
      e.preventDefault();
      const prod = this.state.product
-     this.notificationHandler(`${this.state.product.prodCID}`); 
+     this.notificationHandler(`${this.state.product.prodCID} updated`); 
      setTimeout(()=>{
        this.props.updateProductSubmitHandler(prod);
        this.props.timesHandler()
@@ -65,17 +66,27 @@ class ProductSummary extends Component {
   },3000)  
   
    }
+deleteProduct = ()=>{
+  const prod = this.state.product
+  console.log(prod,"ProductSummary deleteProduct")
+  this.notificationHandler(`${prod.prodCID} deleted`);
+  setTimeout(() => {
+  this.props.deleteProductHandler(prod)
+  this.props.timesHandler()
+  
+},3000)  
 
+}
 
  render(){
-   console.log("ProductSummary render")
+   console.log(this.state.product, "product")
   let message = this.state.message
      return (
       <Auxx className="card">
         <div>
         <div className="form-group d-flex justify-content-end">
               {
-                this.state.notification ? <div className={classes.Notification + " d-flex justify-content-center align-items-center"} >Product <span className="font-weight-bold" > &nbsp;{` ${message} `}&nbsp; </span> updated</div>:null
+                this.state.notification ? <div className={classes.Notification + " d-flex justify-content-center align-items-center"} >Product <span className="font-weight-bold" > &nbsp;{` ${message} `}&nbsp; </span></div>:null
               }
             <span onClick={this.props.timesHandler}><i style={{color:"red"}} className="fas fa-times fa-2x"></i></span>
             </div>
@@ -106,7 +117,7 @@ class ProductSummary extends Component {
   </div>
   <div className="form-group d-flex justify-content-around">
     <button onClick={this.submitHandler} type="submit" className="btn btn-success">Update</button>
-    <button onClick={()=> this.props.deleteProductHandler(this.state.product.prodCID)} type="submit" className="btn btn-danger">Delete</button>
+    <button onClick={this.deleteProduct} type="submit" className="btn btn-danger">Delete</button>
   </div>
 </div>
       </Auxx>
