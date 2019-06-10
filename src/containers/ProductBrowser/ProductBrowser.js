@@ -97,7 +97,7 @@ class ProductBrowser extends Component {
         console.log(copyArr,"deleteProductHandler")
    
         copyArr.forEach( el => {
-            if(el.id===prod.id){
+            if(el.id===prod.prodId){
                 copyArr.splice(copyArr.indexOf(el),1)
             }                
         })
