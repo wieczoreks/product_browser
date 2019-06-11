@@ -16,7 +16,7 @@ class ProductBrowser extends Component {
         super(props)
         this.state = {
             prodArr: [],
-            lan:null,
+            lan:"English",
             product:null,
             modalClicked:false,
             newProdClicked:false,
@@ -26,25 +26,42 @@ class ProductBrowser extends Component {
             error: false
         } 
     }
-   
-    componentDidMount() {
-      axios.get("/en.json").then((res)=>{
+   componentDidUpdate(){
+    if(this.state.lan!=="English"){
+      
+      switch(this.state.lan){
        
+        case "German":
+         axios.get("/de.json").then((res)=>{
+         let recArr = [];
+         for(let key in res.data.products){
+           recArr.push(res.data.products[key])
+         }
+ 
+         this.setState({ prodArr:recArr, loading:false})
+         }).catch(err=>{
+           this.setState({error:true})
+         })
+         break;
+         
+     }
+      return true;
+    } else {
+     
+      return false
+    }
+   }
+    componentDidMount() {
+      console.log("component Did mount")
+      axios.get("/en.json").then((res)=>{
         let recArr = [];
         for(let key in res.data.products){
           recArr.push(res.data.products[key])
         }
-
-      this.setState({
-          prodArr:recArr,
-          lan:res.data.lan,
-          loading:false,
-          
-        })
-      }).catch(err=>{
-        this.setState({error:true})
-      })
-    }
+        this.setState({prodArr:recArr, loading:false })
+      
+    })
+  }
 
     modalClosedNewProductHandler = () => {
         
@@ -55,7 +72,7 @@ class ProductBrowser extends Component {
       this.setState({modalClicked:false});
   }
     productEditHandler = (el) => {
-        console.log(el,"element")
+       
         this.setState({product:el, modalClicked:true})
     }
 
@@ -93,15 +110,14 @@ class ProductBrowser extends Component {
     deleteProductHandler = (prod) =>{
 
         const copyArr = [...this.state.prodArr];
-        console.log(prod,"deleteProductHandler")
-        console.log(copyArr,"deleteProductHandler")
+        
    
         copyArr.forEach( el => {
             if(el.id===prod.prodId){
                 copyArr.splice(copyArr.indexOf(el),1)
             }                
         })
-        console.log("array",copyArr);
+      
         this.setState({prodArr:copyArr})
         axios.put('/en/products.json',copyArr).then(resp=>
           {
@@ -145,9 +161,13 @@ class ProductBrowser extends Component {
        
         this.setState({searchName:name,searchBy:type})
            }
-
+    passLanguageHandlar = (lann) => {
+      this.setState({lan:lann})
+      console.log(lann,"lan");
+    }
+    
     render(){ 
-     
+      console.log(this.state.lan,"render");
         const {prodArr,searchName } = this.state;
         let filteredProducts = prodArr
         
@@ -199,12 +219,15 @@ class ProductBrowser extends Component {
                 <Search 
                     newProdHandler={this.newProdHandler}
                     searchProdHandler={this.searchProdHandler}
+                    passLanguageHandlar={this.passLanguageHandlar}
                     />
                 {this.state.loading ? this.state.error?<p>Server error. Please refresh the page</p>:<Spinner /> :
                   <Auxx>
                     <Products 
                       productEditHandler={this.productEditHandler}
+                      
                       prodArr={filteredProducts}/>
+                      
                     <Pagination />
                   </Auxx>}
 
