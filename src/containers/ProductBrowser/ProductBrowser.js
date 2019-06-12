@@ -17,6 +17,7 @@ class ProductBrowser extends Component {
         this.state = {
             prodArr: [],
             lan:"English",
+            firebaseLan:"English",
             product:null,
             modalClicked:false,
             newProdClicked:false,
@@ -26,39 +27,57 @@ class ProductBrowser extends Component {
             error: false
         } 
     }
-   componentDidUpdate(){
-    if(this.state.lan!=="English"){
-      
-      switch(this.state.lan){
-       
-        case "German":
-         axios.get("/de.json").then((res)=>{
-         let recArr = [];
-         for(let key in res.data.products){
-           recArr.push(res.data.products[key])
-         }
- 
-         this.setState({ prodArr:recArr, loading:false})
-         }).catch(err=>{
-           this.setState({error:true})
-         })
-         break;
-         
-     }
-      return true;
-    } else {
+    shouldComponentUpdate(nextProps, nextState){
+      console.log(this.state,"state",nextState,"nextState")
      
-      return false
-    }
-   }
-    componentDidMount() {
-      console.log("component Did mount")
-      axios.get("/en.json").then((res)=>{
+    return true
+   
+  }
+   componentDidUpdate(){
+     console.log(this.state.loading===true && this.state.lan!=this.state.firebaseLan,"CDU")
+    if(this.state.loading===true && this.state.lan!=this.state.firebaseLan){ 
+      if(this.state.lan==="German"){
+        this.setState({lan:"English"})
+        axios.get("/en.json").then((res)=>{
+              
+          let recArr = [];
+          for(let key in res.data.products){
+            recArr.push(res.data.products[key])
+          }
+          console.log("getting english")
+          this.setState({ prodArr:recArr, loading:false})
+          }).catch(err=>{
+            this.setState({error:true})
+          })
+        
+      }else if(this.state.lan==="English")
+      this.setState({lan:"German"})
+      axios.get("/de.json").then((res)=>{
+            console.log("getting german")
         let recArr = [];
         for(let key in res.data.products){
           recArr.push(res.data.products[key])
         }
-        this.setState({prodArr:recArr, loading:false })
+       
+        this.setState({ prodArr:recArr, loading:false})
+        }).catch(err=>{
+          this.setState({error:true})
+        })
+      /*if(this.state.lan !== this.state.firebaseLan){
+          
+        } */
+  }
+   }
+
+    componentDidMount() {
+      console.log("component Did mount")
+      axios.get("/en.json").then((res)=>{
+        console.log("GETTING DATA")
+        let recArr = [];
+        for(let key in res.data.products){
+          recArr.push(res.data.products[key])
+        }
+        this.setState({prodArr:recArr, loading:false, firebaseLan:res.data.lan})
       
     })
   }
@@ -162,12 +181,12 @@ class ProductBrowser extends Component {
         this.setState({searchName:name,searchBy:type})
            }
     passLanguageHandlar = (lann) => {
-      this.setState({lan:lann})
-      console.log(lann,"lan");
+      this.setState({firebaseLan:lann, loading:true})
+      console.log(lann,"lan passLanguageHandlar");
     }
     
     render(){ 
-      console.log(this.state.lan,"render");
+      console.log(this.state.lan,this.state.firebaseLan,"render lan");
         const {prodArr,searchName } = this.state;
         let filteredProducts = prodArr
         
