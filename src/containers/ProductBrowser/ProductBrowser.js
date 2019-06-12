@@ -16,6 +16,10 @@ class ProductBrowser extends Component {
         super(props)
         this.state = {
             prodArr: [],
+            prodArrEN:[],
+            prodArrENLan:"",
+            prodArrDE:[],
+            prodArrDELan:"",
             lan:"English",
             firebaseLan:"English",
             product:null,
@@ -27,64 +31,57 @@ class ProductBrowser extends Component {
             error: false
         } 
     }
-    shouldComponentUpdate(nextProps, nextState){
-      console.log(this.state,"state",nextState,"nextState")
-     
-    return true
-   
-  }
+
    componentDidUpdate(){
-     console.log(this.state.loading===true && this.state.lan!=this.state.firebaseLan,"CDU")
-    if(this.state.loading===true && this.state.lan!=this.state.firebaseLan){ 
+    
+    if(this.state.loading===true && this.state.lan != this.state.firebaseLan){ 
       if(this.state.lan==="German"){
-        this.setState({lan:"English"})
-        axios.get("/en.json").then((res)=>{
-              
-          let recArr = [];
-          for(let key in res.data.products){
-            recArr.push(res.data.products[key])
-          }
-          console.log("getting english")
-          this.setState({ prodArr:recArr, loading:false})
-          }).catch(err=>{
-            this.setState({error:true})
+        this.setState({
+          lan:this.state.firebaseLan, 
+          loading:false, 
+          prodArr:this.state.prodArrEN, 
           })
-        
+
       }else if(this.state.lan==="English")
-      this.setState({lan:"German"})
-      axios.get("/de.json").then((res)=>{
-            console.log("getting german")
-        let recArr = [];
-        for(let key in res.data.products){
-          recArr.push(res.data.products[key])
-        }
-       
-        this.setState({ prodArr:recArr, loading:false})
-        }).catch(err=>{
-          this.setState({error:true})
-        })
-      /*if(this.state.lan !== this.state.firebaseLan){
-          
-        } */
-  }
+        this.setState({
+          lan:this.state.firebaseLan, 
+          loading:false, 
+          prodArr:this.state.prodArrDE})
+    }
    }
 
     componentDidMount() {
-      console.log("component Did mount")
+      
       axios.get("/en.json").then((res)=>{
-        console.log("GETTING DATA")
+        console.log(res.data,"CHECK")
         let recArr = [];
         for(let key in res.data.products){
           recArr.push(res.data.products[key])
         }
-        this.setState({prodArr:recArr, loading:false, firebaseLan:res.data.lan})
+        this.setState({
+          prodArr:recArr, 
+          prodArrEN:recArr, 
+          loading:false,
+          prodArrENLan:res.data.lan})
       
-    })
+      })
+      axios.get("/de.json").then((res)=>{
+      let recArr = [];
+      for(let key in res.data.products){
+        recArr.push(res.data.products[key])
+      }
+      this.setState({
+        prodArrDE:recArr,
+        loading:false,
+        prodArrDELan:res.data.lan
+      })
+    
+  })
   }
 
     modalClosedNewProductHandler = () => {
         
-        this.setState({newProdClicked:false});
+      this.setState({newProdClicked:false});
     }
     modalClosedProductSummaryHandler = () => {
         
@@ -101,30 +98,39 @@ class ProductBrowser extends Component {
    
 
     newProductSubmitHandler = (prod) =>{
-       const LasteArrElem = this.state.prodArr[this.state.prodArr.length-1] 
-
-        const newProd = {
-          "id":LasteArrElem.id+1,
-            "name": prod.prodName,
-            "cid":prod.prodCID,   
-            "url":prod.prodUrl, 
-            "description": prod.prodDescription, 
-            "subcategory": [
-              { "name": prod.catName, "url": prod.categoryUrl }
-            ]
-        } 
-        const copyArr =[...this.state.prodArr];
+      console.log(prod,prod.prodLan, "prod")
+      const newProd = {
+        "id":prod.prodCID,
+        "name": prod.prodName,
+        "cid":prod.prodCID,   
+        "url":prod.prodUrl, 
+        "description": prod.prodDescription, 
+        "subcategory": [
+          { "name": prod.catName, "url": prod.categoryUrl }
+        ]
+      } 
+      let copyArr;
+      if(prod.prodLan==="English"){
+        copyArr = [...this.state.prodArrEN];
         copyArr.push(newProd);
-
-             this.setState({
-                prodArr:copyArr
-             });
-             
-         axios.post("/en/products.json", newProd ).then(resp=>{
-           
+        this.setState({prodArr:copyArr, prodArrEN:copyArr});
+        axios.post("/en/products.json", newProd ).then(resp=>{
          }).catch(err => {
            this.setState({error:true})
          })    
+      }
+
+      else if(prod.prodLan=="German"){
+        copyArr =[...this.state.prodArrDE];
+        copyArr.push(newProd);
+        this.setState({prodArr:copyArr, prodArrDE:copyArr});
+        axios.post("/de/products.json", newProd ).then(resp=>{
+         }).catch(err => {
+           this.setState({error:true})
+         })   
+      }
+
+        
     }
     deleteProductHandler = (prod) =>{
 
@@ -172,21 +178,23 @@ class ProductBrowser extends Component {
         axios.put('/en/products.json',copyArr).then(resp=>
          {
 
-         } ).catch(err=>{
-           this.setState({error:true})
+         } ).catch( err => {
+           this.setState({ error:true })
          })
     }
     searchProdHandler = (name,type) => {
        
         this.setState({searchName:name,searchBy:type})
            }
-    passLanguageHandlar = (lann) => {
-      this.setState({firebaseLan:lann, loading:true})
-      console.log(lann,"lan passLanguageHandlar");
+    passLanguageHandlar = (inputVal) => {
+      this.setState({firebaseLan:inputVal, loading:true})
+      console.log(inputVal,"lan passLanguageHandlar");
     }
     
+
     render(){ 
-      console.log(this.state.lan,this.state.firebaseLan,"render lan");
+      console.log(this.state.prodArrDE,"render DE lan");
+      console.log(this.state.prodArrEN,"render EN lan");
         const {prodArr,searchName } = this.state;
         let filteredProducts = prodArr
         

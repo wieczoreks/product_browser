@@ -8,6 +8,7 @@ class NewProduct extends Component {
         super(props)
       this.state={
         product:{
+            prodLan:"",
             prodName:"",
             prodCID:'',
             prodUrl:'',
@@ -23,8 +24,12 @@ class NewProduct extends Component {
 
  newProductInputHandler = (e) =>{
    const prod = {...this.state.product}
-   
+   console.log(e.target.value,e.target.id, "target products")
   switch(e.target.id){
+    case "prodLan":
+      prod.prodLan= e.target.value
+      this.setState({product:prod});
+      break;
     case "prodName":
       prod.prodName= e.target.value
       this.setState({product:prod});
@@ -76,6 +81,7 @@ notificationHandler = (message) => {
 submitHandler = (e) => {
     e.preventDefault();
     const prod = this.state.product
+    
     this.notificationHandler(`${this.state.product.prodCID}`); 
     setTimeout(()=>{
       this.props.newProductSubmitHandler(prod);
@@ -98,10 +104,22 @@ render(){
             <span onClick={this.props.closedModal}><i style={{color:"red"}} className="fas fa-times fa-2x"></i></span>
             </div>
             <div className="form-group d-flex flex-column align-items-start">
+              <label htmlFor="prodLan">Language version</label>
+              <select 
+              id="prodLan" 
+              style={{width:"300px"}} 
+              className="form-control" onChange=  {this.newProductInputHandler}>
+                <option value="English" className="selected">English</option>
+                <option value="German" >German</option>
+              </select>
+              
+            </div>
+            <div className="form-group d-flex flex-column align-items-start">
               <label htmlFor="prodName">Product name</label>
               <input onChange={this.newProductInputHandler} value={this.state.product.prodName} type="text" className="form-control" id="prodName" required / >
               
             </div>
+          
             <div className="form-group d-flex flex-column align-items-start">
               <label htmlFor="prodCID">Product CID</label>
               <input onChange={this.newProductInputHandler} type="text" className="form-control" id="prodCID"  value={this.state.product.prodCID} required / >
