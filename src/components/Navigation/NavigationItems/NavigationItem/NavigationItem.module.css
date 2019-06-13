@@ -11,13 +11,17 @@
    box-sizing: border-box;
    display: block;
 }
-
-.NavigationItem a:hover, .NavigationItem a:active, .NavigationItem a.active{
-    color: white;
-    box-sizing: border-box;
-    display: block
+.NavigationItem a.my-active{
+    color: white important!;
+    background-color: red;
+    box-sizing: border-box important!;
+    display: block important!;
 }
-
+.NavigationItem a:hover, .NavigationItem a:active{
+    color: white important!;
+    box-sizing: border-box important!;
+    display: block important!;
+}
 
 @media (min-width:500px){
     .NavigationItem {
@@ -34,7 +38,7 @@
        border-bottom:4px solid transparent;
        }
     
-    .NavigationItem a:hover, .NavigationItem a:active, .NavigationItem a.active{
+    .NavigationItem a:hover, .NavigationItem a:active, .NavigationItem a.my-active{
         color: white;
         border-bottom:4px solid #d39e00;
         box-sizing: border-box;

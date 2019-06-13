@@ -7,13 +7,14 @@ class ProductSummary extends Component {
    super(props);
    this.state={
     product:{
-        prodId:props.product.id,
-        prodName:props.product.name,
-        prodCID:props.product.cid,
-        prodUrl:props.product.url,
-        prodDescription:props.product.description,
-        catName:props.product.subcategory[0].name,
-        categoryUrl:props.product.subcategory[0].url
+        prodLan:this.props.lan,
+        prodId:this.props.product.id,
+        prodName:this.props.product.name,
+        prodCID:this.props.product.cid,
+        prodUrl:this.props.product.url,
+        prodDescription:this.props.product.description,
+        catName:this.props.product.subcategory[0].name,
+        categoryUrl:this.props.product.subcategory[0].url
     },
     notification:false,
     message:"",
@@ -23,7 +24,12 @@ class ProductSummary extends Component {
   const prod = {...this.state.product}
   
  switch(e.target.id){
-   case "prodName":
+  
+    case "prodLan":
+     prod.prodLan= e.target.value
+     this.setState({product:prod});
+     break;
+    case "prodName":
      prod.prodName= e.target.value
      this.setState({product:prod});
      break;
@@ -68,7 +74,7 @@ class ProductSummary extends Component {
    }
 deleteProduct = ()=>{
   const prod = this.state.product
-  console.log(prod,"ProductSummary deleteProduct")
+  
   this.notificationHandler(`${prod.prodCID} deleted`);
   setTimeout(() => {
   this.props.deleteProductHandler(prod)
@@ -79,7 +85,34 @@ deleteProduct = ()=>{
 }
 
  render(){
-   console.log(this.state.product, "product")
+  console.log("Render [Products Summary]")
+   let options;
+   if(this.state.product.prodLan==="German"){
+    
+    options= (<select 
+    id="prodLan" 
+    style={{width:"300px"}} 
+    className="form-control" 
+    onChange=  {this.productUpdateHandler}
+    value={this.state.product.prodLan}
+    >
+      <option value="English" >English</option>
+      <option value="German" >German</option>
+    </select>)
+   } else if(this.state.product.prodLan==="English") {
+    
+    options= (<select 
+      id="prodLan" 
+      style={{width:"300px"}} 
+      className="form-control" 
+      onChange=  {this.productUpdateHandler}
+      value={this.state.product.prodLan}
+      >
+        <option value="English">English</option>
+        <option value="German" >German</option>
+      </select>)
+   }
+
   let message = this.state.message
      return (
       <Auxx className="card">
@@ -90,6 +123,11 @@ deleteProduct = ()=>{
               }
             <span onClick={this.props.timesHandler}><i style={{color:"red"}} className="fas fa-times fa-2x"></i></span>
             </div>
+  <div className="form-group d-flex flex-column align-items-start">
+              <label htmlFor="prodLan">Language version</label>
+              {options}
+              
+  </div>
   <div className="form-group d-flex flex-column align-items-start">
     <label htmlFor="prodName">Product name</label>
     <input onChange={this.productUpdateHandler} type="text" className="form-control" id="prodName"  value={this.state.product.prodName} / >

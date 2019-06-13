@@ -33,7 +33,7 @@ class ProductBrowser extends Component {
     }
 
    componentDidUpdate(){
-    
+    console.log("COMPONENT DID UPDATE [Product browser]")
     if(this.state.loading===true && this.state.lan != this.state.firebaseLan){ 
       if(this.state.lan==="German"){
         this.setState({
@@ -51,9 +51,9 @@ class ProductBrowser extends Component {
    }
 
     componentDidMount() {
-      
+      console.log(this.props,"product browser DID mount ")
       axios.get("/en.json").then((res)=>{
-        console.log(res.data,"CHECK")
+        console.log("COMPONENT DID MOUNT AXIOS [Product browser]")
         let recArr = [];
         for(let key in res.data.products){
           recArr.push(res.data.products[key])
@@ -86,7 +86,7 @@ class ProductBrowser extends Component {
     modalClosedProductSummaryHandler = () => {
         
       this.setState({modalClicked:false});
-  }
+    }
     productEditHandler = (el) => {
        
         this.setState({product:el, modalClicked:true})
@@ -98,7 +98,7 @@ class ProductBrowser extends Component {
    
 
     newProductSubmitHandler = (prod) =>{
-      console.log(prod,prod.prodLan, "prod")
+      
       const newProd = {
         "id":prod.prodCID,
         "name": prod.prodName,
@@ -134,28 +134,41 @@ class ProductBrowser extends Component {
     }
     deleteProductHandler = (prod) =>{
 
-        const copyArr = [...this.state.prodArr];
-        
-   
-        copyArr.forEach( el => {
-            if(el.id===prod.prodId){
-                copyArr.splice(copyArr.indexOf(el),1)
-            }                
-        })
+        let copyArr;
       
-        this.setState({prodArr:copyArr})
-        axios.put('/en/products.json',copyArr).then(resp=>
-          {
- 
-          } ).catch(err=>{
-            this.setState({error:true})
-          })
-        
-    } 
+      if(prod.prodLan==="English"){
+        copyArr = [...this.state.prodArrEN];
+        copyArr.forEach( el => {
+          if(el.id===prod.prodId){
+              copyArr.splice(copyArr.indexOf(el),1);
+              
+          }                
+      })
+   
+        this.setState({prodArr:copyArr, prodArrEN:copyArr})
+        axios.put('/en/products.json',copyArr).then(resp=>{
+      }).catch( err => {
+       this.setState({ error:true })
+      })
+   
+    }  else if(prod.prodLan==="German"){
+      copyArr = [...this.state.prodArrDE];
+      copyArr.forEach( el => {
+        if(el.id===prod.prodId){
+            copyArr.splice(copyArr.indexOf(el),1);
+        }                
+    })
+    this.setState({prodArr:copyArr, prodArrDE:copyArr})
+    axios.put('/de/products.json',copyArr).then(resp=>{
+      } ).catch( err => {
+        this.setState({ error:true })
+      })
+    }
+  }
     
     updateProductSubmitHandler = (prod) => {
        
-       const copyArr = [...this.state.prodArr];
+       let copyArr = [...this.state.prodArr];
        const updatedProd = {
          "id":prod.prodId,
         "name": prod.prodName,
@@ -166,35 +179,51 @@ class ProductBrowser extends Component {
           { "name": prod.catName, "url": prod.categoryUrl }
         ]
         } 
-        
+      
+      if(prod.prodLan==="English"){
+        copyArr = [...this.state.prodArrEN];
         copyArr.forEach( el => {
-            if(el.id===prod.prodId){
-               
-                copyArr.splice(copyArr.indexOf(el),1);
-                copyArr.push(updatedProd);
-            }                
+          if(el.id===prod.prodId){
+              copyArr.splice(copyArr.indexOf(el),1);
+              copyArr.push(updatedProd);
+          }                
+      })
+      this.setState({prodArr:copyArr, prodArrEN:copyArr})
+      axios.put('/en/products.json',copyArr).then(resp=>{
+        } ).catch( err => {
+          this.setState({ error:true })
         })
-        this.setState({prodArr:copyArr})
-        axios.put('/en/products.json',copyArr).then(resp=>
-         {
-
-         } ).catch( err => {
-           this.setState({ error:true })
-         })
+      }
+      else if(prod.prodLan==="German"){
+        copyArr = [...this.state.prodArrDE];
+        copyArr.forEach( el => {
+          if(el.id===prod.prodId){
+              copyArr.splice(copyArr.indexOf(el),1);
+              copyArr.push(updatedProd);
+          }                
+      })
+      this.setState({prodArr:copyArr, prodArrDE:copyArr})
+      axios.put('/de/products.json',copyArr).then(resp=>{
+        } ).catch( err => {
+          this.setState({ error:true })
+        })
+      }
+        
+       
     }
     searchProdHandler = (name,type) => {
-       
         this.setState({searchName:name,searchBy:type})
-           }
+    }
+
     passLanguageHandlar = (inputVal) => {
+      
       this.setState({firebaseLan:inputVal, loading:true})
-      console.log(inputVal,"lan passLanguageHandlar");
+  
     }
     
 
     render(){ 
-      console.log(this.state.prodArrDE,"render DE lan");
-      console.log(this.state.prodArrEN,"render EN lan");
+      console.log("RENDER [Product browser]")
         const {prodArr,searchName } = this.state;
         let filteredProducts = prodArr
         
@@ -235,6 +264,7 @@ class ProductBrowser extends Component {
                     {this.state.modalClicked ?
                     <ProductSummary 
                         product={this.state.product}
+                        lan={this.state.firebaseLan}
                         timesHandler={this.modalClosedProductSummaryHandler}
                         deleteProductHandler={this.deleteProductHandler}
                         updateProductSubmitHandler={this.updateProductSubmitHandler}

@@ -8,6 +8,9 @@ class Search extends Component {
       lan:"English"
     }
 }
+componentDidMount(){
+  console.log("Component DID MOUNT [Search]")
+}
 searchByHandler = (e) => {
 this.setState({searchBy:e.target.value})
 }
@@ -24,7 +27,7 @@ searchChangeHandler = (e) => {
 
 
  render(){
-     
+  console.log("Render [SEARCH]") 
   return (
       <div className=" d-flex justify-content-between align-items-center w-100 bg-light">
         <div>

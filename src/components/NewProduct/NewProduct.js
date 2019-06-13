@@ -20,11 +20,13 @@ class NewProduct extends Component {
         message:""
     }
     }
-
+componentDidMount(){
+  console.log("Component Did Mount [New Product]")
+}
 
  newProductInputHandler = (e) =>{
    const prod = {...this.state.product}
-   console.log(e.target.value,e.target.id, "target products")
+   
   switch(e.target.id){
     case "prodLan":
       prod.prodLan= e.target.value
@@ -93,7 +95,7 @@ submitHandler = (e) => {
 
 render(){
   let message = this.state.message
- 
+  console.log("Render [New Product]")
      return (
       <Auxx className="card">
         <form>

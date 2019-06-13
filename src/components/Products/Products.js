@@ -1,16 +1,19 @@
 import React from 'react';
-
+import {NavLink,withRouter} from "react-router-dom";
 
 const Products = (props) => {
-  console.log("products")
+  
     if(props.prodArr.length===0){
       return null;
     }
     
     const prodArrr = props.prodArr.map((el,index)=>{
-      console.log("products rendered")
+      console.log("Render [Products]")
         return  (
         <div className="card m-2 shadow" style={{width:"20rem"}} key={el.cid}>
+          
+        
+          
           <span 
           href={el.cid} 
           className="badge badge-info" 
@@ -19,6 +22,7 @@ const Products = (props) => {
           href={index} 
           className="badge badge-info" 
           style={{position:"absolute",top:"5px",left:"100px"}}>{index}</span>
+
           <span 
           onClick={()=> props.productEditHandler(el)}  
           style={{color:"lightgrey"}}>
@@ -27,6 +31,7 @@ const Products = (props) => {
             style={{position:"absolute",top:"5px",right:"5px"}}>
             </i>
           </span>
+
           <div className="card-body">
             <h5 className="card-title">{el.name}</h5>
             <p className="card-text">{el.description}</p>
@@ -54,4 +59,4 @@ const Products = (props) => {
  
 
 
-export default Products;
+export default withRouter(Products);
