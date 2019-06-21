@@ -5,16 +5,20 @@ import ProductBrowser from "./containers/ProductBrowser/ProductBrowser";
 import { BrowserRouter } from 'react-router-dom';
 import {Route} from 'react-router-dom';
 import About from './components/About/About';
+import ProductDetails from './components/ProductDetails/ProductDetails'
+import CategoryBrowser from './containers/CartegoryBrowser/CategoryBrowser';
 
 function App() {
   return (
   <BrowserRouter>
     <div className=" container-fluid text-center">
      <Layout>
-      
+        
         <Route path="/about" exact component={About} />
         <Route path="/products" exact component={ProductBrowser} />
-       
+        <Route path="/categories" exact component={CategoryBrowser} />
+        <Route path="/en/products/:id/" exact component={ProductDetails} />
+        <Route path="/de/products/:id/" exact component={ProductDetails} />
      </Layout>
     </div>
   </BrowserRouter>

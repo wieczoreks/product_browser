@@ -282,7 +282,7 @@ class ProductBrowser extends Component {
                   <Auxx>
                     <Products 
                       productEditHandler={this.productEditHandler}
-                      
+                      lan={this.state.lan}
                       prodArr={filteredProducts}/>
                       
                     <Pagination />
