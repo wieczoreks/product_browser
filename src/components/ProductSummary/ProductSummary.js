@@ -95,6 +95,7 @@ deleteProduct = ()=>{
     className="form-control" 
     onChange=  {this.productUpdateHandler}
     value={this.state.product.prodLan}
+    disabled
     >
       <option value="English" >English</option>
       <option value="German" >German</option>
@@ -107,9 +108,10 @@ deleteProduct = ()=>{
       className="form-control" 
       onChange=  {this.productUpdateHandler}
       value={this.state.product.prodLan}
+      disabled
       >
-        <option value="English">English</option>
-        <option value="German" >German</option>
+        <option  value="English">English</option>
+        <option  value="German" >German</option>
       </select>)
    }
 

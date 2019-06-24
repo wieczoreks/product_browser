@@ -42,11 +42,12 @@ class ProductBrowser extends Component {
           prodArr:this.state.prodArrEN, 
           })
 
-      }else if(this.state.lan==="English")
+      } else if(this.state.lan==="English"){
         this.setState({
           lan:this.state.firebaseLan, 
           loading:false, 
           prodArr:this.state.prodArrDE})
+        }
     }
    }
 
