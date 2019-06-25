@@ -254,7 +254,7 @@ class ProductBrowser extends Component {
      return (
       <Auxx> 
            
-            <Modal show={this.state.newProdClicked} clicked={this.modalClosedNewProductHandler}>
+                <Modal show={this.state.newProdClicked} clicked={this.modalClosedNewProductHandler}>
                     <NewProduct 
                         newProductSubmitHandler={this.newProductSubmitHandler}
                         closedModal={this.modalClosedNewProductHandler}

@@ -74,7 +74,7 @@ deleteCategory = ()=>{
 }
 
  render(){
-  console.log("Render [Category Summary]")
+  
    let options;
    if(this.state.category.catLan==="German"){
     

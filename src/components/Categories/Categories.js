@@ -18,9 +18,12 @@ const Categories = (props) => {
               </span>}
 
               <a className="badge badge-secondary" target="_blank" href={`${res.url}`}>{`${res.name}`}</a>
-              <span style={{color:"lightgrey"}} onClick={()=>props.editCategoryHandler(res,"main")}>
+              <div>
+              <span className="p-1 m-1" onClick={()=>props.addCatHandler(res,"main")}><i className="fas fa-plus-circle"></i></span>
+              <span className="p-1 m-1"   onClick={()=>props.editCategoryHandler(res,"main")}>
                 <i className="fas fa-edit"></i>
               </span>
+              </div>
             </div>
             {res.cat1 && res.collapse ? 
               <div className="w-100">{res.cat1.map((cat1El,cat1Index)=>{
@@ -36,9 +39,12 @@ const Categories = (props) => {
                     </span>}
                   
                     <a className="badge badge-primary" target="_blank" href={`${cat1El.url}`}> {`${cat1El.name}`} </a>
-                    <span onClick={()=>props.editCategoryHandler(cat1El, "cat1")}>
-                      <i className="fas fa-edit"></i>
-                    </span>
+                    <div>
+                      <span className="p-1 m-1" onClick={()=>props.addCatHandler(cat1El,"cat1")}><i className="fas fa-plus-circle"></i></span>
+                      <span className="p-1 m-1" onClick={()=>props.editCategoryHandler(cat1El, "cat1")}>
+                        <i className="fas fa-edit"></i>
+                      </span>
+                    </div>
                   </div>
                   {cat1El.cat2 && cat1El.collapse  ? 
                   <div className="w-100">{cat1El.cat2.map((cat2El,cat2Index)=>{
@@ -54,9 +60,12 @@ const Categories = (props) => {
                         </span>}
                      
                       <a className="badge badge-success" target="_blank" href={`${cat2El.url}`}>{`${cat2El.name}`}</a>
-                      <span onClick={()=>props.editCategoryHandler(cat2El, "cat2")}>
+                      <div>
+                      <span className="p-1 m-1"  onClick={()=>props.addCatHandler(cat2El,"cat2")}><i className="fas fa-plus-circle"></i></span>
+                      <span className="p-1 m-1"  onClick={()=>props.editCategoryHandler(cat2El, "cat2")}>
                         <i className="fas fa-edit"></i>
                       </span>
+                      </div>
                       </div>
                               {cat2El.cat3 && cat2El.collapse  ? 
                               <div className="w-100">{cat2El.cat3.map((cat3El,cat3Index)=>{
@@ -72,11 +81,13 @@ const Categories = (props) => {
                                 </span>}
                               
                               <a className="badge badge-danger" target="_blank" href={`${cat3El.url}`}>{`${cat3El.name}`}</a>
+                              <div>
+                              
                               <span onClick={()=>props.editCategoryHandler(cat3El, "cat3")}>
                                 <i className="fas fa-edit"></i>
                               </span>
                               </div>
-                                        
+                              </div>  
                             </div>)
                             })}</div>:null}  
                     </div>)

@@ -6,6 +6,7 @@ import Modal from '../../UI/Modal/Modal';
 import CategorySummary from '../../components/CategorySummary/CategorySummary';
 import Categories from "../../components/Categories/Categories";
 import CategoryControls from '../../components/CategoryControls/CategoryControls';
+import NewCategory from '../../components/NewCategory/NewCategory';
 
 class CategoryBrowser extends Component {
     constructor(props){
@@ -19,6 +20,7 @@ class CategoryBrowser extends Component {
             loading:true,
             curCategory:null,
             modalClicked:false,
+            newCatClicked:false,
             str:null,
             error:false
         }
@@ -150,14 +152,21 @@ class CategoryBrowser extends Component {
       }
       }
      
-      editCategoryHandler = (el,str) => {
-       
+    editCategoryHandler = (el,str) => {
+      console.log(el,str,"editCategoryHandler") 
         this.setState({curCategory:el, str:str, modalClicked:true})
     }
-   
+    addCatHandler = (el,str) => {
+    console.log(el,str,"addCatHandler")
+    this.setState({newCatClicked:true, curCategory:el, str:str})
+    }
+
     modalClosedCategorySummaryHandler = () => {
         
       this.setState({modalClicked:false});
+    }
+    modalClosedNewCategoryHandler = () =>{
+      this.setState({newCatClicked:false});
     }
     deleteCategoryHandler=()=>{
       console.log("deleteCategoryHandler");
@@ -170,15 +179,20 @@ class CategoryBrowser extends Component {
       console.log(inputVal,"passLanguageHandler");
       this.setState({firebaseLan:inputVal, loading:true})
     }
-
-    newCatHandler=()=>{
-      console.log("newCatHandler")
+    newCategorySubmitHandler=()=>{
+      console.log("newCategorySubmitHandler")
     }
-
+    
     render(){
 console.log(this.state.lan,"RENDER LAN",this.state.firebaseLan,"firebaseLan")
     return (  
         <Auxx>
+                <Modal show={this.state.newCatClicked} clicked={this.modalClosedNewCategoryHandler}>
+                    <NewCategory 
+                        newCategorySubmitHandler={this.newCategorySubmitHandler}
+                        closedModal={this.modalClosedNewCategoryHandler}
+                        />
+                </Modal>
            <Modal show={this.state.modalClicked} clicked={this.modalClosedCategorySummaryHandler}>
                     {this.state.modalClicked ?
                     <CategorySummary
@@ -193,7 +207,7 @@ console.log(this.state.lan,"RENDER LAN",this.state.firebaseLan,"firebaseLan")
               </Modal>
               <CategoryControls
                passLanguageHandler={this.passLanguageHandler}
-               newCatHandler={this.newCatHandler}
+               addCatHandler={this.addCatHandler}
                />      
         {this.state.loading ? this.state.error ? <p>Server error. Please refresh the page</p>:<Spinner /> :
             
@@ -209,7 +223,8 @@ console.log(this.state.lan,"RENDER LAN",this.state.firebaseLan,"firebaseLan")
                 cat2RollDownHandler={this.cat2RollDownHandler}
                 cat3RollUpHandler={this.cat3RollUpHandler}
                 cat3RollDownHandler={this.cat3RollDownHandler}
-                editCategoryHandler={this.editCategoryHandler} />
+                editCategoryHandler={this.editCategoryHandler}
+                addCatHandler={this.addCatHandler} />
             </Auxx>}
         </Auxx>
         );
