@@ -4,7 +4,7 @@ import classes from "./NavigationItems.module.css";
     
 
 const NavigationItems = (props) => {
- console.log(props,"NavigationitemS")
+ 
 return (
     
         <ul className={classes.NavigationItemsUL}>

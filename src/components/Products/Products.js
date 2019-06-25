@@ -4,7 +4,7 @@ import {Link,withRouter} from "react-router-dom";
 const Products = (props) => {
    
     let prodArrr;
-    if(props.lan=="English"){
+    if(props.lan==="English"){
       
           prodArrr = props.prodArr.map((el,index)=>{
       
@@ -58,7 +58,7 @@ const Products = (props) => {
       })
 
     }
-    else if(props.lan=="German"){
+    else if(props.lan==="German"){
       prodArrr = props.prodArr.map((el,index)=>{
       
         return  (

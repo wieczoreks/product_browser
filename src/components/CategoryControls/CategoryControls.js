@@ -23,7 +23,7 @@ class CategoryControls extends Component {
                 <option value="English" className="selected">English</option>
                 <option value="German" >German</option>
         </select>
-        <span onClick={this.props.addCatHandler}><i className="fas fa-plus-circle fa-2x"></i></span>
+        <span onClick={()=>this.props.addMainCatHandler("main")}><i className="fas fa-plus-circle fa-2x"></i></span>
         
       
       </div>

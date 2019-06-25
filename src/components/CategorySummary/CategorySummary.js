@@ -19,6 +19,7 @@ class CategorySummary extends Component {
     },
     notification:false,
     message:"",
+    str:this.props.str
   }
  }
  categoryUpdateHandler = (e) =>{
@@ -135,7 +136,7 @@ deleteCategory = ()=>{
   
   <div className="form-group d-flex justify-content-around">
     <button onClick={this.submitHandler} type="submit" className="btn btn-success">Update</button>
-    <button onClick={this.deleteCategory} type="submit" className="btn btn-danger">Delete</button>
+    <button onClick={this.deleteCategory} type="submit" className="btn btn-danger"><span><i className="fas fa-trash-alt m-2"></i></span>Delete</button>
   </div>
 </div>
       </Auxx>

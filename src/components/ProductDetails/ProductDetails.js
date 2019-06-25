@@ -44,7 +44,7 @@ class ProductDetails extends Component {
             }
 
             let el = recArr.filter(item=>{
-                return item.id == this.props.match.params.id
+                return item.id === this.props.match.params.id
             })
             console.log("EN AXIOS",el)
            this.setState({
@@ -72,7 +72,7 @@ class ProductDetails extends Component {
             }
 
             let el = recArr.filter(item=>{
-                return item.id == this.props.match.params.id
+                return item.id === this.props.match.params.id
             })
             console.log("DE AXIOS",el)
            this.setState({

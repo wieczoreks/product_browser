@@ -21,7 +21,7 @@ class CategoryBrowser extends Component {
             curCategory:null,
             modalClicked:false,
             newCatClicked:false,
-            str:null,
+            str:"",
             error:false
         }
     }
@@ -53,8 +53,8 @@ class CategoryBrowser extends Component {
     }
 
     componentDidUpdate(){
-      console.log(this.state.loading, "loading",this.state.lan,"lan",this.state.firebaseLan,"firebaseLan","COMPONENT DID UPDATE [Category browser]")
-      if(this.state.loading===true && this.state.lan != this.state.firebaseLan){ 
+      
+      if(this.state.loading===true && this.state.lan !== this.state.firebaseLan){ 
         if(this.state.firebaseLan==="German"){
          
           this.setState({
@@ -152,14 +152,89 @@ class CategoryBrowser extends Component {
       }
       }
      
-    editCategoryHandler = (el,str) => {
-      console.log(el,str,"editCategoryHandler") 
-        this.setState({curCategory:el, str:str, modalClicked:true})
-    }
-    addCatHandler = (el,str) => {
-    console.log(el,str,"addCatHandler")
-    this.setState({newCatClicked:true, curCategory:el, str:str})
-    }
+      editCategoryHandler = (el,str) => {
+        console.log(el,str,"editCategoryHandler") 
+          this.setState({curCategory:el, str:str, modalClicked:true})
+      }
+
+      addCatHandler = (el,str) => {
+      console.log(el,str,"addCatHandler")
+      this.setState({newCatClicked:true, str:str,curCategory:el})
+      }
+
+      addMainCatHandler= (str) => {
+      console.log(str,"addMainCatHandler")
+      this.setState({newCatClicked:true, str:str})
+      }
+
+      newCategorySubmitHandler = (cat,str) => {
+        console.log(cat,"newCategorySubmitHandler",str)
+        let newCat = {
+          id:cat.catCID,
+          cid:cat.catCID,
+          name: cat.catName,
+          url:cat.catUrl,
+         
+        } 
+
+        let copyArr;
+        if(str==="main"){
+          if(cat.catLan==="English"){
+            copyArr = [...this.state.catEN];
+            copyArr.push(newCat);
+            this.setState({cat:copyArr, catEN:copyArr});
+            axios.post("/en/category.json", newCat ).then(resp=>{
+             }).catch(err => {
+               this.setState({error:true})
+             })    
+          }
+    
+          else if(cat.catLan==="German"){
+            copyArr =[...this.state.catDE];
+            copyArr.push(newCat);
+            this.setState({cat:copyArr, catDE:copyArr});
+            axios.post("/de/category.json", newCat ).then(resp=>{
+             }).catch(err => {
+               this.setState({error:true})
+             })   
+          }
+        } else if(str==="cat1"){
+          if(cat.catLan==="English"){
+            copyArr = [...this.state.catEN];
+            
+            copyArr.forEach((el,index)=>{
+              if(el.id===this.state.curCategory.id){
+                el.cat1.push(newCat);
+              }
+            })
+            console.log(copyArr,"after PUSh")
+            this.setState({cat:copyArr, catEN:copyArr});
+
+            axios.put("/en/category.json", copyArr ).then(resp=>{
+              console.log(resp,"RESP")
+             }).catch(err => {
+               this.setState({error:true})
+             })    
+          }
+          
+          else if(cat.catLan==="German"){
+            copyArr =[...this.state.catDE];
+            copyArr.forEach((el,index)=>{
+              if(el.id===cat.catId){
+                el.cat1.push(newCat);
+              }
+            })
+           
+            this.setState({cat:copyArr, catDE:copyArr});
+            axios.put("/de/category.json", copyArr ).then(resp=>{
+             }).catch(err => {
+               this.setState({error:true})
+             })   
+          }
+
+        }
+        
+      }
 
     modalClosedCategorySummaryHandler = () => {
         
@@ -168,27 +243,58 @@ class CategoryBrowser extends Component {
     modalClosedNewCategoryHandler = () =>{
       this.setState({newCatClicked:false});
     }
-    deleteCategoryHandler=()=>{
-      console.log("deleteCategoryHandler");
+    deleteCategoryHandler=(cat)=>{
+      console.log(cat,cat.catStr,"deleteCategoryHandler");
+      let copyArr;
+      if(cat.catStr==="main"){
+        if(cat.catLan==="English"){
+          copyArr = [...this.state.catEN];
+          copyArr.forEach( el => {
+            if(el.id===cat.catId){
+                copyArr.splice(copyArr.indexOf(el),1);
+                
+            }                
+        })
+     
+          this.setState({cat:copyArr, catEN:copyArr})
+          axios.put('/en/category.json',copyArr).then(resp=>{
+        }).catch( err => {
+         this.setState({ error:true })
+        })
+     
+      }  else if(cat.catLan==="German"){
+        copyArr = [...this.state.catDE];
+        copyArr.forEach( el => {
+          if(el.id===cat.catId){
+              copyArr.splice(copyArr.indexOf(el),1);
+          }                
+      })
+      this.setState({cat:copyArr, catDE:copyArr})
+      axios.put('/de/category.json',copyArr).then(resp=>{
+        } ).catch( err => {
+          this.setState({ error:true })
+        })
+      }  
+      }
+      
       
     }
-    updateCategorySubmitHandler = () => {
-      console.log("updateCategorySubmitHandler");
+    updateCategorySubmitHandler = (cat,str) => {
+      console.log(cat,str,"updateCategorySubmitHandler");
     }
     passLanguageHandler=(inputVal)=>{
       console.log(inputVal,"passLanguageHandler");
       this.setState({firebaseLan:inputVal, loading:true})
     }
-    newCategorySubmitHandler=()=>{
-      console.log("newCategorySubmitHandler")
-    }
+ 
     
     render(){
-console.log(this.state.lan,"RENDER LAN",this.state.firebaseLan,"firebaseLan")
+      console.log("RENDER", this.state.str)
     return (  
         <Auxx>
                 <Modal show={this.state.newCatClicked} clicked={this.modalClosedNewCategoryHandler}>
-                    <NewCategory 
+                    <NewCategory
+                        str={this.state.str} 
                         newCategorySubmitHandler={this.newCategorySubmitHandler}
                         closedModal={this.modalClosedNewCategoryHandler}
                         />
@@ -207,13 +313,13 @@ console.log(this.state.lan,"RENDER LAN",this.state.firebaseLan,"firebaseLan")
               </Modal>
               <CategoryControls
                passLanguageHandler={this.passLanguageHandler}
-               addCatHandler={this.addCatHandler}
+               addMainCatHandler={this.addMainCatHandler}
                />      
         {this.state.loading ? this.state.error ? <p>Server error. Please refresh the page</p>:<Spinner /> :
             
             <Auxx>
              
-              <Categories 
+              <Categories
                 catArr={this.state.cat}
                 rollUpHandler={this.rollUpHandler}
                 rollDownHandler={this.rollDownHandler}

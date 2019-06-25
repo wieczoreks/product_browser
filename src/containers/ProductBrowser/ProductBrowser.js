@@ -34,7 +34,7 @@ class ProductBrowser extends Component {
 
    componentDidUpdate(){
     console.log("COMPONENT DID UPDATE [Product browser]")
-    if(this.state.loading===true && this.state.lan != this.state.firebaseLan){ 
+    if(this.state.loading===true && this.state.lan !== this.state.firebaseLan){ 
       if(this.state.lan==="German"){
         this.setState({
           lan:this.state.firebaseLan, 
@@ -121,7 +121,7 @@ class ProductBrowser extends Component {
          })    
       }
 
-      else if(prod.prodLan=="German"){
+      else if(prod.prodLan==="German"){
         copyArr =[...this.state.prodArrDE];
         copyArr.push(newProd);
         this.setState({prodArr:copyArr, prodArrDE:copyArr});

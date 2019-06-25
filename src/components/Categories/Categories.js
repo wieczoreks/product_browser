@@ -17,9 +17,10 @@ const Categories = (props) => {
                 <i className="fas fa-chevron-circle-up"></i>
               </span>}
 
-              <a className="badge badge-secondary" target="_blank" href={`${res.url}`}>{`${res.name}`}</a>
+              <a className="badge badge-secondary" target="_blank" 
+             rel="noopener noreferrer" href={`${res.url}`}>{`${res.name}`}</a>
               <div>
-              <span className="p-1 m-1" onClick={()=>props.addCatHandler(res,"main")}><i className="fas fa-plus-circle"></i></span>
+              <span className="p-1 m-1" onClick={()=>props.addCatHandler(res,"cat1")}><i className="fas fa-plus-circle"></i></span>
               <span className="p-1 m-1"   onClick={()=>props.editCategoryHandler(res,"main")}>
                 <i className="fas fa-edit"></i>
               </span>
@@ -38,9 +39,9 @@ const Categories = (props) => {
                       <i className="fas fa-chevron-circle-up"></i>
                     </span>}
                   
-                    <a className="badge badge-primary" target="_blank" href={`${cat1El.url}`}> {`${cat1El.name}`} </a>
+                    <a className="badge badge-primary" rel="noopener noreferrer" target="_blank" href={`${cat1El.url}`}> {`${cat1El.name}`} </a>
                     <div>
-                      <span className="p-1 m-1" onClick={()=>props.addCatHandler(cat1El,"cat1")}><i className="fas fa-plus-circle"></i></span>
+                      <span className="p-1 m-1" onClick={()=>props.addCatHandler(cat1El,"cat2")}><i className="fas fa-plus-circle"></i></span>
                       <span className="p-1 m-1" onClick={()=>props.editCategoryHandler(cat1El, "cat1")}>
                         <i className="fas fa-edit"></i>
                       </span>
@@ -59,9 +60,9 @@ const Categories = (props) => {
                         <i className="fas fa-chevron-circle-up"></i>
                         </span>}
                      
-                      <a className="badge badge-success" target="_blank" href={`${cat2El.url}`}>{`${cat2El.name}`}</a>
+                      <a className="badge badge-success" rel="noopener noreferrer" target="_blank" href={`${cat2El.url}`}>{`${cat2El.name}`}</a>
                       <div>
-                      <span className="p-1 m-1"  onClick={()=>props.addCatHandler(cat2El,"cat2")}><i className="fas fa-plus-circle"></i></span>
+                      <span className="p-1 m-1"  onClick={()=>props.addCatHandler(cat2El,"cat3")}><i className="fas fa-plus-circle"></i></span>
                       <span className="p-1 m-1"  onClick={()=>props.editCategoryHandler(cat2El, "cat2")}>
                         <i className="fas fa-edit"></i>
                       </span>
@@ -80,7 +81,7 @@ const Categories = (props) => {
                                 <i className="fas fa-chevron-circle-up"></i>
                                 </span>}
                               
-                              <a className="badge badge-danger" target="_blank" href={`${cat3El.url}`}>{`${cat3El.name}`}</a>
+                              <a className="badge badge-danger" rel="noopener noreferrer" target="_blank" href={`${cat3El.url}`}>{`${cat3El.name}`}</a>
                               <div>
                               
                               <span onClick={()=>props.editCategoryHandler(cat3El, "cat3")}>
