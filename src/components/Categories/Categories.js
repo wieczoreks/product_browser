@@ -9,13 +9,14 @@ const Categories = (props) => {
             <div key={res.id} className="d-flex flex-column p-1 align-items-start">
             <div className="d-flex flex-row justify-content-between shadow p-4 w-100">
               
-              {res.collapse ?
+              {res.hasOwnProperty("cat1") ? res.collapse ? 
               <span onClick={()=>props.rollUpHandler(res.id, index)}>
                 <i className="fas fa-caret-square-down"></i>
-              </span> :
+              </span>:
               <span onClick={()=>props.rollDownHandler(res.id, index)}>
                 <i className="fas fa-chevron-circle-up"></i>
-              </span>}
+              </span>:
+              <span><i className="fas fa-ban"></i></span>}
 
               <a className="badge badge-secondary" target="_blank" 
              rel="noopener noreferrer" href={`${res.url}`}>{`${res.name}`}</a>

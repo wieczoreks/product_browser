@@ -168,72 +168,57 @@ class CategoryBrowser extends Component {
       }
 
       newCategorySubmitHandler = (cat,str) => {
-        console.log(cat,"newCategorySubmitHandler",str)
+        let copyArr;
         let newCat = {
           id:cat.catCID,
           cid:cat.catCID,
           name: cat.catName,
           url:cat.catUrl,
-         
-        } 
-
-        let copyArr;
-        if(str==="main"){
-          if(cat.catLan==="English"){
-            copyArr = [...this.state.catEN];
-            copyArr.push(newCat);
-            this.setState({cat:copyArr, catEN:copyArr});
-            axios.post("/en/category.json", newCat ).then(resp=>{
-             }).catch(err => {
-               this.setState({error:true})
-             })    
-          }
-    
-          else if(cat.catLan==="German"){
-            copyArr =[...this.state.catDE];
-            copyArr.push(newCat);
-            this.setState({cat:copyArr, catDE:copyArr});
-            axios.post("/de/category.json", newCat ).then(resp=>{
-             }).catch(err => {
-               this.setState({error:true})
-             })   
-          }
-        } else if(str==="cat1"){
-          if(cat.catLan==="English"){
-            copyArr = [...this.state.catEN];
-            
-            copyArr.forEach((el,index)=>{
-              if(el.id===this.state.curCategory.id){
-                el.cat1.push(newCat);
-              }
-            })
-            console.log(copyArr,"after PUSh")
-            this.setState({cat:copyArr, catEN:copyArr});
-
-            axios.put("/en/category.json", copyArr ).then(resp=>{
-              console.log(resp,"RESP")
-             }).catch(err => {
-               this.setState({error:true})
-             })    
-          }
-          
-          else if(cat.catLan==="German"){
-            copyArr =[...this.state.catDE];
-            copyArr.forEach((el,index)=>{
-              if(el.id===cat.catId){
-                el.cat1.push(newCat);
-              }
-            })
-           
-            this.setState({cat:copyArr, catDE:copyArr});
-            axios.put("/de/category.json", copyArr ).then(resp=>{
-             }).catch(err => {
-               this.setState({error:true})
-             })   
-          }
-
+          collapse:false
         }
-        
+
+        switch(cat.catLan){
+          case "English":
+            copyArr = [...this.state.catEN];
+            break;
+          case "German":
+            copyArr =[...this.state.catDE];
+            break;
+          default:
+            break;
+          }
+
+        if(str === "main"){
+          copyArr.push(newCat);
+        } else if ( str==="cat1" ){
+          copyArr.forEach((el)=>{
+          if(el.id===this.state.curCategory.id){
+              if(el.hasOwnProperty("cat1")){
+                  el.cat1.push(newCat);
+                  el.collapse=true
+                } else {
+                  el.cat1 = [];
+                  el.cat1.push(newCat)
+                  el.collapse=true
+                }
+              }
+              }) 
+              }
+            
+        if(cat.catLan==="English"){
+           this.setState({cat:copyArr, catEN:copyArr});
+          axios.put("/en/category.json", copyArr ).then(resp=>{
+           }).catch(err => {
+             this.setState({error:true})
+           })    
+        } else if(cat.catLan==="German"){
+                   
+          this.setState({cat:copyArr, catDE:copyArr});
+          axios.put("/de/category.json", copyArr ).then(resp=>{
+           }).catch(err => {
+             this.setState({error:true})
+           })   
+        }
       }
 
     modalClosedCategorySummaryHandler = () => {
@@ -246,38 +231,54 @@ class CategoryBrowser extends Component {
     deleteCategoryHandler=(cat)=>{
       console.log(cat,cat.catStr,"deleteCategoryHandler");
       let copyArr;
-      if(cat.catStr==="main"){
-        if(cat.catLan==="English"){
+      switch(cat.catLan){
+        case "English":
           copyArr = [...this.state.catEN];
+          break;
+        case "German":
+          copyArr =[...this.state.catDE];
+          break;
+        default:
+          break;
+        }
+
+      if(cat.catStr==="main"){
           copyArr.forEach( el => {
             if(el.id===cat.catId){
                 copyArr.splice(copyArr.indexOf(el),1);
-                
             }                
-        })
-     
-          this.setState({cat:copyArr, catEN:copyArr})
-          axios.put('/en/category.json',copyArr).then(resp=>{
-        }).catch( err => {
-         this.setState({ error:true })
-        })
-     
-      }  else if(cat.catLan==="German"){
-        copyArr = [...this.state.catDE];
+          })
+      } else if (cat.catStr==="cat1"){
         copyArr.forEach( el => {
-          if(el.id===cat.catId){
-              copyArr.splice(copyArr.indexOf(el),1);
-          }                
-      })
-      this.setState({cat:copyArr, catDE:copyArr})
-      axios.put('/de/category.json',copyArr).then(resp=>{
-        } ).catch( err => {
-          this.setState({ error:true })
+          if(el.hasOwnProperty("cat1")){
+            el.cat1.forEach(cat1El=>{
+               if(cat1El.id===cat.catId){
+                 el.cat1.splice(el.cat1.indexOf(cat1El),1);
+                 if(el.cat1.length===0){
+                  delete el.cat1
+                 }
+                  el.collapse=true;
+                 }
+             })  
+          } 
+                        
         })
-      }  
       }
-      
-      
+      console.log(copyArr,"After DELETE")
+      if(cat.catLan==="English"){
+        this.setState({cat:copyArr, catEN:copyArr});
+       axios.put("/en/category.json", copyArr ).then(resp=>{
+        }).catch(err => {
+          this.setState({error:true})
+        })    
+     } else if(cat.catLan==="German"){
+                
+       this.setState({cat:copyArr, catDE:copyArr});
+       axios.put("/de/category.json", copyArr ).then(resp=>{
+        }).catch(err => {
+          this.setState({error:true})
+        })   
+     }
     }
     updateCategorySubmitHandler = (cat,str) => {
       console.log(cat,str,"updateCategorySubmitHandler");
