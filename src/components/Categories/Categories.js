@@ -32,13 +32,14 @@ const Categories = (props) => {
                 return(
                 <div key={cat1El.id} className="p-0 ml-4">
                   <div  style={{color:"#007bff"}} className="d-flex flex-row justify-content-between shadow p-4 w-100">
-                    {cat1El.collapse ?
+                    {cat1El.hasOwnProperty("cat2") ? cat1El.collapse ?
                     <span onClick={()=>props.cat1RollUpHandler(cat1El.id, index, cat1Index)}>
                       <i className="fas fa-caret-square-down"></i>
                     </span>:
                     <span onClick={()=>props.cat1RollDownHandler(cat1El.id, index, cat1Index)}>
                       <i className="fas fa-chevron-circle-up"></i>
-                    </span>}
+                    </span>:
+                    <span><i className="fas fa-ban"></i></span>}
                   
                     <a className="badge badge-primary" rel="noopener noreferrer" target="_blank" href={`${cat1El.url}`}> {`${cat1El.name}`} </a>
                     <div>
@@ -53,13 +54,14 @@ const Categories = (props) => {
                       return(
                     <div key={cat2El.id} className="p-0 ml-4">
                       <div className="d-flex flex-row justify-content-between shadow p-4 w-100" style={{color:"#28a745"}}>
-                        {cat2El.collapse?
+                        {cat2El.hasOwnProperty("cat3") ? cat2El.collapse?
                         <span onClick={()=>props.cat2RollUpHandler(cat2El.id, index, cat1Index, cat2Index)}>
                           <i className="fas fa-caret-square-down"></i>
                         </span>:
                         <span onClick={()=>props.cat2RollDownHandler(cat2El.id, index, cat1Index, cat2Index)}>
                         <i className="fas fa-chevron-circle-up"></i>
-                        </span>}
+                        </span>:
+                        <span><i className="fas fa-ban"></i></span>}
                      
                       <a className="badge badge-success" rel="noopener noreferrer" target="_blank" href={`${cat2El.url}`}>{`${cat2El.name}`}</a>
                       <div>
@@ -74,13 +76,14 @@ const Categories = (props) => {
                               return(
                             <div key={cat3El.id} className="p-0 ml-4">
                               <div className="d-flex flex-row justify-content-between shadow p-4 w-100" style={{color:"#dc3545"}}>
-                                {cat3El.collapse?
+                                {cat3El.hasOwnProperty("cat4")? cat3El.collapse?
                                 <span onClick={()=>props.cat3RollUpHandler(cat3El.id, index, cat1Index, cat2Index, cat3Index)}>
                                   <i className="fas fa-caret-square-down"></i>
                                 </span>:
                                 <span onClick={()=>props.cat3RollDownHandler(cat3El.id, index, cat1Index, cat2Index, cat3Index)}>
                                 <i className="fas fa-chevron-circle-up"></i>
-                                </span>}
+                                </span>:
+                                <span><i className="fas fa-ban"></i></span>}
                               
                               <a className="badge badge-danger" rel="noopener noreferrer" target="_blank" href={`${cat3El.url}`}>{`${cat3El.name}`}</a>
                               <div>
