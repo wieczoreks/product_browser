@@ -74,18 +74,15 @@ class CategoryBrowser extends Component {
       }
      }
   
-
     rollDownHandler = (id, index) => {
         let newCatArr = [...this.state.cat];
-        console.log("rollupHandler", this.state.firebaseLan,"lan", id,"id");
         if(id){
           newCatArr[index].collapse=true;
             this.setState({cat:newCatArr});
       } 
     }
 
-    rollUpHandler = (id, index) => {
-      console.log(id,"rollupHandler");
+    rollUpHandler = (id, index) => {  
       let newCatArr = [...this.state.cat];
       if(id){ 
         newCatArr[index].collapse=false;
@@ -93,10 +90,7 @@ class CategoryBrowser extends Component {
       }
       }
       cat1RollDownHandler = (id, index, cat1Index) => {
-     
-        console.log(id,index,cat1Index,"cat1RollDownHandler");
-        let newCatArr = [...this.state.cat];
-        
+        let newCatArr = [...this.state.cat]; 
         if(id){
           newCatArr[index].cat1[cat1Index].collapse=true;
             this.setState({cat:newCatArr});
@@ -104,7 +98,6 @@ class CategoryBrowser extends Component {
     }
 
     cat1RollUpHandler = (id, index, cat1Index) => {
-      console.log(id,index,cat1Index,"cat1RollUpHandler");
       let newCatArr = [...this.state.cat];
       if(id){ 
         newCatArr[index].cat1[cat1Index].collapse=false;
@@ -113,8 +106,6 @@ class CategoryBrowser extends Component {
       }
       
       cat2RollDownHandler = (id, index, cat1Index,cat2Index) => {
-     
-        console.log(id,index,cat1Index,cat2Index,"cat2RollDownHandler");
         let newCatArr = [...this.state.cat];
         
         if(id){
@@ -124,7 +115,6 @@ class CategoryBrowser extends Component {
     }
 
     cat2RollUpHandler = (id, index, cat1Index, cat2Index) => {
-      console.log(id,index,cat1Index,cat2Index,"cat2RollUpHandler");
       let newCatArr = [...this.state.cat];
       if(id){ 
         newCatArr[index].cat1[cat1Index].cat2[cat2Index].collapse=false;
@@ -133,10 +123,7 @@ class CategoryBrowser extends Component {
       }
       
       cat3RollDownHandler = (id, index, cat1Index, cat2Index, cat3Index) => {
-     
-        console.log(id,index,cat1Index,cat2Index,"cat3RollDownHandler");
         let newCatArr = [...this.state.cat];
-        
         if(id){
           newCatArr[index].cat1[cat1Index].cat2[cat2Index].cat3[cat3Index].collapse=true;
             this.setState({cat:newCatArr});
@@ -144,7 +131,6 @@ class CategoryBrowser extends Component {
     }
 
     cat3RollUpHandler = (id, index, cat1Index, cat2Index, cat3Index) => {
-      console.log(id,index,cat1Index,cat2Index,"cat3RollUpHandler");
       let newCatArr = [...this.state.cat];
       if(id){ 
         newCatArr[index].cat1[cat1Index].cat2[cat2Index].cat3[cat3Index].collapse=false;
@@ -152,19 +138,16 @@ class CategoryBrowser extends Component {
       }
       }
      
-      editCategoryHandler = (el,str) => {
-        console.log(el,str,"editCategoryHandler") 
+      editCategoryHandler = (el,str) => { 
           this.setState({curCategory:el, str:str, modalClicked:true})
       }
 
       addCatHandler = (el,str) => {
-      console.log(el,str,"addCatHandler")
-      this.setState({newCatClicked:true, str:str,curCategory:el})
+        this.setState({newCatClicked:true, str:str,curCategory:el})
       }
 
       addMainCatHandler= (str) => {
-      console.log(str,"addMainCatHandler")
-      this.setState({newCatClicked:true, str:str})
+        this.setState({newCatClicked:true, str:str})
       }
 
       newCategorySubmitHandler = (cat,str) => {
@@ -203,7 +186,48 @@ class CategoryBrowser extends Component {
                 }
               }
               }) 
-              }
+        } else if (str === "cat2"){
+          copyArr.forEach(el=>{
+            if(el.hasOwnProperty("cat1")){
+              el.cat1.forEach(cat1El=>{
+                if( cat1El.id=== this.state.curCategory.id){
+                  if(cat1El.hasOwnProperty("cat2")){
+                    cat1El.cat2.push(newCat);
+                    cat1El.collapse=true
+                  } else {
+                    cat1El.cat2 = [];
+                    cat1El.cat2.push(newCat)
+                    cat1El.collapse=true
+                  }
+                }
+              })
+            }
+          })
+        } else if (str === "cat3" ){
+          copyArr.forEach(el=>{
+            if(el.hasOwnProperty("cat1")){
+              el.cat1.forEach(cat1El=>{
+                if(cat1El.hasOwnProperty("cat2")){
+                  cat1El.cat2.forEach(cat2El=>{
+
+                    if( cat2El.id=== this.state.curCategory.id){
+                      if(cat2El.hasOwnProperty("cat3")){
+                        cat2El.cat3.push(newCat);
+                        cat2El.collapse=true
+                      } else {
+                        cat2El.cat3 = [];
+                        cat2El.cat3.push(newCat)
+                        cat2El.collapse=true
+                      }
+                    }
+
+                  })
+                }
+              
+              })
+            }
+          })
+        }
             
         if(cat.catLan==="English"){
            this.setState({cat:copyArr, catEN:copyArr});
@@ -263,8 +287,49 @@ class CategoryBrowser extends Component {
           } 
                         
         })
+      } else if ( cat.catStr==="cat2"){
+        copyArr.forEach(el=>{
+          if(el.hasOwnProperty("cat1")){
+            el.cat1.forEach(cat1El=>{
+              if(cat1El.hasOwnProperty("cat2")){
+                cat1El.cat2.forEach(cat2El=>{
+                  if(cat2El.id===cat.catId){
+                    cat1El.cat2.splice(cat1El.cat2.indexOf(cat2El),1);
+                    if(cat1El.cat2.length===0){
+                     delete cat1El.cat2;
+                     cat1El.collapse=false;
+                    }
+                     cat1El.collapse=true;
+                    }
+                })
+              }
+            })
+          }
+        })
+      } else if (cat.catStr=== "cat3"){
+        copyArr.forEach( el => {
+          if(el.hasOwnProperty("cat1")){
+            el.cat1.forEach(cat1El=>{
+              if(cat1El.hasOwnProperty("cat2")){
+                cat1El.cat2.forEach(cat2El=>{
+                  if(cat2El.hasOwnProperty("cat3")){
+                    cat2El.cat3.forEach(cat3El=>{
+                      if(cat3El.id===cat.catId){
+                        cat2El.cat3.splice(cat2El.cat3.indexOf(cat3El),1);
+                        if(cat2El.cat3.length===0){
+                         delete cat2El.cat3;
+                         cat2El.collapse=false;
+                        }
+                         cat2El.collapse=true;
+                        }
+                    })
+                  }
+                })
+              }
+            })
+          }
+        })
       }
-      console.log(copyArr,"After DELETE")
       if(cat.catLan==="English"){
         this.setState({cat:copyArr, catEN:copyArr});
        axios.put("/en/category.json", copyArr ).then(resp=>{
@@ -282,6 +347,106 @@ class CategoryBrowser extends Component {
     }
     updateCategorySubmitHandler = (cat,str) => {
       console.log(cat,str,"updateCategorySubmitHandler");
+      let catUpdate = {
+        id:cat.catId,
+        cid:cat.catCID,
+        name:cat.catName,
+        url:cat.catUrl,
+        collapse:false
+      }
+
+      let copyArr;
+      switch(cat.catLan){
+        case "English":
+          copyArr = [...this.state.catEN];
+          break;
+        case "German":
+          copyArr =[...this.state.catDE];
+          break;
+        default:
+          break;
+        }
+
+      if(cat.catStr==="main"){
+          copyArr.forEach( el => {
+            if(el.id===cat.catId){
+                copyArr.splice(copyArr.indexOf(el),1);
+                copyArr.push(catUpdate)
+            }                
+          })
+      } 
+      else if (cat.catStr==="cat1"){
+        copyArr.forEach( el => {
+          if(el.hasOwnProperty("cat1")){
+            el.cat1.forEach(cat1El=>{
+               if(cat1El.id===cat.catId){
+                 el.cat1.splice(el.cat1.indexOf(cat1El),1);
+                 if(el.cat1.length===0){
+                  delete el.cat1
+                 }
+                  el.collapse=true;
+                 }
+             })  
+          } 
+                        
+        })
+      } else if ( cat.catStr==="cat2"){
+        copyArr.forEach(el=>{
+          if(el.hasOwnProperty("cat1")){
+            el.cat1.forEach(cat1El=>{
+              if(cat1El.hasOwnProperty("cat2")){
+                cat1El.cat2.forEach(cat2El=>{
+                  if(cat2El.id===cat.catId){
+                    cat1El.cat2.splice(cat1El.cat2.indexOf(cat2El),1);
+                    if(cat1El.cat2.length===0){
+                     delete cat1El.cat2;
+                     cat1El.collapse=false;
+                    }
+                     cat1El.collapse=true;
+                    }
+                })
+              }
+            })
+          }
+        })
+      } else if (cat.catStr=== "cat3"){
+        copyArr.forEach( el => {
+          if(el.hasOwnProperty("cat1")){
+            el.cat1.forEach(cat1El=>{
+              if(cat1El.hasOwnProperty("cat2")){
+                cat1El.cat2.forEach(cat2El=>{
+                  if(cat2El.hasOwnProperty("cat3")){
+                    cat2El.cat3.forEach(cat3El=>{
+                      if(cat3El.id===cat.catId){
+                        cat2El.cat3.splice(cat2El.cat3.indexOf(cat3El),1);
+                        if(cat2El.cat3.length===0){
+                         delete cat2El.cat3;
+                         cat2El.collapse=false;
+                        }
+                         cat2El.collapse=true;
+                        }
+                    })
+                  }
+                })
+              }
+            })
+          }
+        })
+      }
+      if(cat.catLan==="English"){
+        this.setState({cat:copyArr, catEN:copyArr});
+       axios.put("/en/category.json", copyArr ).then(resp=>{
+        }).catch(err => {
+          this.setState({error:true})
+        })    
+     } else if(cat.catLan==="German"){
+                
+       this.setState({cat:copyArr, catDE:copyArr});
+       axios.put("/de/category.json", copyArr ).then(resp=>{
+        }).catch(err => {
+          this.setState({error:true})
+        })   
+     }
     }
     passLanguageHandler=(inputVal)=>{
       console.log(inputVal,"passLanguageHandler");
