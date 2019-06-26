@@ -345,8 +345,8 @@ class CategoryBrowser extends Component {
         })   
      }
     }
-    updateCategorySubmitHandler = (cat,str) => {
-      console.log(cat,str,"updateCategorySubmitHandler");
+    updateCategorySubmitHandler = (cat) => {
+      console.log(cat,"updateCategorySubmitHandler",cat.catStr);
       let catUpdate = {
         id:cat.catId,
         cid:cat.catCID,
@@ -376,61 +376,80 @@ class CategoryBrowser extends Component {
           })
       } 
       else if (cat.catStr==="cat1"){
+        let cat2Copy;
         copyArr.forEach( el => {
           if(el.hasOwnProperty("cat1")){
             el.cat1.forEach(cat1El=>{
-               if(cat1El.id===cat.catId){
-                 el.cat1.splice(el.cat1.indexOf(cat1El),1);
-                 if(el.cat1.length===0){
-                  delete el.cat1
-                 }
-                  el.collapse=true;
-                 }
-             })  
-          } 
-                        
-        })
-      } else if ( cat.catStr==="cat2"){
-        copyArr.forEach(el=>{
-          if(el.hasOwnProperty("cat1")){
-            el.cat1.forEach(cat1El=>{
-              if(cat1El.hasOwnProperty("cat2")){
-                cat1El.cat2.forEach(cat2El=>{
-                  if(cat2El.id===cat.catId){
-                    cat1El.cat2.splice(cat1El.cat2.indexOf(cat2El),1);
-                    if(cat1El.cat2.length===0){
-                     delete cat1El.cat2;
-                     cat1El.collapse=false;
+                if(cat1El.hasOwnProperty("cat2")){
+                  cat2Copy = cat1El.cat2
+                  console.log(cat2Copy)
+                  if(cat1El.id===cat.catId){
+                    el.cat1.splice(el.cat1.indexOf(cat1El),1);
+                    el.cat1.push(catUpdate)
+                    cat1El.collapse=true;
+                    el.cat1[el.cat1.length-1].cat2=cat2Copy
                     }
-                     cat1El.collapse=true;
-                    }
-                })
-              }
-            })
-          }
-        })
-      } else if (cat.catStr=== "cat3"){
-        copyArr.forEach( el => {
-          if(el.hasOwnProperty("cat1")){
-            el.cat1.forEach(cat1El=>{
-              if(cat1El.hasOwnProperty("cat2")){
-                cat1El.cat2.forEach(cat2El=>{
-                  if(cat2El.hasOwnProperty("cat3")){
-                    cat2El.cat3.forEach(cat3El=>{
-                      if(cat3El.id===cat.catId){
-                        cat2El.cat3.splice(cat2El.cat3.indexOf(cat3El),1);
-                        if(cat2El.cat3.length===0){
-                         delete cat2El.cat3;
-                         cat2El.collapse=false;
-                        }
-                         cat2El.collapse=true;
-                        }
-                    })
+                }else{
+                  if(cat1El.id===cat.catId){
+                    el.cat1.splice(el.cat1.indexOf(cat1El),1);
+                    el.cat1.push(catUpdate)
+                    cat1El.collapse=true;
                   }
-                })
-              }
-            })
-          }
+                }
+             
+             })  
+          }               
+        })
+      }
+      else if (cat.catStr==="cat2"){
+        let cat3Copy;
+        copyArr.forEach( el => {
+          if(el.hasOwnProperty("cat1")){
+            el.cat1.forEach(cat1El=>{
+                if(cat1El.hasOwnProperty("cat2")){
+                  cat1El.cat2.forEach(cat2El=>{
+                    if(cat2El.hasOwnProperty("cat3")){
+                      cat3Copy = cat2El.cat3
+                      if(cat2El.id===cat.catId){
+                        cat1El.cat2.splice(cat1El.cat2.indexOf(cat2El),1);
+                        cat1El.cat2.push(catUpdate)
+                        cat2El.collapse=true;
+                        cat1El.cat2[cat1El.cat2.length-1].cat3=cat3Copy
+                        }
+                    }else{
+                      if(cat2El.id===cat.catId){
+                        cat1El.cat2.splice(cat1El.cat2.indexOf(cat2El),1);
+                        cat1El.cat2.push(catUpdate)
+                        cat1El.collapse=true;
+                       }
+                    }
+                  })
+                }
+             })  
+          }               
+        })
+      }
+      else if (cat.catStr==="cat3"){
+        
+        copyArr.forEach( el => {
+          if(el.hasOwnProperty("cat1")){
+            el.cat1.forEach(cat1El=>{
+                if(cat1El.hasOwnProperty("cat2")){
+                  cat1El.cat2.forEach(cat2El=>{
+                    if(cat2El.hasOwnProperty("cat3")){
+                      cat2El.cat3.forEach(cat3El=>{
+                        if(cat3El.id===cat.catId){
+                          cat2El.cat3.splice(cat2El.cat3.indexOf(cat3El),1);
+                          cat2El.cat3.push(catUpdate)
+                          cat3El.collapse=true;
+                        }  
+                      })
+                      
+                    }
+                  })
+                }
+             })  
+          }               
         })
       }
       if(cat.catLan==="English"){

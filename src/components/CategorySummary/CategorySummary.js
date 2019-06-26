@@ -19,12 +19,13 @@ class CategorySummary extends Component {
     },
     notification:false,
     message:"",
-    str:this.props.str
+    
   }
  }
  categoryUpdateHandler = (e) =>{
   const cat = {...this.state.category}
-  
+  cat.catStr = this.props.str
+  this.setState({category:cat})
  switch(e.target.id){
   
     case "catLan":
