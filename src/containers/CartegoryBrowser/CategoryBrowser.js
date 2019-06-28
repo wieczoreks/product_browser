@@ -29,23 +29,19 @@ class CategoryBrowser extends Component {
     componentDidMount() {
        
         axios.get("/en.json").then((res)=>{
-          
-          let recArr = [];
-          for(let key in res.data.category){
+           let recArr = [];
+           for(let key in res.data.category){
             recArr.push(res.data.category[key])
-          }
-          this.setState({cat:recArr, loading:false, catEN:recArr})
-        }).catch(err=>{
-          this.setState({error:true})
-        })
+            }
+            this.setState({cat:recArr, loading:false, catEN:recArr})
+            }).catch(err=>{
+           this.setState({error:true})
+            })
         axios.get("/de.json").then((res)=>{
-           
             let recArr = [];
-
             for(let key in res.data.category){
               recArr.push(res.data.category[key])
             }
-
             this.setState({catDE:recArr})
           }).catch(err=>{
             this.setState({error:true})
