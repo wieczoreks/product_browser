@@ -12,6 +12,7 @@ return (
             <NavigationItem link="/categories">Categories</NavigationItem>
             <NavigationItem link="/data">Data</NavigationItem>
             <NavigationItem link="/about">About</NavigationItem>
+            <NavigationItem link="/microtool">MicroTool</NavigationItem>
         </ul>
     
 );

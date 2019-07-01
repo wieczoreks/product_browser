@@ -8,6 +8,7 @@ import About from './components/About/About';
 import ProductDetails from './components/ProductDetails/ProductDetails'
 import CategoryBrowser from './containers/CartegoryBrowser/CategoryBrowser';
 import Data from './containers/Data/Data'
+import MicroTool from './components/MicroTool/MicroTool';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/data" exact component={Data} />
         <Route path="/products" exact component={ProductBrowser} />
         <Route path="/categories" exact component={CategoryBrowser} />
+        <Route path="/microtool" exact component={MicroTool} />
         <Route path="/en/products/:id/" exact component={ProductDetails} />
         <Route path="/de/products/:id/" exact component={ProductDetails} />
      </Layout>
