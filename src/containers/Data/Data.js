@@ -92,14 +92,14 @@ class Data extends Component {
             {lan:"EN", active:true},
             {lan:"DE", active:false}
           ]
-          this.setState({buttonArrList:buttonArrList,prod:this.state.prodEN, catprod:"catprodEN"})
+          this.setState({buttonArrList:buttonArrList, cat:this.state.catEN, prod:this.state.prodEN, catprod:"catprodEN"})
         break;
         case "DE":
           buttonArrList=[
           {lan:"EN", active:false},
           {lan:"DE", active:true}
           ]
-          this.setState({buttonArrList:buttonArrList,prod:this.state.prodDE, catprod:"catprodDE"})
+          this.setState({buttonArrList:buttonArrList, cat:this.state.catDE,  prod:this.state.prodDE, catprod:"catprodDE"})
         break;
       }
 
@@ -119,82 +119,82 @@ class Data extends Component {
                             cat3Let = cat2El.cat3.map((cat3El,indexEl3)=>{
                               return(
                                 <div className="text-left" key={cat3El.id}>
-                                  <span>&#123;&nbsp;&#34;name&#34;&#58;</span><span>&#34;{cat3El.name}&#34;&#8218;</span>
-                                  <span>&nbsp;url&nbsp;&#58;</span><span>&#34;{cat3El.url}&#34;&#125;</span>
-                                  {indexEl3===cat2El.cat3.length-1?<span>&#93;</span>:<span>&#8218;</span>}
+                                  <span>&#123;&nbsp;&#34;name&#34;:</span><span>&#34;{cat3El.name}&#34;&#44;</span>
+                                  <span>&nbsp;url:&nbsp;</span><span>&#34;{cat3El.url}&#34;</span>
+                                  {indexEl3===cat2El.cat3.length-1?<span>&#125;</span> : <span>&#125;&nbsp;&#44;</span> }
                                 </div>)
                             })
                             return(
                               <div className="text-left ml-4" key={cat2El.id}>
                                 
-                                <span>&#123;&nbsp; &#34;name&#34;</span>:<span>&#34;{cat2El.name}&#34;&#8218;</span> 
-                                <span>&nbsp;url&nbsp;</span>:<span>&#34;{cat2El.url}&#34;&#8218;</span><br />
+                                <span>&#123;&nbsp; &#34;name&#34;</span>:<span>&#34;{cat2El.name}&#34;&#44;</span> 
+                                <span>&nbsp;url:&nbsp;</span><span>&#34;{cat2El.url}&#34;&#44;</span><br />
                                 "cat3"&nbsp;&#58; &#91; &nbsp;<br /> 
-                                <span>{cat3Let}</span>
-                                {indexEl2===cat1El.cat2.length-1?<span>&#93;</span>:<span>&#8218;</span>}
+                                <span>{cat3Let}</span><span>&#93;</span>
+                                {indexEl2===cat1El.cat2.length-1?<span>&#125;</span> : <span>&#125;&nbsp;&#44;</span> }
                               </div>)
                         } else {
                           return(
                             <div className="text-left ml-4" key={cat2El.id}>
-                              
-                              <span>&#123;&nbsp; &#34;name&#34;</span>:<span>&#34;{cat2El.name}&#34;&#8218;</span> 
-                              <span>&nbsp;url&nbsp;</span>:<span>&#34;{cat2El.url}&#34;&#125;</span>
-                              {indexEl2===cat1El.cat2.length-1?<span>&#93;</span>:<span>&#8218;</span>}
+                              <span>&#123;&nbsp; &#34;name&#34;</span>:<span>&#34;{cat2El.name}&#34;&#44;</span> 
+                              <span>&nbsp;url:&nbsp;</span><span>&#34;{cat2El.url}&#34;</span>
+                              {indexEl2===cat1El.cat2.length-1?<span>&#125;</span> : <span>&#125;&nbsp;&#44;</span> }
                             </div>)
                         }
                       })
                   return ( 
                     <div className="text-left ml-4" key={cat1El.id}>
-                      <span>&#123;&nbsp; &#34;name&#34;</span>:<span>&#34;{cat1El.name}&#34;&#8218;</span> 
-                      <span>&nbsp;url&nbsp;</span>:<span>&#34;{cat1El.url}&#34;&#8218;</span><br />
-                      "cat2"&nbsp;&#58; &#91; &nbsp;<br /> 
-                      <span>{cat2Let}</span>
-                      {indexEl1===el.cat1.length-1?<span>&#93;</span>:<span>&#8218;</span>}
+                      <span>&#123;&nbsp; &#34;name&#34;</span>:
+                      <span>&#34;{cat1El.name}&#34;&#44;</span> 
+                      <span>&nbsp;url:&nbsp;</span><span>&#34;{cat1El.url}&#34;&#44;</span><br />
+                      <span>"cat2"&nbsp;&#58;&nbsp;&#91;&nbsp;</span><br /> 
+                      <span>{cat2Let}</span><span>&#93;</span>
+                      {indexEl1===el.cat1.length-1?<span>&#125;</span>:<span>&#125;&nbsp;&#44;</span> }
                     </div>)
                 } else {
                   return ( 
                     <div className="text-left ml-4" key={cat1El.id}>
-                      <span>&#123;&nbsp; &#34;name&#34;</span>:<span>&#34;{cat1El.name}&#34;&#8218;</span> 
-                      <span>&nbsp;url&nbsp;</span>:<span>&#34;{cat1El.url}&#34;&#125;</span>
-                      {indexEl1===el.cat1.length-1?<span>&#93;</span>:<span>&#8218;</span>}
+                      <span>&#123;&nbsp; &#34;name&#34;</span>:<span>&#34;{cat1El.name}&#34;&#44;</span> 
+                      <span>&nbsp;url:&nbsp;</span><span>&#34;{cat1El.url}&#34;</span>
+                      {indexEl1===el.cat1.length-1?<span>&#125;</span>:<span>&#125;&nbsp;&#44;</span>}
                     </div>)
                 }
                 
               })
               return (
                 <div className="text-left" key={el.id}>
-                  <span>&#123;&nbsp;&#34;name&#34;&#58;</span><span>&#34;{el.name}&#34;&#8218;</span>
-                  <span>&nbsp;url&nbsp;&#58;</span><span>&#34;{el.url}&#34;&#8218;</span><br />
-                  "cat1"&nbsp;&#58; &#91; &nbsp;<br /> <span>{cat1Let}</span>
-                  {indexEl===this.state.cat.length-1?null:<span>&#8218;</span>}
+                  <span>&#123;&nbsp;&#34;name&#34;&#58;</span><span>&#34;{el.name}&#34;&#44;</span>
+                  <span>&nbsp;url&#58;&nbsp;</span><span>&#34;{el.url}&#34;&#44;</span><br />
+                  <span>"cat1"&nbsp;&#58;&nbsp;&#91;&nbsp;</span><br /> 
+                  <span>{cat1Let}</span><span>&#93;</span>
+                  { indexEl === this.state.cat.length-1 ? <span>&#125;</span> : <span>&#125;&nbsp;&#44;</span> }
                 </div>)
             } else {
               
               return (
                 <div className="text-left" key={el.id}>
-                  <span>&#123;&nbsp;&#34;name&#34;&#58;</span><span>&#34;{el.name}&#34;&#8218;</span>
-                  <span>&nbsp;url&nbsp;&#58;</span><span>&#34;{el.url}&#34;&#125;</span>
-                  {indexEl===this.state.cat.length-1?null:<span>&#8218;</span>}
+                  <span>&#123;&nbsp;&#34;name&#34;&#58;</span><span>&#34;{el.name}&#34;&#44;</span>
+                  <span>&nbsp;url&nbsp;&#58;</span><span>&#34;{el.url}&#34;</span>
+                  {indexEl === this.state.cat.length-1 ? <span>&#125;</span> : <span>&#125;&nbsp;&#44;</span> }
                 </div>)
             }
             
         })
 
-        const prodArr = this.state.prod.map(el=>{
+        const prodArr = this.state.prod.map((el,index)=>{
             return (<div className="text-left" key={el.id}>
               &#123;<br /> 
-              <span>&#34;name&#34;</span>:<span>&#34;{el.name}&#34;&#8218;</span><br />
-              <span>&#34;url&#34;</span>:<span>&#34;{el.url}&#34;&#8218;</span>
-              <span>&#34;cid&#34;</span>:<span>&#34;{el.cid}&#34;&#8218;</span><br />
-              <span>&#34;description&#34;</span>:<span>&#34;{el.description}&#34;&#8218;</span><br />
+              <span>&#34;name&#34;</span>:<span>&#34;{el.name}&#34;&#44;</span><br />
+              <span>&#34;url&#34;</span>:<span>&#34;{el.url}&#34;&#44;</span>
+              <span>&#34;description&#34;</span>:<span>&#34;{el.description}&#34;&#44;</span><br />
               <span>&#34;subcategory&#34;&nbsp;</span>:&#91;<br />
-              <Auxx>{el.subcategory.map((sub,index)=>{
-                  return (<div key={index} className="ml-4">
-                        <span>&#34;name&#34;</span>:<span>&#34;{sub.name}&#34;</span><span>&#9;&#8218;</span><span>&#34;url&#34;</span>:<span>&#34;{sub.url}&#34;</span>
-                  </div>)
-              })}</Auxx>
+                  <Auxx>{el.subcategory.map((sub,index)=>{
+                      return (<div key={index} className="ml-4">
+                        <span>&#123;&nbsp;&#34;name&#34;</span>:<span>&#34;{sub.name}&#34;</span><span>&#9;&#44;</span><span>&#34;url&#34;</span>:<span>&#34;{sub.url}&#34;&nbsp;&#125;</span>
+                       </div>)})}     
+                  </Auxx>
               &#93;
-              &#125; &#8218;
+              {index===this.state.prod.length-1?<span>&#125;</span>:<span>&#125;&nbsp;&#44;</span>}
               
             </div>)
         })
