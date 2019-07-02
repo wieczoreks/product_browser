@@ -15,10 +15,7 @@ const Products = (props) => {
               href={el.cid} 
               className="badge badge-info" 
               style={{position:"absolute",top:"5px",left:"5px"}}>{el.cid}</span>
-               <span 
-              href={index} 
-              className="badge badge-info" 
-              style={{position:"absolute",top:"5px",left:"100px"}}>{index}</span>
+               
             
               <Link  to = {{
               pathname:"/en"+props.match.url+"/"+el.cid

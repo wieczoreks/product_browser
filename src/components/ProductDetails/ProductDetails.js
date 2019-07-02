@@ -74,7 +74,7 @@ class ProductDetails extends Component {
             let el = recArr.filter(item=>{
                 return item.id === this.props.match.params.id
             })
-            console.log("DE AXIOS",el)
+            
            this.setState({
                loading:false,
                prodArrDE:recArr,
@@ -92,20 +92,22 @@ class ProductDetails extends Component {
         })
     }
 
-
+    navigateBackHandler=()=>{
+        this.props.history.push({pathname:"/products"})
+    }
+    
     render(){ 
-        console.log(this.props.match.url,"this.props.match.params.url")
-        console.log(this.state,"STATE")
+        console.log(this.props,"PROPS PRODDETAIL")
 
         let prod; 
         let content = <Spinner />
         if(this.state.prodEN.cid || this.state.prodDE.cid){
             if(this.props.match.url.includes("/en")){
                 prod = this.state.prodEN
-                console.log(this.props.match.url.includes("/en"),prod,"INICLUDES EN")
+               
             }
             if(this.props.match.url.includes("/de")){
-                console.log(this.props.match.url.includes("/de"),prod,"INICLUDES DE")
+                
                 prod = this.state.prodDE
             }
             content = (<div>
@@ -135,8 +137,10 @@ class ProductDetails extends Component {
         }
       
         
-     return   (<div>
-     {content}
+     return   (
+     <div>
+         <button className="btn btn-primary" onClick={this.navigateBackHandler}>Back</button>
+        {content}
       </div>)
     
 }
