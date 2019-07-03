@@ -7,7 +7,7 @@ const Products = (props) => {
     if(props.lan==="English"){
       
           prodArrr = props.prodArr.map((el,index)=>{
-      
+      console.log(props.match.url,"props.match.url")
             return  (
           <div className="card m-2 shadow" style={{width:"20rem"}} key={el.cid}>
     
