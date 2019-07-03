@@ -1,4 +1,8 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<<<<<<< HEAD
+=======
+Product Browser App created for Updating products in numerous languages
+
+
 
 ## Available Scripts
 
@@ -66,3 +70,11 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+<<<<<<< HEAD
+=======
+# product_browser
+=======
+# product_browser
+Product Browser App
+>>>>>>> 3fe906a992e2d8f2f508fc60d17b87ce0a05b330
+>>>>>>> 925c596845a57bb934c9bfcf5738c3c9132855c0
