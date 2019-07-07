@@ -3,6 +3,7 @@ import Spinner from '../../UI/Spinner/Spinner';
 import Auxx from '../../hoc/Auxx'; 
 import axios from '../../axios-products';
 import DataControllers from '../../components/DataControllers/DataControllers' 
+import {connect} from 'react-redux';
 
 class Data extends Component {
  
@@ -199,7 +200,7 @@ class Data extends Component {
             </div>)
         })
        
-        
+        console.log("this.props DATA", this.props)
      return (
          
       <div>
@@ -233,5 +234,20 @@ class Data extends Component {
       );
     }
 }
- 
-export default Data;
+
+const mapStateToProps = (state) => {
+
+    return {
+
+    }
+
+}
+const mapDispatchToProps = (dispatch) => {
+
+  return {
+
+  }
+
+}
+
+export default connect(mapStateToProps,mapDispatchToProps )(Data);

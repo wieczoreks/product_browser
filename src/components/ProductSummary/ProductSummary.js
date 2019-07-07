@@ -7,18 +7,40 @@ class ProductSummary extends Component {
    super(props);
    this.state={
     product:{
-        prodLan:this.props.lan,
-        prodId:this.props.product.id,
-        prodName:this.props.product.name,
-        prodCID:this.props.product.cid,
-        prodUrl:this.props.product.url,
-        prodDescription:this.props.product.description,
-        catName:this.props.product.subcategory[0].name,
-        categoryUrl:this.props.product.subcategory[0].url
+        
+        name:"",
+        id:'',
+        cid:'',
+        url:'',
+        description:'',
+        subcategory:[
+          {name:'',url:''}
+        ]
+        
     },
     notification:false,
     message:"",
-  }
+    prodLan:""
+}
+ }
+
+ componentDidMount(){
+   this.setState({
+    product:{
+        
+        id:this.props.product.id,
+        name:this.props.product.name,
+        cid:this.props.product.cid,
+        url:this.props.product.url,
+        description:this.props.product.description,
+        subcategory:[
+          {name:this.props.product.subcategory[0].name,url:this.props.product.subcategory[0].url}
+        ]
+    },
+    notification:false,
+    message:"",
+    prodLan:this.props.lan,
+  })
  }
  productUpdateHandler = (e) =>{
   const prod = {...this.state.product}
@@ -26,31 +48,32 @@ class ProductSummary extends Component {
  switch(e.target.id){
   
     case "prodLan":
-     prod.prodLan= e.target.value
-     this.setState({product:prod});
+     
+     this.setState({prodLan:e.target.value});
      break;
     case "prodName":
-     prod.prodName= e.target.value
+     prod.name= e.target.value
      this.setState({product:prod});
      break;
      case "prodCID":
-         prod.prodCID= e.target.value
+         prod.cid= e.target.value
+         prod.id= e.target.value
          this.setState({product:prod});
      break;
      case "prodUrl":
-         prod.prodUrl= e.target.value
+         prod.url= e.target.value
          this.setState({product:prod});
      break;
      case "prodDescription":
-         prod.prodDescription= e.target.value
+         prod.description= e.target.value
          this.setState({product:prod});
      break;
      case "catName":
-         prod.catName= e.target.value
+         prod.subcategory[0].name= e.target.value
          this.setState({product:prod});
      break;
      case "categoryUrl":
-         prod.categoryUrl= e.target.value
+         prod.subcategory[0].url= e.target.value
          this.setState({product:prod});
      break;
      default:
@@ -66,7 +89,7 @@ class ProductSummary extends Component {
      const prod = this.state.product
      this.notificationHandler(`${this.state.product.prodCID} updated`); 
      setTimeout(()=>{
-       this.props.updateProductSubmitHandler(prod);
+       this.props.updateProductSubmitHandler(prod,this.state.prodLan);
        this.props.timesHandler()
        
   },3000)  
@@ -77,7 +100,7 @@ deleteProduct = ()=>{
   
   this.notificationHandler(`${prod.prodCID} deleted`);
   setTimeout(() => {
-  this.props.deleteProductHandler(prod)
+  this.props.deleteProductHandler(prod, this.state.prodLan)
   this.props.timesHandler()
   
 },3000)  

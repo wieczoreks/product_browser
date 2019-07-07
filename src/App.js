@@ -6,13 +6,13 @@ import { BrowserRouter } from 'react-router-dom';
 import {Route,Switch, Redirect} from 'react-router-dom';
 import About from './components/About/About';
 import ProductDetails from './components/ProductDetails/ProductDetails'
-
 //import CategoryBrowser from './containers/CartegoryBrowser/CategoryBrowser';
-
 import Data from './containers/Data/Data';
 import FourOFour from './components/FourOFour/FourOFour';
 //import MicroTool from './components/MicroTool/MicroTool';
 import asyncComponent from './hoc/AsyncComponent/AsyncComponent';
+
+
 const CategoryBrowser = React.lazy(()=>{
   return import("./containers/CartegoryBrowser/CategoryBrowser")
 });
@@ -25,10 +25,10 @@ function App() {
   return (
   <BrowserRouter>
     <div className=" container-fluid text-center">
-     <Layout>
+     <Layout >
        <Switch>
           
-          <Route path="/about" exact component={About} />
+          <Route path="/about" exact render={About} />
           <Route path="/data" exact component={Data} />
           <Route path="/products" exact component={AsyncNewProductBrowser} />
           <Route path="/categories" exact render={()=><Suspense fallback={<div>Loading...</div>}><CategoryBrowser /></Suspense>} />

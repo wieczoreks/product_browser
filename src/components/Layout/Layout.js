@@ -13,7 +13,7 @@ class Layout extends Component {
 
       sideDrawerClosedHandler = () => {
             this.setState({showSideDrawer:false})
-         
+
       }
       expandToolbarMenuHandler = () => {
             this.setState((prevState)=>{
@@ -29,7 +29,7 @@ class Layout extends Component {
                               open={this.state.showSideDrawer} 
                               closed ={this.sideDrawerClosedHandler} />
                   </div>
-                  <main className="p-3 bg-light mt-5">
+                  <main className="p-3 bg-light mt-5" test="test">
                         {this.props.children} 
                   </main>
                   <footer className="p-4 bg-secondary">Footer</footer>   

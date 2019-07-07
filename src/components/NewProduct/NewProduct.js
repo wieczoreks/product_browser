@@ -8,16 +8,20 @@ class NewProduct extends Component {
         super(props)
       this.state={
         product:{
-            prodLan:"",
-            prodName:"",
-            prodCID:'',
-            prodUrl:'',
-            prodDescription:'',
-            catName:'',
-            categoryUrl:''
+            
+            name:"",
+            id:'',
+            cid:'',
+            url:'',
+            description:'',
+            subcategory:[
+              {name:'',url:''}
+            ]
+            
         },
         notification:false,
-        message:""
+        message:"",
+        prodLan:""
     }
     }
 componentDidMount(){
@@ -25,35 +29,39 @@ componentDidMount(){
 }
 
  newProductInputHandler = (e) =>{
-   const prod = {...this.state.product}
+   const prod = {
+     ...this.state.product,
+     subcategory:[...this.state.product.subcategory]
+  }
+   
    
   switch(e.target.id){
     case "prodLan":
-      prod.prodLan= e.target.value
-      this.setState({product:prod});
+      this.setState({prodLan:e.target.value});
       break;
     case "prodName":
-      prod.prodName= e.target.value
+      prod.name= e.target.value
       this.setState({product:prod});
       break;
       case "prodCID":
-          prod.prodCID= e.target.value
+          prod.cid= e.target.value
+          prod.id= e.target.value
           this.setState({product:prod});
       break;
       case "prodUrl":
-          prod.prodUrl= e.target.value
+          prod.url= e.target.value
           this.setState({product:prod});
       break;
       case "prodDescription":
-          prod.prodDescription= e.target.value
+          prod.description= e.target.value
           this.setState({product:prod});
       break;
       case "catName":
-          prod.catName= e.target.value
+          prod.subcategory[0].name= e.target.value
           this.setState({product:prod});
       break;
       case "categoryUrl":
-          prod.categoryUrl= e.target.value
+          prod.subcategory[0].url= e.target.value
           this.setState({product:prod});
       break;
       default:
@@ -63,17 +71,21 @@ componentDidMount(){
  
   clearHandler = () => {
      this.setState({
-        product:{
-          prodName:"",
-          prodCID:'',
-          prodUrl:'',
-          prodDescription:'',
-          catName:'',
-          categoryUrl:'',
+      product:{
+          prodLan:"",
+          name:"",
+          cid:'',
+          id:'',
+          url:'',
+          description:'',
+          subcategory:[
+            {name:'',url:''}
+          ]
+          
       },
       notification:false,
       message:""
-    })
+  })
 }
 
 notificationHandler = (message) => {
@@ -84,9 +96,9 @@ submitHandler = (e) => {
     e.preventDefault();
     const prod = this.state.product
     
-    this.notificationHandler(`${this.state.product.prodCID}`); 
+    this.notificationHandler(`${this.state.product.cid}`); 
     setTimeout(()=>{
-      this.props.newProductSubmitHandler(prod);
+      this.props.newProductSubmitHandler(prod, this.state.prodLan);
       this.props.closedModal()
       this.clearHandler();
  },3000)  
