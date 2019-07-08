@@ -5,19 +5,12 @@ class Search extends Component {
     super(props)
     this.state = {
       searchBy:"name",
-      
+
     }
 }
-componentDidMount(){
-  console.log("Component DID MOUNT [Search]")
-}
+
 searchByHandler = (e) => {
 this.setState({searchBy:e.target.value})
-}
-
-lanSelectorByHandler = (e) => {
-  
-  this.props.passLanguageHandlar(e.target.value)
 }
 
 searchChangeHandler = (e) => {
@@ -27,7 +20,7 @@ searchChangeHandler = (e) => {
 
 
  render(){
-  console.log("Render [SEARCH]") 
+  
   return (
       <div className=" d-flex justify-content-between align-items-center w-100 bg-light">
         <div>
@@ -43,14 +36,7 @@ searchChangeHandler = (e) => {
             </select>
           </div>
         </div>
-   
-        <select  style={{width:"300px"}} className="form-control" onChange={this.lanSelectorByHandler}>
-                <option value="English" className="selected">English</option>
-                <option value="German" >German</option>
-        </select>
-        <button style={{width:"200px"}} onClick={this.props.newProdHandler} className="btn btn-secondary m-2 " type="submit">Add new</button>
-      
-      </div>
+         </div>
       );
      }
 }

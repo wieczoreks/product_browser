@@ -15,7 +15,7 @@ const DataController = (props) => {
         <button onClick={()=>props.buttonLanChangeHandler(bu)} className={classButton}>{bu.lan}</button></Auxx>)
     })
     return (
-        <div>
+        <div className="d-flex flex-row">
          {butArr} 
         </div>
     );

@@ -13,24 +13,19 @@ export const syncProdState_FAILED = () => {
         error:true
     }
 }
-export const addProdEN = (prod)=>{
-    return {
-        type:actionTypes.ADD_NEW_PRODUCT,
-        prod:prod
-    }
-}
+
 
 export const syncProdEN = () => {
-    console.log("syncProdEN")
+   
     return (dispatch) => {
         axios.get("/en.json").then((res)=>{
             let recArr = [];
             for(let key in res.data.products){
               recArr.push(res.data.products[key])
             }  
-            console.log("syncProdEN AXIOS",recArr )
+            
               dispatch(setProdStateEN({
-                prodArr:recArr, 
+                
                 prodArrEN:recArr, 
                 loading:false,
                 
@@ -40,6 +35,29 @@ export const syncProdEN = () => {
           })  
     }
 }
+
+export const addNewProdEN = (arr)=>{
+    return {
+        type:actionTypes.UPDATE_NEW_PRODUCT_EN,
+        prodArrEN:arr.prodArrEN
+    }
+}
+export const syncUpdateProdArrEN = (arr) => {
+   
+    return (dispatch) => {
+        axios.put("/en/products.json", arr ).then(resp=>{
+            dispatch(addNewProdEN({
+                prodArrEN:arr
+                }))
+
+        }).catch(err=>{
+              dispatch(syncProdState_FAILED())
+          })  
+    }
+}
+
+///////////////////DE/////////////////////////////
+
 const setProdStateDE = (res) => {
     return {
         type:actionTypes.SET_PROD_DE,
@@ -48,9 +66,9 @@ const setProdStateDE = (res) => {
 }
 
 export const syncProdDE = () => {
-    console.log("syncProdDE")
+    
     return (dispatch) => {
-        console.log("syncProdDE AXIOS")
+        
         axios.get("/de.json").then((res)=>{
             
             let recArr = [];
@@ -58,7 +76,7 @@ export const syncProdDE = () => {
               recArr.push(res.data.products[key])
             }  
               dispatch(setProdStateDE({
-                prodArr:recArr, 
+                 
                 prodArrDE:recArr, 
                 loading:false,
                
@@ -66,5 +84,24 @@ export const syncProdDE = () => {
           }).catch(err=>{
             dispatch(syncProdState_FAILED())
         })     
+    }
+}
+export const addNewProdDE = (arr)=>{
+    return {
+        type:actionTypes.UPDATE_NEW_PRODUCT_DE,
+        prodArrDE:arr.prodArrDE
+    }
+}
+export const syncUpdateProdArrDE = (arr) => {
+   
+    return (dispatch) => {
+        axios.put("/de/products.json", arr ).then(resp=>{
+            dispatch(addNewProdDE({
+                prodArrDE:arr
+                }))
+
+        }).catch(err=>{
+              dispatch(syncProdState_FAILED())
+          })  
     }
 }

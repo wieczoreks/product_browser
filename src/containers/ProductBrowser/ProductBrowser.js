@@ -10,46 +10,48 @@ import axios from '../../axios-products';
 import Spinner from '../../UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import {connect} from 'react-redux';
-import * as actionsProd from '../../store/actions/index' 
+import * as actionsProd from '../../store/actions/index';
+import DataControllers from '../../components/DataControllers/DataControllers';
 
 class ProductBrowser extends Component {
 
     constructor(props){
         super(props)
         this.state = {
-            
-            lan:"English",
             firebaseLan:"English",
             product:null,
             modalClicked:false,
             newProdClicked:false,
             searchName:'',
             searchType:'',
-            
+            buttonArrList:[
+              {lan:"EN", active:true, id:"catprodEN"},
+              {lan:"DE", active:false, id:"catprodDE"}
+              ],
         } 
     }
 
-   componentDidUpdate(){
+  //  componentDidUpdate(){
    
-    if(this.state.loading===true && this.state.lan !== this.state.firebaseLan){ 
-      if(this.state.lan==="German"){
-        this.setState({
-          lan:this.state.firebaseLan, 
-          loading:false, 
-          prodArr:this.props.prodArrEN, 
-          })
+  //   if(this.state.loading===true && this.state.lan !== this.state.firebaseLan){ 
+  //     if(this.state.lan==="German"){
+  //       this.setState({
+  //         lan:this.state.firebaseLan, 
+  //         loading:false, 
+  //         prodArr:this.props.prodArrDE, 
+  //         })
 
-      } else if(this.state.lan==="English"){
-        this.setState({
-          lan:this.state.firebaseLan, 
-          loading:false, 
-          prodArr:this.props.prodArrDE})
-        }
-    }
-   }
+  //     } else if(this.state.lan==="English"){
+  //       this.setState({
+  //         lan:this.state.firebaseLan, 
+  //          loading:false, 
+  //         prodArr:this.props.prodArrEN})
+  //       }
+  //   }
+  //  }
 
     componentDidMount() {
-      console.log("componentDidMount", "PRODUCT BROWSER")
+      
       this.props.getArrEN();
       this.props.getArrDE();
     
@@ -72,50 +74,31 @@ class ProductBrowser extends Component {
     }
    
 
-    newProductSubmitHandler = (prod ,lan) =>{
-    
+    newProductSubmitHandler = (prod, lan) =>{
       let copyArr;
       if(lan==="English"){
         copyArr = [...this.props.prodArrEN];
         copyArr.push(prod);
-        this.setState({prodArr:copyArr, prodArrEN:copyArr});
-
-        axios.post("/en/products.json", prod ).then(resp=>{
-         }).catch(err => {
-           this.setState({error:true})
-         })    
+        this.props.updateProductArrEN(copyArr);
+           
       }
-
       else if(lan==="German"){
         copyArr =[...this.props.prodArrDE];
         copyArr.push(prod);
-        this.setState({prodArr:copyArr, prodArrDE:copyArr});
-        axios.post("/de/products.json", prod ).then(resp=>{
-         }).catch(err => {
-           this.setState({error:true})
-         })   
+        this.props.updateProductArrDE(copyArr);
       }
-
-        
     }
-    deleteProductHandler = (prod,lan) =>{
 
-        let copyArr;
-      
+    deleteProductHandler = (prod,lan) =>{
+      let copyArr;  
       if(lan==="English"){
         copyArr = [...this.props.prodArrEN];
         copyArr.forEach( el => {
           if(el.id===prod.id){
-              copyArr.splice(copyArr.indexOf(el),1);
-              
+              copyArr.splice(copyArr.indexOf(el),1); 
           }                
       })
-   
-        this.setState({prodArr:copyArr, prodArrEN:copyArr})
-        axios.put('/en/products.json',copyArr).then(resp=>{
-      }).catch( err => {
-       this.setState({ error:true })
-      })
+       this.props.updateProductArrEN(copyArr);
    
     }  else if(lan==="German"){
       copyArr = [...this.props.prodArrDE];
@@ -124,45 +107,33 @@ class ProductBrowser extends Component {
             copyArr.splice(copyArr.indexOf(el),1);
         }                
     })
-    this.setState({prodArr:copyArr, prodArrDE:copyArr})
-    axios.put('/de/products.json',copyArr).then(resp=>{
-      } ).catch( err => {
-        this.setState({ error:true })
-      })
+    this.props.updateProductArrDE(copyArr);
     }
   }
     
     updateProductSubmitHandler = (prod,lan) => {
-       
-       let copyArr = [...this.props.prodArr];
-      if(lan==="English"){
+       console.log(prod,lan," updateProductSubmitHandler")
+       let copyArr;
+        if(lan==="English"){
         copyArr = [...this.props.prodArrEN];
         copyArr.forEach( el => {
           if(el.id===prod.id){
               copyArr.splice(copyArr.indexOf(el),1);
-              copyArr.push(prod);
+              copyArr.push({...prod, id:prod.cid});
           }                
         })
-
-      this.setState({prodArr:copyArr, prodArrEN:copyArr})
-      axios.put('/en/products.json',copyArr).then(resp=>{
-        } ).catch( err => {
-          this.setState({ error:true })
-        })
+        console.log( copyArr," copyArr updateProductSubmitHandler")
+        this.props.updateProductArrEN(copyArr);
       }
       else if(lan==="German"){
         copyArr = [...this.props.prodArrDE];
         copyArr.forEach( el => {
           if(el.id===prod.id){
               copyArr.splice(copyArr.indexOf(el),1);
-              copyArr.push(prod);
+              copyArr.push({...prod, id:prod.cid});
           }                
       })
-      this.setState({prodArr:copyArr, prodArrDE:copyArr})
-      axios.put('/de/products.json',copyArr).then(resp=>{
-        } ).catch( err => {
-          this.setState({ error:true })
-        })
+      this.props.updateProductArrDE(copyArr);
       }
         
        
@@ -171,19 +142,54 @@ class ProductBrowser extends Component {
         this.setState({searchName:name,searchBy:type})
     }
 
-    passLanguageHandlar = (inputVal) => {
-      
-      this.setState({firebaseLan:inputVal, loading:true})
   
-    }
     
-
-    render(){ 
+    buttonLanChangeHandler = (bu) => {
       
-        const {searchName } = this.state;
+      this.setState({loading:true});
 
-        let filteredProducts = this.props.prodArr
-        
+      let buttonArrList = [...this.state.buttonArrList];
+     console.log(bu.lan,"bu.lan")
+      switch(bu.lan){
+        case "EN":
+          buttonArrList=[
+            {lan:"EN", active:true},
+            {lan:"DE", active:false}
+          ]
+          this.setState(
+            {
+              buttonArrList:buttonArrList, 
+              loading:false,
+              firebaseLan:"English"}
+            )
+          break;
+        case "DE":
+          buttonArrList=[
+          {lan:"EN", active:false},
+          {lan:"DE", active:true}
+          ]
+          this.setState({
+            buttonArrList:buttonArrList,   
+            loading:false, 
+            firebaseLan:"German" 
+          })
+        break;
+      }
+
+    }
+  
+    render(){ 
+      console.log(this.state.firebaseLan,"firebaseLan",this.props.prodArrEN,"EN",this.props.prodArrDE,"DE");
+
+        const {searchName } = this.state;
+        let filteredProducts;
+
+        if (this.state.firebaseLan==="English"){
+          filteredProducts = this.props.prodArrEN;
+        }else if (this.state.firebaseLan==="German"){
+          filteredProducts = this.props.prodArrDE;
+        }
+
         if(searchName.length>0){
            switch(this.state.searchBy){
               case "name":
@@ -205,7 +211,6 @@ class ProductBrowser extends Component {
                 break;
               
            }
-            
           }
      return (
       <Auxx> 
@@ -214,6 +219,7 @@ class ProductBrowser extends Component {
                     <NewProduct 
                         newProductSubmitHandler={this.newProductSubmitHandler}
                         closedModal={this.modalClosedNewProductHandler}
+                        lan={this.state.firebaseLan}
                         />
                 </Modal>
 
@@ -228,18 +234,24 @@ class ProductBrowser extends Component {
                         />
                     :null}
                 </Modal>
-                
-                
-                <Search 
-                    newProdHandler={this.newProdHandler}
-                    searchProdHandler={this.searchProdHandler}
-                    passLanguageHandlar={this.passLanguageHandlar}
-                    />
+               
+                <div className="d-flex flex-row">
+                  <Search 
+                      searchProdHandler={this.searchProdHandler}
+                  />
+                  <div className="d-flex justify-content-center align-items-center">
+                  <DataControllers 
+                    buttonLanChangeHandler={this.buttonLanChangeHandler}
+                    buttonArrList={this.state.buttonArrList} />
+                    <span onClick={this.newProdHandler} ><i className="fas fa-plus-circle fa-2x"></i></span>
+                  </div>
+                  
+                </div>
                 {this.props.loading ? this.props.error?<p>Server error. Please refresh the page</p>:<Spinner /> :
                   <Auxx>
                     <Products 
                       productEditHandler={this.productEditHandler}
-                      lan={this.state.lan}
+                      lan={this.state.firebaseLan}
                       prodArr={filteredProducts}/>
                       
                     <Pagination />
@@ -253,7 +265,7 @@ class ProductBrowser extends Component {
 const mapStateToProps = (state) => {
 
   return {
-    prodArr:state.reducerProd.prodArr,
+   
     prodArrEN:state.reducerProd.prodArrEN,
     prodArrDE:state.reducerProd.prodArrDE,
     loading:state.reducerProd.loading,
@@ -264,9 +276,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 
 return {
-    getArrEN:()=> dispatch(actionsProd.syncProdEN()),
-    getArrDE:()=> dispatch(actionsProd.syncProdDE()),
-    addProdEN:(prod)=> dispatch(actionsProd.addProdEN(prod))
+    getArrEN:     ()=> dispatch(actionsProd.syncProdEN()),
+    getArrDE:     ()=> dispatch(actionsProd.syncProdDE()),
+    updateProductArrEN: (arr, prod) => dispatch(actionsProd.syncUpdateProdArrEN( arr, prod ) ),
+    updateProductArrDE: (arr, prod) => dispatch(actionsProd.syncUpdateProdArrDE( arr, prod) )
 }
 
 }

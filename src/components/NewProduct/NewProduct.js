@@ -8,7 +8,6 @@ class NewProduct extends Component {
         super(props)
       this.state={
         product:{
-            
             name:"",
             id:'',
             cid:'',
@@ -16,16 +15,17 @@ class NewProduct extends Component {
             description:'',
             subcategory:[
               {name:'',url:''}
-            ]
-            
+            ]  
         },
         notification:false,
         message:"",
-        prodLan:""
+        
     }
     }
 componentDidMount(){
-  console.log("Component Did Mount [New Product]")
+  console.log(this.props.lan,"DID MOUNT newProduct")
+  
+  this.clearHandler()
 }
 
  newProductInputHandler = (e) =>{
@@ -36,9 +36,7 @@ componentDidMount(){
    
    
   switch(e.target.id){
-    case "prodLan":
-      this.setState({prodLan:e.target.value});
-      break;
+    
     case "prodName":
       prod.name= e.target.value
       this.setState({product:prod});
@@ -71,20 +69,22 @@ componentDidMount(){
  
   clearHandler = () => {
      this.setState({
-      product:{
-          prodLan:"",
+      product:{  
           name:"",
-          cid:'',
           id:'',
+          cid:'',
           url:'',
           description:'',
           subcategory:[
-            {name:'',url:''}
-          ]
-          
+            {
+              name:'',
+              url:''
+            }
+          ] 
       },
       notification:false,
-      message:""
+      message:"",
+     
   })
 }
 
@@ -95,10 +95,10 @@ notificationHandler = (message) => {
 submitHandler = (e) => {
     e.preventDefault();
     const prod = this.state.product
-    
-    this.notificationHandler(`${this.state.product.cid}`); 
+    console.log(prod,this.props.lan,"NEWPRODUCT SUBMIT")
+    this.notificationHandler(`${prod.cid}`); 
     setTimeout(()=>{
-      this.props.newProductSubmitHandler(prod, this.state.prodLan);
+      this.props.newProductSubmitHandler(prod, this.props.lan);
       this.props.closedModal()
       this.clearHandler();
  },3000)  
@@ -107,7 +107,35 @@ submitHandler = (e) => {
 
 render(){
   let message = this.state.message
-  console.log("Render [New Product]")
+  
+  let options;
+  if(this.props.lan==="German"){
+   
+   options= (<select 
+   id="prodLan" 
+   style={{width:"300px"}} 
+   className="form-control" 
+   onChange=  {this.newProductInputHandler}
+   value={this.props.lan}
+   disabled
+   >
+     <option value="English" >English</option>
+     <option value="German" >German</option>
+   </select>)
+  } else if(this.props.lan==="English") {
+   
+   options= (<select 
+     id="prodLan" 
+     style={{width:"300px"}} 
+     className="form-control" 
+     onChange=  {this.newProductInputHandler}
+     value={this.props.lan}
+     disabled
+     >
+       <option  value="English">English</option>
+       <option  value="German" >German</option>
+     </select>)
+  }
      return (
       <Auxx className="card">
         <form>
@@ -119,40 +147,34 @@ render(){
             </div>
             <div className="form-group d-flex flex-column align-items-start">
               <label htmlFor="prodLan">Language version</label>
-              <select 
-              id="prodLan" 
-              style={{width:"300px"}} 
-              className="form-control" onChange=  {this.newProductInputHandler}>
-                <option value="English" className="selected">English</option>
-                <option value="German" >German</option>
-              </select>
+              {options}
               
             </div>
             <div className="form-group d-flex flex-column align-items-start">
               <label htmlFor="prodName">Product name</label>
-              <input onChange={this.newProductInputHandler} value={this.state.product.prodName} type="text" className="form-control" id="prodName" required / >
+              <input onChange={this.newProductInputHandler} value={this.state.product.name} type="text" className="form-control" id="prodName" required / >
               
             </div>
           
             <div className="form-group d-flex flex-column align-items-start">
               <label htmlFor="prodCID">Product CID</label>
-              <input onChange={this.newProductInputHandler} type="text" className="form-control" id="prodCID"  value={this.state.product.prodCID} required / >
+              <input onChange={this.newProductInputHandler} type="text" className="form-control" id="prodCID"  value={this.state.product.cid} required / >
             </div>
             <div className="form-group d-flex flex-column align-items-start">
               <label htmlFor="prodUrl">Product url</label>
-              <input onChange={this.newProductInputHandler} type="text" className="form-control" id="prodUrl" value={this.state.product.prodUrl} required / >
+              <input onChange={this.newProductInputHandler} type="text" className="form-control" id="prodUrl" value={this.state.product.url} required / >
             </div>
             <div className="form-group d-flex flex-column align-items-start">
               <label htmlFor="prodDescription">Product description</label>
-              <input onChange={this.newProductInputHandler} type="text" className="form-control" id="prodDescription" value={this.state.product.prodDescription} required / >
+              <input onChange={this.newProductInputHandler} type="text" className="form-control" id="prodDescription" value={this.state.product.description} required / >
             </div>
             <div className="form-group d-flex flex-column align-items-start">
               <label htmlFor="catName">Category name</label>
-              <input onChange={this.newProductInputHandler} type="text" className="form-control" id="catName" value={this.state.product.catName}  required / >
+              <input onChange={this.newProductInputHandler} type="text" className="form-control" id="catName" value={this.state.product.subcategory[0].name}  required / >
             </div>
             <div className="form-group d-flex flex-column align-items-start">
               <label htmlFor="categoryUrl">Category url</label>
-              <input onChange={this.newProductInputHandler} type="text" className="form-control" id="categoryUrl"  value={this.state.product.categoryUrl}  required/ >
+              <input onChange={this.newProductInputHandler} type="text" className="form-control" id="categoryUrl"  value={this.state.product.subcategory[0].url}  required/ >
             </div>
             <div className="form-group d-flex justify-content-around">
               <button onClick={this.submitHandler} type="submit" className="btn btn-success">Add</button>

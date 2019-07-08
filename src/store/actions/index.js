@@ -4,8 +4,8 @@ export {
     syncProdEN,
     syncProdDE,
     syncProdState_FAILED,
-    addProdEN
-
+    syncUpdateProdArrEN,
+    syncUpdateProdArrDE
 } from './actionsProd';
 
 export {

@@ -1,6 +1,6 @@
 export const SYNC_PROD_FAILED = "SYNC_PROD_FAILED";
 export const SET_PROD_EN = "SET_PROD_EN";
 export const SET_PROD_DE = "SET_PROD_DE";
-
-export const ADD_NEW_PRODUCT = "ADD_NEW_PRODUCT";
+export const UPDATE_NEW_PRODUCT_EN = "UPDATE_NEW_PRODUCT_EN";
+export const UPDATE_NEW_PRODUCT_DE = "UPDATE_NEW_PRODUCT_DE";
 

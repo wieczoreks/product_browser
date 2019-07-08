@@ -33,8 +33,10 @@ class ProductSummary extends Component {
         cid:this.props.product.cid,
         url:this.props.product.url,
         description:this.props.product.description,
-        subcategory:[
-          {name:this.props.product.subcategory[0].name,url:this.props.product.subcategory[0].url}
+        subcategory:[{
+            name:this.props.product.subcategory[0].name,
+            url:this.props.product.subcategory[0].url
+          }
         ]
     },
     notification:false,
@@ -48,7 +50,6 @@ class ProductSummary extends Component {
  switch(e.target.id){
   
     case "prodLan":
-     
      this.setState({prodLan:e.target.value});
      break;
     case "prodName":
@@ -57,7 +58,7 @@ class ProductSummary extends Component {
      break;
      case "prodCID":
          prod.cid= e.target.value
-         prod.id= e.target.value
+         
          this.setState({product:prod});
      break;
      case "prodUrl":
@@ -98,7 +99,7 @@ class ProductSummary extends Component {
 deleteProduct = ()=>{
   const prod = this.state.product
   
-  this.notificationHandler(`${prod.prodCID} deleted`);
+  this.notificationHandler(`${prod.cid} deleted`);
   setTimeout(() => {
   this.props.deleteProductHandler(prod, this.state.prodLan)
   this.props.timesHandler()
@@ -110,27 +111,27 @@ deleteProduct = ()=>{
  render(){
   console.log("Render [Products Summary]")
    let options;
-   if(this.state.product.prodLan==="German"){
+   if(this.state.prodLan==="German"){
     
     options= (<select 
     id="prodLan" 
     style={{width:"300px"}} 
     className="form-control" 
     onChange=  {this.productUpdateHandler}
-    value={this.state.product.prodLan}
+    value={this.state.prodLan}
     disabled
     >
       <option value="English" >English</option>
       <option value="German" >German</option>
     </select>)
-   } else if(this.state.product.prodLan==="English") {
+   } else if(this.state.prodLan==="English") {
     
     options= (<select 
       id="prodLan" 
       style={{width:"300px"}} 
       className="form-control" 
       onChange=  {this.productUpdateHandler}
-      value={this.state.product.prodLan}
+      value={this.state.prodLan}
       disabled
       >
         <option  value="English">English</option>
@@ -155,28 +156,28 @@ deleteProduct = ()=>{
   </div>
   <div className="form-group d-flex flex-column align-items-start">
     <label htmlFor="prodName">Product name</label>
-    <input onChange={this.productUpdateHandler} type="text" className="form-control" id="prodName"  value={this.state.product.prodName} / >
+    <input onChange={this.productUpdateHandler} type="text" className="form-control" id="prodName"  value={this.state.product.name} / >
     
   </div>
   <div className="form-group d-flex flex-column align-items-start">
     <label htmlFor="prodCID">Product CID</label>
-    <input onChange={this.productUpdateHandler} type="text" className="form-control" id="prodCID"  value={this.state.product.prodCID} / >
+    <input onChange={this.productUpdateHandler} type="text" className="form-control" id="prodCID"  value={this.state.product.cid} / >
   </div>
   <div className="form-group d-flex flex-column align-items-start">
     <label htmlFor="prodUrl">Product url</label>
-    <input onChange={this.productUpdateHandler} type="text" className="form-control" id="prodUrl"  value={this.state.product.prodUrl} / >
+    <input onChange={this.productUpdateHandler} type="text" className="form-control" id="prodUrl"  value={this.state.product.url} / >
   </div>
   <div className="form-group d-flex flex-column align-items-start">
     <label htmlFor="prodDescription">Product description</label>
-    <input onChange={this.productUpdateHandler} type="text" className="form-control" id="prodDescription"  value={this.state.product.prodDescription} / >
+    <input onChange={this.productUpdateHandler} type="text" className="form-control" id="prodDescription"  value={this.state.product.description} / >
   </div>
   <div className="form-group d-flex flex-column align-items-start">
     <label htmlFor="catName">Category name</label>
-    <input onChange={this.productUpdateHandler} type="text" className="form-control" id="catName" value={this.state.product.catName} / >
+    <input onChange={this.productUpdateHandler} type="text" className="form-control" id="catName" value={this.state.product.subcategory[0].name} / >
   </div>
   <div className="form-group d-flex flex-column align-items-start">
     <label htmlFor="catUrl">Category url</label>
-    <input onChange={this.productUpdateHandler} type="text" className="form-control" id="catUrl"  value={this.state.product.categoryUrl} / >
+    <input onChange={this.productUpdateHandler} type="text" className="form-control" id="catUrl"  value={this.state.product.subcategory[0].url} / >
   </div>
   <div className="form-group d-flex justify-content-around">
     <button onClick={this.submitHandler} type="submit" className="btn btn-success">Update</button>
