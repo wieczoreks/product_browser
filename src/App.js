@@ -11,7 +11,7 @@ import Data from './containers/Data/Data';
 import FourOFour from './components/FourOFour/FourOFour';
 //import MicroTool from './components/MicroTool/MicroTool';
 import asyncComponent from './hoc/AsyncComponent/AsyncComponent';
-
+import Auth from "./containers/Auth/Auth"
 
 const CategoryBrowser = React.lazy(()=>{
   return import("./containers/CartegoryBrowser/CategoryBrowser")
@@ -30,11 +30,12 @@ function App() {
           
           <Route path="/about" exact render={About} />
           <Route path="/data" exact component={Data} />
+          <Route path="/login" exact component={Auth} />
           <Route path="/products" exact component={AsyncNewProductBrowser} />
           <Route path="/categories" exact render={()=><Suspense fallback={<div>Loading...</div>}><CategoryBrowser /></Suspense>} />
           <Route path="/en/products/:id/" exact component={ProductDetails} />
           <Route path="/de/products/:id/" exact component={ProductDetails} />
-          <Redirect from="/" to="/about" />
+          <Redirect from="/" to="/login" />
           <Route component={FourOFour} />
           {/*<Redirect from="/" to="/about" />*/}
         </Switch>
