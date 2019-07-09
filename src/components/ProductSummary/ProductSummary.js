@@ -41,7 +41,7 @@ class ProductSummary extends Component {
     },
     notification:false,
     message:"",
-    prodLan:this.props.lan,
+    
   })
  }
  productUpdateHandler = (e) =>{
@@ -49,9 +49,7 @@ class ProductSummary extends Component {
   
  switch(e.target.id){
   
-    case "prodLan":
-     this.setState({prodLan:e.target.value});
-     break;
+    
     case "prodName":
      prod.name= e.target.value
      this.setState({product:prod});
@@ -88,9 +86,9 @@ class ProductSummary extends Component {
  submitHandler = (e) => {
      e.preventDefault();
      const prod = this.state.product
-     this.notificationHandler(`${this.state.product.prodCID} updated`); 
+     this.notificationHandler(`${this.state.product.cid} updated`); 
      setTimeout(()=>{
-       this.props.updateProductSubmitHandler(prod,this.state.prodLan);
+       this.props.updateProductSubmitHandler(prod,this.props.lan);
        this.props.timesHandler()
        
   },3000)  
@@ -101,7 +99,7 @@ deleteProduct = ()=>{
   
   this.notificationHandler(`${prod.cid} deleted`);
   setTimeout(() => {
-  this.props.deleteProductHandler(prod, this.state.prodLan)
+  this.props.deleteProductHandler(prod, this.state.lan)
   this.props.timesHandler()
   
 },3000)  
@@ -111,7 +109,7 @@ deleteProduct = ()=>{
  render(){
   console.log("Render [Products Summary]")
    let options;
-   if(this.state.prodLan==="German"){
+   if(this.props.lan==="German"){
     
     options= (<select 
     id="prodLan" 
@@ -124,7 +122,7 @@ deleteProduct = ()=>{
       <option value="English" >English</option>
       <option value="German" >German</option>
     </select>)
-   } else if(this.state.prodLan==="English") {
+   } else if(this.props.lan==="English") {
     
     options= (<select 
       id="prodLan" 

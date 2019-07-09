@@ -5,73 +5,45 @@ import Auxx from '../../hoc/Auxx';
 import Modal from '../../UI/Modal/Modal';
 import CategorySummary from '../../components/CategorySummary/CategorySummary';
 import Categories from "../../components/Categories/Categories";
-import CategoryControls from '../../components/CategoryControls/CategoryControls';
+//import CategoryControls from '../../components/CategoryControls/CategoryControls';
 import NewCategory from '../../components/NewCategory/NewCategory';
+//import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+import {connect} from 'react-redux';
+import * as actionsCat from '../../store/actions/index';
+import DataControllers from '../../components/DataControllers/DataControllers';
 
 class CategoryBrowser extends Component {
     constructor(props){
         super(props);
         this.state = {
-            cat:[],
-            catEN:[],
-            catDE:[],
+            cat:[], 
             firebaseLan:"English",
-            lan:"English",
-            loading:true,
             curCategory:null,
             modalClicked:false,
             newCatClicked:false,
             str:"",
-            error:false
+            buttonArrList:[
+              {lan:"EN", active:true, id:"catprodEN"},
+              {lan:"DE", active:false, id:"catprodDE"}
+              ],    
         }
     }
-
     componentDidMount() {
-       
-        axios.get("/en.json").then((res)=>{
-           let recArr = [];
-           for(let key in res.data.category){
-            recArr.push(res.data.category[key])
-            }
-            this.setState({cat:recArr, loading:false, catEN:recArr})
-            }).catch(err=>{
-           this.setState({error:true})
-            })
-        axios.get("/de.json").then((res)=>{
-            let recArr = [];
-            for(let key in res.data.category){
-              recArr.push(res.data.category[key])
-            }
-            this.setState({catDE:recArr})
-          }).catch(err=>{
-            this.setState({error:true})
-          })
+        this.props.getArrEN();
+        this.props.getArrDE();
+        this.setState({cat:this.props.catEN})
     }
-
-    componentDidUpdate(){
-      
-      if(this.state.loading===true && this.state.lan !== this.state.firebaseLan){ 
-        if(this.state.firebaseLan==="German"){
-         
-          this.setState({
-            lan:this.state.firebaseLan, 
-            loading:false, 
-            cat:this.state.catDE 
-            })
-  
-        }else if(this.state.firebaseLan==="English"){
-        
-          this.setState({
-            lan:this.state.firebaseLan, 
-            loading:false, 
-            cat:this.state.catEN})
-          }
-
-      }
-     }
+    
   
     rollDownHandler = (id, index) => {
-        let newCatArr = [...this.state.cat];
+      let newCatArr;
+      if(this.state.firebaseLan==="English"){
+        newCatArr = [...this.props.catEN];
+      }
+      else if (this.state.firebaseLan==="German"){
+        newCatArr = [...this.props.catDE];
+      }
+      
         if(id){
           newCatArr[index].collapse=true;
             this.setState({cat:newCatArr});
@@ -79,12 +51,20 @@ class CategoryBrowser extends Component {
     }
 
     rollUpHandler = (id, index) => {  
-      let newCatArr = [...this.state.cat];
+      let newCatArr
+      if(this.state.firebaseLan==="English"){
+        newCatArr = [...this.props.catEN];
+      }
+      else if (this.state.firebaseLan==="German"){
+        newCatArr = [...this.props.catDE];
+      }
+
       if(id){ 
         newCatArr[index].collapse=false;
         this.setState({cat:newCatArr})
       }
       }
+
       cat1RollDownHandler = (id, index, cat1Index) => {
         let newCatArr = [...this.state.cat]; 
         if(id){
@@ -146,54 +126,57 @@ class CategoryBrowser extends Component {
         this.setState({newCatClicked:true, str:str})
       }
 
-      newCategorySubmitHandler = (cat,str) => {
+      newCategorySubmitHandler = (cat,str,lan) => {
         let copyArr;
-        let newCat = {
-          id:cat.catCID,
-          cid:cat.catCID,
-          name: cat.catName,
-          url:cat.catUrl,
-          collapse:false
-        }
-
-        switch(cat.catLan){
+        switch(lan){
           case "English":
-            copyArr = [...this.state.catEN];
+            copyArr = [...this.props.catEN];
             break;
           case "German":
-            copyArr =[...this.state.catDE];
+            copyArr =[...this.props.catDE];
             break;
           default:
             break;
           }
-
+      
         if(str === "main"){
-          copyArr.push(newCat);
+          copyArr.push(cat);
+          
         } else if ( str==="cat1" ){
           copyArr.forEach((el)=>{
-          if(el.id===this.state.curCategory.id){
-              if(el.hasOwnProperty("cat1")){
-                  el.cat1.push(newCat);
-                  el.collapse=true
+          if(el.id === this.state.curCategory.id){
+            
+            if(el.hasOwnProperty("cat1")){
+                 let copyElCat1 = [...el.cat1] 
+                  el.cat1 = copyElCat1
+                  el.cat1.push(cat);
+                  
+                  
                 } else {
                   el.cat1 = [];
-                  el.cat1.push(newCat)
-                  el.collapse=true
+                  el.cat1.push(cat)
+                  
                 }
               }
               }) 
-        } else if (str === "cat2"){
+        } else if ( str === "cat2" ){
           copyArr.forEach(el=>{
-            if(el.hasOwnProperty("cat1")){
+            if(el.hasOwnProperty( "cat1" )){
+              let copyElCat1 = [...el.cat1];
+              el.cat1=copyElCat1
               el.cat1.forEach(cat1El=>{
                 if( cat1El.id=== this.state.curCategory.id){
+                  
                   if(cat1El.hasOwnProperty("cat2")){
-                    cat1El.cat2.push(newCat);
-                    cat1El.collapse=true
+                    let copyElCat2 = [...cat1El.cat2]
+                    cat1El.cat2 = copyElCat2
+                    cat1El.cat2.push(cat);
+                    
+                    
                   } else {
                     cat1El.cat2 = [];
-                    cat1El.cat2.push(newCat)
-                    cat1El.collapse=true
+                    cat1El.cat2.push(cat)
+                    
                   }
                 }
               })
@@ -201,19 +184,27 @@ class CategoryBrowser extends Component {
           })
         } else if (str === "cat3" ){
           copyArr.forEach(el=>{
+            
             if(el.hasOwnProperty("cat1")){
+            let copyElCat1 = [...el.cat1] 
+            el.cat1 = copyElCat1 
               el.cat1.forEach(cat1El=>{
-                if(cat1El.hasOwnProperty("cat2")){
-                  cat1El.cat2.forEach(cat2El=>{
 
+                if(cat1El.hasOwnProperty("cat2")){
+                  let copyElCat2 = [...cat1El.cat2] 
+                  cat1El.cat1 = copyElCat2 
+                  cat1El.cat2.forEach(cat2El=>{
+                    
                     if( cat2El.id=== this.state.curCategory.id){
                       if(cat2El.hasOwnProperty("cat3")){
-                        cat2El.cat3.push(newCat);
-                        cat2El.collapse=true
+                        let copyElCat3 = [...cat2El.cat3] 
+                        copyElCat3.push(cat);
+                        cat2El.cat3=copyElCat3
+                        
                       } else {
                         cat2El.cat3 = [];
-                        cat2El.cat3.push(newCat)
-                        cat2El.collapse=true
+                        cat2El.cat3.push(cat)
+                        
                       }
                     }
 
@@ -224,20 +215,13 @@ class CategoryBrowser extends Component {
             }
           })
         }
+        this.setState({cat:copyArr})
+        if(lan==="English"){
+            this.props.updateCatEN(copyArr);  
+        } else if(lan==="German"){
+            this.props.updateCatDE(copyArr);         
             
-        if(cat.catLan==="English"){
-           this.setState({cat:copyArr, catEN:copyArr});
-          axios.put("/en/category.json", copyArr ).then(resp=>{
-           }).catch(err => {
-             this.setState({error:true})
-           })    
-        } else if(cat.catLan==="German"){
-                   
-          this.setState({cat:copyArr, catDE:copyArr});
-          axios.put("/de/category.json", copyArr ).then(resp=>{
-           }).catch(err => {
-             this.setState({error:true})
-           })   
+            
         }
       }
 
@@ -248,31 +232,33 @@ class CategoryBrowser extends Component {
     modalClosedNewCategoryHandler = () =>{
       this.setState({newCatClicked:false});
     }
-    deleteCategoryHandler=(cat)=>{
-      console.log(cat,cat.catStr,"deleteCategoryHandler");
+    deleteCategoryHandler=(cat,str,lan)=>{
+  console.log(cat,"cat",str,"str",lan,"lan")
       let copyArr;
-      switch(cat.catLan){
+      switch(lan){
         case "English":
-          copyArr = [...this.state.catEN];
+          copyArr = [...this.props.catEN];
           break;
         case "German":
-          copyArr =[...this.state.catDE];
+          copyArr =[...this.props.catDE];
           break;
         default:
           break;
         }
 
-      if(cat.catStr==="main"){
+      if(str==="main"){
           copyArr.forEach( el => {
-            if(el.id===cat.catId){
+            if(el.id===cat.id){
                 copyArr.splice(copyArr.indexOf(el),1);
             }                
           })
-      } else if (cat.catStr==="cat1"){
+      } else if (str==="cat1"){
         copyArr.forEach( el => {
           if(el.hasOwnProperty("cat1")){
+            let copyElCat1 = [...el.cat1] 
+            el.cat1 = copyElCat1
             el.cat1.forEach(cat1El=>{
-               if(cat1El.id===cat.catId){
+               if(cat1El.id===cat.id){
                  el.cat1.splice(el.cat1.indexOf(cat1El),1);
                  if(el.cat1.length===0){
                   delete el.cat1
@@ -283,13 +269,17 @@ class CategoryBrowser extends Component {
           } 
                         
         })
-      } else if ( cat.catStr==="cat2"){
+      } else if ( str==="cat2"){
         copyArr.forEach(el=>{
           if(el.hasOwnProperty("cat1")){
+            let copyElCat1 = [...el.cat1] 
+            el.cat1 = copyElCat1
             el.cat1.forEach(cat1El=>{
               if(cat1El.hasOwnProperty("cat2")){
+                let copyElCat2 = [...cat1El.cat2] 
+                cat1El.cat2 = copyElCat2
                 cat1El.cat2.forEach(cat2El=>{
-                  if(cat2El.id===cat.catId){
+                  if(cat2El.id===cat.id){
                     cat1El.cat2.splice(cat1El.cat2.indexOf(cat2El),1);
                     if(cat1El.cat2.length===0){
                      delete cat1El.cat2;
@@ -302,15 +292,21 @@ class CategoryBrowser extends Component {
             })
           }
         })
-      } else if (cat.catStr=== "cat3"){
+      } else if (str=== "cat3"){
         copyArr.forEach( el => {
           if(el.hasOwnProperty("cat1")){
+            let copyElCat1 = [...el.cat1] 
+            el.cat1 = copyElCat1
             el.cat1.forEach(cat1El=>{
               if(cat1El.hasOwnProperty("cat2")){
+                let copyElCat2 = [...cat1El.cat2] 
+                cat1El.cat2 = copyElCat2
                 cat1El.cat2.forEach(cat2El=>{
                   if(cat2El.hasOwnProperty("cat3")){
+                    let copyElCat3 = [...cat2El.cat3] 
+                    cat2El.cat1 = copyElCat3
                     cat2El.cat3.forEach(cat3El=>{
-                      if(cat3El.id===cat.catId){
+                      if(cat3El.id===cat.id){
                         cat2El.cat3.splice(cat2El.cat3.indexOf(cat3El),1);
                         if(cat2El.cat3.length===0){
                          delete cat2El.cat3;
@@ -326,155 +322,172 @@ class CategoryBrowser extends Component {
           }
         })
       }
-      if(cat.catLan==="English"){
-        this.setState({cat:copyArr, catEN:copyArr});
-       axios.put("/en/category.json", copyArr ).then(resp=>{
-        }).catch(err => {
-          this.setState({error:true})
-        })    
-     } else if(cat.catLan==="German"){
-                
-       this.setState({cat:copyArr, catDE:copyArr});
-       axios.put("/de/category.json", copyArr ).then(resp=>{
-        }).catch(err => {
-          this.setState({error:true})
-        })   
-     }
-    }
-    updateCategorySubmitHandler = (cat) => {
-      console.log(cat,"updateCategorySubmitHandler",cat.catStr);
-      let catUpdate = {
-        id:cat.catId,
-        cid:cat.catCID,
-        name:cat.catName,
-        url:cat.catUrl,
-        collapse:false
+      this.setState({cat:copyArr});
+        if(lan==="English"){
+        this.props.updateCatEN(copyArr) 
+      } else if(lan==="German"){
+        this.props.updateCatDE(copyArr)  
       }
+    }
 
+    updateCategorySubmitHandler = (cat,str,lan) => {
+      console.log(cat,str,lan,"cat,str,lan")
       let copyArr;
-      switch(cat.catLan){
+      switch(lan){
         case "English":
-          copyArr = [...this.state.catEN];
+          copyArr = [...this.props.catEN];
           break;
         case "German":
-          copyArr =[...this.state.catDE];
+          copyArr =[...this.props.catDE];
           break;
         default:
           break;
         }
 
-      if(cat.catStr==="main"){
+      if(str==="main"){
           copyArr.forEach( el => {
-            if(el.id===cat.catId){
+            if(el.id===cat.id){
                 copyArr.splice(copyArr.indexOf(el),1);
-                copyArr.push(catUpdate)
+                copyArr.push(cat)
             }                
           })
       } 
-      else if (cat.catStr==="cat1"){
-        let cat2Copy;
+      else if (str==="cat1"){
+        let cat2Copy
         copyArr.forEach( el => {
-          if(el.hasOwnProperty("cat1")){
-            el.cat1.forEach(cat1El=>{
-                if(cat1El.hasOwnProperty("cat2")){
+         if(el.hasOwnProperty("cat1")){
+           let copyElCat1 = [...el.cat1] 
+           el.cat1 = copyElCat1
+           el.cat1.forEach(cat1El=>{
+               if(cat1El.hasOwnProperty("cat2")){
                   cat2Copy = cat1El.cat2
-                  console.log(cat2Copy)
-                  if(cat1El.id===cat.catId){
-                    el.cat1.splice(el.cat1.indexOf(cat1El),1);
-                    el.cat1.push(catUpdate)
-                    cat1El.collapse=true;
-                    el.cat1[el.cat1.length-1].cat2=cat2Copy
-                    }
-                }else{
-                  if(cat1El.id===cat.catId){
-                    el.cat1.splice(el.cat1.indexOf(cat1El),1);
-                    el.cat1.push(catUpdate)
-                    cat1El.collapse=true;
-                  }
-                }
-             
-             })  
-          }               
-        })
-      }
-      else if (cat.catStr==="cat2"){
-        let cat3Copy;
-        copyArr.forEach( el => {
-          if(el.hasOwnProperty("cat1")){
-            el.cat1.forEach(cat1El=>{
-                if(cat1El.hasOwnProperty("cat2")){
-                  cat1El.cat2.forEach(cat2El=>{
-                    if(cat2El.hasOwnProperty("cat3")){
-                      cat3Copy = cat2El.cat3
-                      if(cat2El.id===cat.catId){
-                        cat1El.cat2.splice(cat1El.cat2.indexOf(cat2El),1);
-                        cat1El.cat2.push(catUpdate)
-                        cat2El.collapse=true;
-                        cat1El.cat2[cat1El.cat2.length-1].cat3=cat3Copy
-                        }
-                    }else{
-                      if(cat2El.id===cat.catId){
-                        cat1El.cat2.splice(cat1El.cat2.indexOf(cat2El),1);
-                        cat1El.cat2.push(catUpdate)
-                        cat1El.collapse=true;
+                   if(cat1El.id===cat.id){
+                   el.cat1.splice(el.cat1.indexOf(cat1El),1);
+                   el.cat1.push(cat)
+                   el.cat1[el.cat1.length-1].cat2 = cat2Copy
+                   }
+               }else{
+                 if(cat1El.id===cat.id){
+                   el.cat1.splice(el.cat1.indexOf(cat1El),1);
+                   el.cat1.push(cat)
+                   }
+               }
+            
+            })  
+         }               
+       })
+     }
+     else if (str==="cat2"){
+       let cat3Copy;
+       copyArr.forEach( el => {
+         if(el.hasOwnProperty("cat1")){
+          let copyElCat1 = [...el.cat1] 
+          el.cat1 = copyElCat1
+           el.cat1.forEach(cat1El=>{
+               if(cat1El.hasOwnProperty("cat2")){
+                let copyElCat2 = [...cat1El.cat2] 
+                cat1El.cat2 = copyElCat2
+                 cat1El.cat2.forEach(cat2El=>{
+                   if(cat2El.hasOwnProperty("cat3")){
+                     cat3Copy = cat2El.cat3
+                     if(cat2El.id===cat.id){
+                       cat1El.cat2.splice(cat1El.cat2.indexOf(cat2El),1);
+                       cat1El.cat2.push(cat)
+                       cat2El.collapse=true;
+                       cat1El.cat2[cat1El.cat2.length-1].cat3=cat3Copy
                        }
-                    }
-                  })
-                }
-             })  
-          }               
-        })
-      }
-      else if (cat.catStr==="cat3"){
-        
-        copyArr.forEach( el => {
-          if(el.hasOwnProperty("cat1")){
-            el.cat1.forEach(cat1El=>{
-                if(cat1El.hasOwnProperty("cat2")){
-                  cat1El.cat2.forEach(cat2El=>{
-                    if(cat2El.hasOwnProperty("cat3")){
-                      cat2El.cat3.forEach(cat3El=>{
-                        if(cat3El.id===cat.catId){
-                          cat2El.cat3.splice(cat2El.cat3.indexOf(cat3El),1);
-                          cat2El.cat3.push(catUpdate)
-                          cat3El.collapse=true;
-                        }  
-                      })
-                      
-                    }
-                  })
-                }
-             })  
-          }               
-        })
-      }
-      if(cat.catLan==="English"){
-        this.setState({cat:copyArr, catEN:copyArr});
-       axios.put("/en/category.json", copyArr ).then(resp=>{
-        }).catch(err => {
-          this.setState({error:true})
-        })    
-     } else if(cat.catLan==="German"){
-                
-       this.setState({cat:copyArr, catDE:copyArr});
-       axios.put("/de/category.json", copyArr ).then(resp=>{
-        }).catch(err => {
-          this.setState({error:true})
-        })   
+                   }else{
+                     if(cat2El.id===cat.id){
+                       cat1El.cat2.splice(cat1El.cat2.indexOf(cat2El),1);
+                       cat1El.cat2.push(cat)
+                       cat1El.collapse=true;
+                      }
+                   }
+                 })
+               }
+            })  
+         }               
+       })
+     }
+     else if (str==="cat3"){
+       
+       copyArr.forEach( el => {
+         if(el.hasOwnProperty("cat1")){
+          let copyElCat1 = [...el.cat1] 
+          el.cat1 = copyElCat1
+           el.cat1.forEach(cat1El=>{
+               if(cat1El.hasOwnProperty("cat2")){
+                let copyElCat2 = [...cat1El.cat2] 
+                cat1El.cat2 = copyElCat2
+                 cat1El.cat2.forEach(cat2El=>{
+                   if(cat2El.hasOwnProperty("cat3")){
+                    let copyElCat3 = [...cat2El.cat3] 
+                    cat2El.cat3 = copyElCat3
+                     cat2El.cat3.forEach(cat3El=>{
+                       if(cat3El.id===cat.id){
+                         cat2El.cat3.splice(cat2El.cat3.indexOf(cat3El),1);
+                         cat2El.cat3.push(cat)
+                       }  
+                     })
+                     
+                   }
+                 })
+               }
+            })  
+         }               
+       })
+     }
+      this.setState({cat:copyArr});
+      if(lan==="English"){
+       this.props.updateCatEN(copyArr)
+     } else if(lan==="German"){       
+       this.props.updateCatEN(copyArr)
      }
     }
-    passLanguageHandler=(inputVal)=>{
-      console.log(inputVal,"passLanguageHandler");
-      this.setState({firebaseLan:inputVal, loading:true})
+
+    buttonLanChangeHandler = (bu) => {
+      
+      this.setState({loading:true});
+
+      let buttonArrList = [...this.state.buttonArrList];
+     console.log(bu.lan,"bu.lan")
+      switch(bu.lan){
+        case "EN":
+          buttonArrList=[
+            {lan:"EN", active:true},
+            {lan:"DE", active:false}
+          ]
+          this.setState(
+            {
+              buttonArrList:buttonArrList, 
+              loading:false,
+              firebaseLan:"English"}
+            )
+          break;
+        case "DE":
+          buttonArrList=[ {lan:"EN", active:false}, {lan:"DE", active:true} ]
+          this.setState({
+            buttonArrList:buttonArrList,   
+            loading:false, 
+            firebaseLan:"German" 
+          })
+        break;
+      }
+
     }
- 
-    
     render(){
-      console.log("RENDER", this.state.str)
+     let categories;
+      if(this.state.firebaseLan === "English"){
+        categories = this.props.catEN
+     } 
+     if(this.state.firebaseLan === "German"){
+        categories = this.props.catDE
+   } 
     return (  
         <Auxx>
                 <Modal show={this.state.newCatClicked} clicked={this.modalClosedNewCategoryHandler}>
                     <NewCategory
+                        lan={this.state.firebaseLan}
                         str={this.state.str} 
                         newCategorySubmitHandler={this.newCategorySubmitHandler}
                         closedModal={this.modalClosedNewCategoryHandler}
@@ -492,16 +505,17 @@ class CategoryBrowser extends Component {
                     />
                     :null}
               </Modal>
-              <CategoryControls
-               passLanguageHandler={this.passLanguageHandler}
-               addMainCatHandler={this.addMainCatHandler}
-               />      
+                <div className="d-flex justify-content-between">
+                <DataControllers 
+                    buttonLanChangeHandler={this.buttonLanChangeHandler}
+                    buttonArrList={this.state.buttonArrList} />   
+                <span onClick={()=>this.addMainCatHandler("main")}><i className="fas fa-plus-circle fa-2x"></i></span>
+                </div>   
         {this.state.loading ? this.state.error ? <p>Server error. Please refresh the page</p>:<Spinner /> :
             
             <Auxx>
-             
               <Categories
-                catArr={this.state.cat}
+                catArr={categories}
                 rollUpHandler={this.rollUpHandler}
                 rollDownHandler={this.rollDownHandler}
                 cat1RollUpHandler={this.cat1RollUpHandler}
@@ -512,9 +526,33 @@ class CategoryBrowser extends Component {
                 cat3RollDownHandler={this.cat3RollDownHandler}
                 editCategoryHandler={this.editCategoryHandler}
                 addCatHandler={this.addCatHandler} />
+
             </Auxx>}
         </Auxx>
         );
     }
 }
-export default CategoryBrowser;
+
+const mapStateToProps = (state) => {
+
+  return {
+   
+    catEN:state.reducerCat.catEN,
+    catDE:state.reducerCat.catDE,
+    loading:state.reducerCat.loading,
+    error:state.reducerCat.error
+  }
+
+}
+const mapDispatchToProps = (dispatch) => {
+
+return {
+    getArrEN:     () => dispatch(actionsCat.syncCatEN()),
+    getArrDE:     () => dispatch(actionsCat.syncCatDE()),
+    updateCatEN: (arr) => dispatch(actionsCat.syncUpdateCatEN(arr) ),
+    updateCatDE: (arr) => dispatch(actionsCat.syncUpdateCatDE(arr) )
+}
+
+}
+
+export default connect(mapStateToProps,mapDispatchToProps )(CategoryBrowser);

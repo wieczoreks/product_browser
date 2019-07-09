@@ -31,24 +31,6 @@ class ProductBrowser extends Component {
         } 
     }
 
-  //  componentDidUpdate(){
-   
-  //   if(this.state.loading===true && this.state.lan !== this.state.firebaseLan){ 
-  //     if(this.state.lan==="German"){
-  //       this.setState({
-  //         lan:this.state.firebaseLan, 
-  //         loading:false, 
-  //         prodArr:this.props.prodArrDE, 
-  //         })
-
-  //     } else if(this.state.lan==="English"){
-  //       this.setState({
-  //         lan:this.state.firebaseLan, 
-  //          loading:false, 
-  //         prodArr:this.props.prodArrEN})
-  //       }
-  //   }
-  //  }
 
     componentDidMount() {
       
@@ -112,7 +94,7 @@ class ProductBrowser extends Component {
   }
     
     updateProductSubmitHandler = (prod,lan) => {
-       console.log(prod,lan," updateProductSubmitHandler")
+       
        let copyArr;
         if(lan==="English"){
         copyArr = [...this.props.prodArrEN];
@@ -122,7 +104,7 @@ class ProductBrowser extends Component {
               copyArr.push({...prod, id:prod.cid});
           }                
         })
-        console.log( copyArr," copyArr updateProductSubmitHandler")
+        
         this.props.updateProductArrEN(copyArr);
       }
       else if(lan==="German"){
@@ -164,10 +146,7 @@ class ProductBrowser extends Component {
             )
           break;
         case "DE":
-          buttonArrList=[
-          {lan:"EN", active:false},
-          {lan:"DE", active:true}
-          ]
+          buttonArrList=[ {lan:"EN", active:false}, {lan:"DE", active:true} ]
           this.setState({
             buttonArrList:buttonArrList,   
             loading:false, 
@@ -179,10 +158,9 @@ class ProductBrowser extends Component {
     }
   
     render(){ 
-      console.log(this.state.firebaseLan,"firebaseLan",this.props.prodArrEN,"EN",this.props.prodArrDE,"DE");
-
-        const {searchName } = this.state;
         let filteredProducts;
+        const searchName  = this.state;
+        
 
         if (this.state.firebaseLan==="English"){
           filteredProducts = this.props.prodArrEN;

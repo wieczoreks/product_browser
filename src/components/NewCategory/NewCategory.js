@@ -8,39 +8,35 @@ class NewCategory extends Component {
         super(props)
       this.state={
         category:{
-            catLan:'English',
-            catName:"",
-            catCID:'',
-            catUrl:''
+            name:"",
+            cid:'',
+            id:'',
+            url:'',
+            collapse:false
             },
         notification:false,
         message:"",
-        str:""
+        
     }
     }
-componentDidMount(){
-  console.log("Component Did Mount [NewCategory]")
-}
+
 
  newCategoryInputHandler = (e) =>{
    const cat = {...this.state.category}
-   this.setState({str:this.props.str})
+   
   switch(e.target.id){
-    
-    case "catLan":
-      cat.catLan= e.target.value
-      this.setState({category:cat});
-      break;
+
     case "catName":
-      cat.catName= e.target.value
-      this.setState({category:cat});
-      break;
+          cat.name= e.target.value
+          this.setState({category:cat});
+          break;
       case "catCID":
-          cat.catCID= e.target.value
+          cat.cid= e.target.value;
+          cat.id= e.target.value
           this.setState({category:cat});
       break;
       case "catUrl":
-          cat.catUrl= e.target.value
+          cat.url= e.target.value
           this.setState({category:cat});
       break;
       default:
@@ -49,17 +45,18 @@ componentDidMount(){
 }
  
   clearHandler = () => {
-    console.log("CLEAR")
+    
      this.setState({
         category:{
-          catLan:'English',
-          catName:'',
-          catCID:'',
-          catUrl:'',
+          name:'',
+          cid:'',
+          id:'',
+          url:'',
+          collapse:false
           },
         notification:false,
         message:"",
-        
+
     })
 }
 
@@ -70,10 +67,10 @@ notificationHandler = (message) => {
 submitHandler = (e) => {
     e.preventDefault();
     const cat = this.state.category
-    console.log(this.state.category,this.state.str,"submit HANDLER")
-    this.notificationHandler(`${this.state.category.catCID}`); 
+    
+    this.notificationHandler(`${cat.cid}`); 
     setTimeout(()=>{
-      this.props.newCategorySubmitHandler(cat,this.state.str);
+      this.props.newCategorySubmitHandler(cat,this.props.str,this.props.lan);
       this.props.closedModal()
       this.clearHandler();
  },3000)  
@@ -82,7 +79,9 @@ submitHandler = (e) => {
 
 render(){
   let message = this.state.message
-  console.log(this.state.str,"RENDER NEW CATEGORY",this.props.str,"PASSED")
+ 
+
+  
      return (
       <Auxx className="card">
         <form>
@@ -95,27 +94,31 @@ render(){
             <div className="form-group d-flex flex-column align-items-start">
               <label htmlFor="catLan">Language version</label>
               <select 
-              id="catLan" 
-              style={{width:"300px"}} 
-              className="form-control" onChange={this.newCategoryInputHandler}>
-                <option value="English" className="selected">English</option>
-                <option value="German" >German</option>
-              </select>
+                id="catLan" 
+                style={{width:"300px"}} 
+                className="form-control" 
+                onChange=  {this.newCategoryInputHandler}
+                value={this.props.lan}
+                disabled
+              >
+        <option  value="English">English</option>
+        <option  value="German" >German</option>
+      </select>
               
             </div>
             <div className="form-group d-flex flex-column align-items-start">
               <label htmlFor="catName">Category name</label>
-              <input onChange={this.newCategoryInputHandler} value={this.state.category.catName} type="text" className="form-control" id="catName" required / >
+              <input onChange={this.newCategoryInputHandler} value={this.state.category.name} type="text" className="form-control" id="catName" required / >
               
             </div>
           
             <div className="form-group d-flex flex-column align-items-start">
               <label htmlFor="catCID">Category CID</label>
-              <input onChange={this.newCategoryInputHandler} type="text" className="form-control" id="catCID"  value={this.state.category.catCID} required / >
+              <input onChange={this.newCategoryInputHandler} type="text" className="form-control" id="catCID"  value={this.state.category.cid} required / >
             </div>
             <div className="form-group d-flex flex-column align-items-start">
               <label htmlFor="catUrl">Category url</label>
-              <input onChange={this.newCategoryInputHandler} type="text" className="form-control" id="catUrl" value={this.state.category.catUrl} required / >
+              <input onChange={this.newCategoryInputHandler} type="text" className="form-control" id="catUrl" value={this.state.category.url} required / >
             </div>
             <div className="form-group d-flex justify-content-around">
               <button onClick={this.submitHandler} type="submit" className="btn btn-success">Add</button>

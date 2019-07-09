@@ -10,7 +10,7 @@ import reducerProd from './store/reducers/reducerProd';
 import reducerCat from './store/reducers/reducerCat';
 const reducer = combineReducers({
     reducerProd:reducerProd,
-    rc:reducerCat
+    reducerCat:reducerCat
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

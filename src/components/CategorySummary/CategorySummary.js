@@ -9,39 +9,34 @@ class CategorySummary extends Component {
    this.state={
     
     category:{
-        catStr:this.props.str,
-        catLan:this.props.lan,
-        catId:this.props.category.id,
-        catName:this.props.category.name,
-        catCID:this.props.category.cid,
-        catUrl:this.props.category.url,
+        
+        id:this.props.category.id,
+        name:this.props.category.name,
+        cid:this.props.category.cid,
+        url:this.props.category.url,
         
     },
     notification:false,
     message:"",
     
+     
   }
  }
  categoryUpdateHandler = (e) =>{
   const cat = {...this.state.category}
-  cat.catStr = this.props.str
-  this.setState({category:cat})
- switch(e.target.id){
   
-    case "catLan":
-        cat.catLan= e.target.value
-        this.setState({category:cat});
-         break;
+ switch(e.target.id){
+ 
     case "catName":
-        cat.catName= e.target.value
+        cat.name= e.target.value
         this.setState({category:cat});
         break;
     case "catCID":
-         cat.catCID= e.target.value
+         cat.cid= e.target.value
          this.setState({category:cat});
         break;
     case "catUrl":
-         cat.catUrl= e.target.value
+         cat.url= e.target.value
          this.setState({category:cat});
         break;
     default:
@@ -54,10 +49,10 @@ class CategorySummary extends Component {
  
  submitHandler = (e) => {
      e.preventDefault();
-     
-     this.notificationHandler(`${this.state.category.catCID} updated`); 
+     const cat = this.state.category
+     this.notificationHandler(`${cat.cid} updated`); 
      setTimeout(()=>{
-       this.props.updateCategorySubmitHandler(this.state.category);
+       this.props.updateCategorySubmitHandler(cat,this.props.str,this.props.lan);
        this.props.timesHandler()
        
   },3000)  
@@ -66,9 +61,9 @@ class CategorySummary extends Component {
 deleteCategory = ()=>{
   const cat = this.state.category
   
-  this.notificationHandler(`${cat.catCID} deleted`);
+  this.notificationHandler(`${cat.cid} deleted`);
   setTimeout(() => {
-  this.props.deleteCategoryHandler(cat)
+  this.props.deleteCategoryHandler(cat,this.props.str,this.props.lan)
   this.props.timesHandler()
   
 },3000)  
@@ -77,34 +72,7 @@ deleteCategory = ()=>{
 
  render(){
   
-   let options;
-   if(this.state.category.catLan==="German"){
-    
-    options= (<select 
-    id="catLan" 
-    style={{width:"300px"}} 
-    className="form-control" 
-    onChange=  {this.productUpdateHandler}
-    value={this.state.category.catLan}
-    disabled
-    >
-      <option value="English" >English</option>
-      <option value="German" >German</option>
-    </select>)
-   } else if(this.state.category.catLan==="English") {
-    
-    options= (<select 
-      id="catLan" 
-      style={{width:"300px"}} 
-      className="form-control" 
-      onChange=  {this.categoryUpdateHandler}
-      value={this.state.category.catLan}
-      disabled
-      >
-        <option value="English">English</option>
-        <option value="German" >German</option>
-      </select>)
-   }
+  
 
   let message = this.state.message
      return (
@@ -118,21 +86,31 @@ deleteCategory = ()=>{
             </div>
             <div className="form-group d-flex flex-column align-items-start">
                         <label htmlFor="prodLan">Language version</label>
-                        {options}
+                        <select 
+                          id="catLan" 
+                          style={{width:"300px"}} 
+                          className="form-control" 
+                          onChange=  {this.productUpdateHandler}
+                          value={this.props.lan}
+                          disabled
+                          >
+                            <option value="English" >English</option>
+                            <option value="German" >German</option>
+                          </select>
                         
             </div>
   <div className="form-group d-flex flex-column align-items-start">
     <label htmlFor="catName">Category name</label>
-    <input onChange={this.categoryUpdateHandler} type="text" className="form-control" id="catName"  value={this.state.category.catName} / >
+    <input onChange={this.categoryUpdateHandler} type="text" className="form-control" id="catName"  value={this.state.category.name} / >
     
   </div>
   <div className="form-group d-flex flex-column align-items-start">
     <label htmlFor="catCID">Category CID</label>
-    <input onChange={this.categoryUpdateHandler} type="text" className="form-control" id="catCID"  value={this.state.category.catCID} / >
+    <input onChange={this.categoryUpdateHandler} type="text" className="form-control" id="catCID"  value={this.state.category.cid} / >
   </div>
   <div className="form-group d-flex flex-column align-items-start">
     <label htmlFor="catUrl">Category url</label>
-    <input onChange={this.categoryUpdateHandler} type="text" className="form-control" id="catUrl"  value={this.state.category.catUrl} / >
+    <input onChange={this.categoryUpdateHandler} type="text" className="form-control" id="catUrl"  value={this.state.category.url} / >
   </div>
   
   <div className="form-group d-flex justify-content-around">

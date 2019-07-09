@@ -23,13 +23,11 @@ export const syncProdEN = () => {
             for(let key in res.data.products){
               recArr.push(res.data.products[key])
             }  
-            
               dispatch(setProdStateEN({
-                
                 prodArrEN:recArr, 
                 loading:false,
-                
                 }))
+                
           }).catch(err=>{
               dispatch(syncProdState_FAILED())
           })  
