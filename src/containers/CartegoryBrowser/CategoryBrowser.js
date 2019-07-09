@@ -233,7 +233,7 @@ class CategoryBrowser extends Component {
       this.setState({newCatClicked:false});
     }
     deleteCategoryHandler=(cat,str,lan)=>{
-  console.log(cat,"cat",str,"str",lan,"lan")
+  
       let copyArr;
       switch(lan){
         case "English":
@@ -331,7 +331,7 @@ class CategoryBrowser extends Component {
     }
 
     updateCategorySubmitHandler = (cat,str,lan) => {
-      console.log(cat,str,lan,"cat,str,lan")
+      
       let copyArr;
       switch(lan){
         case "English":
@@ -441,7 +441,7 @@ class CategoryBrowser extends Component {
       if(lan==="English"){
        this.props.updateCatEN(copyArr)
      } else if(lan==="German"){       
-       this.props.updateCatEN(copyArr)
+       this.props.updateCatDE(copyArr)
      }
     }
 
@@ -450,7 +450,7 @@ class CategoryBrowser extends Component {
       this.setState({loading:true});
 
       let buttonArrList = [...this.state.buttonArrList];
-     console.log(bu.lan,"bu.lan")
+     
       switch(bu.lan){
         case "EN":
           buttonArrList=[

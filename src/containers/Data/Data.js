@@ -4,6 +4,8 @@ import Auxx from '../../hoc/Auxx';
 import axios from '../../axios-products';
 import DataControllers from '../../components/DataControllers/DataControllers' 
 import {connect} from 'react-redux';
+import * as actions from '../../store/actions/index';
+
 
 class Data extends Component {
  
@@ -12,64 +14,34 @@ class Data extends Component {
       super(props);
 
       this.state = {
-        cat:[],
+        lan:"English",
         catEN:[],
         catDE:[],
-        prod: [],
         prodEN:[],
         prodDE:[],
-        loading:true,
         catprod:"catprodEN",
+        
         buttonArrList:[
           {lan:"EN", active:true, id:"catprodEN"},
           {lan:"DE", active:false, id:"catprodDE"}
           ],
-          error:false
+        
         }
 
     }
     componentDidMount() {
-        axios.get("/en.json").then((res)=>{
-          let recArr = [];
-          for(let key in res.data.products){
-            recArr.push(res.data.products[key])
-          }
-        this.setState({prod:recArr, prodEN:recArr, loading:false
-          })
-        }).catch(err=>{
-          this.setState({error:true})
-           })
-        axios.get("/de.json").then((res)=>{
-        let recArr = [];
-        for(let key in res.data.products){
-          recArr.push(res.data.products[key])
-        }
-        this.setState({prodDE:recArr})
-        }).catch(err=>{
-          this.setState({error:true})
-           })
-        axios.get("/en.json").then((res)=>{
-          let recArr = [];
-          for(let key in res.data.category){
-           recArr.push(res.data.category[key])
-           }
-           this.setState({cat:recArr, loading:false, catEN:recArr})
-           }).catch(err=>{
-          this.setState({error:true})
-           })
-       axios.get("/de.json").then((res)=>{
-           let recArr = [];
-           for(let key in res.data.category){
-             recArr.push(res.data.category[key])
-           }
-           this.setState({catDE:recArr})
-         }).catch(err=>{
-           this.setState({error:true})
-         })
-    }
-   
+      if(this.state.lan==="English"){
+        this.props.getCatEN();
+        this.props.getProdEN();
+      }else if (this.state.lan==="German"){
+        this.props.getCatDE();
+        this.props.getProdDE();
+      }
+     
+       
+  }
     copyTextHandler = (containerid)=>{
-      console.log(containerid,"containerid")
+      
         if (document.selection) {
             var range = document.body.createTextRange();
             range.moveToElementText(document.getElementById(containerid));
@@ -93,22 +65,45 @@ class Data extends Component {
             {lan:"EN", active:true},
             {lan:"DE", active:false}
           ]
-          this.setState({buttonArrList:buttonArrList, cat:this.state.catEN, prod:this.state.prodEN, catprod:"catprodEN"})
+          this.setState({buttonArrList:buttonArrList, catEN:this.props.catEN, prodEN:this.props.prodEN, lan:"English" })
         break;
         case "DE":
           buttonArrList=[
           {lan:"EN", active:false},
           {lan:"DE", active:true}
           ]
-          this.setState({buttonArrList:buttonArrList, cat:this.state.catDE,  prod:this.state.prodDE, catprod:"catprodDE"})
+          this.setState({buttonArrList:buttonArrList, catDE:this.props.catDE,  prodDE:this.props.prodDE, lan:"German" })
         break;
       }
 
     }
+    syncDataHandler = () => {
+      
+      this.props.getCatDE();
+     
+      
+      this.props.getProdDE();
+    }
 
     render(){ 
-      console.log("RENDER", this.state.catprod);
-        const catArr = this.state.cat.map((el,indexEl)=>{
+        let cat;
+        let prod;
+        if(this.state.lan ==="English" && this.props.catEN && this.props.prodEN){
+          
+            cat = this.props.catEN;
+            prod = this.props.prodEN;
+        }
+        else if(this.state.lan ==="German" && this.props.catDE && this.props.prodDE)  {
+          cat = this.props.catDE;
+          prod = this.props.prodDE;
+        } else {
+          cat = [];
+          prod = [];
+        }
+        console.log("RENDER", cat,prod)
+           
+        
+        const catArr = cat.map((el,indexEl)=>{
             let cat1Let;
             let cat2Let;
             let cat3Let;
@@ -168,7 +163,7 @@ class Data extends Component {
                   <span>&nbsp;url&#58;&nbsp;</span><span>&#34;{el.url}&#34;&#44;</span><br />
                   <span>"cat1"&nbsp;&#58;&nbsp;&#91;&nbsp;</span><br /> 
                   <span>{cat1Let}</span><span>&#93;</span>
-                  { indexEl === this.state.cat.length-1 ? <span>&#125;</span> : <span>&#125;&nbsp;&#44;</span> }
+                  { indexEl === cat.length-1 ? <span>&#125;</span> : <span>&#125;&nbsp;&#44;</span> }
                 </div>)
             } else {
               
@@ -176,13 +171,13 @@ class Data extends Component {
                 <div className="text-left" key={el.id}>
                   <span>&#123;&nbsp;&#34;name&#34;&#58;</span><span>&#34;{el.name}&#34;&#44;</span>
                   <span>&nbsp;url&nbsp;&#58;</span><span>&#34;{el.url}&#34;</span>
-                  {indexEl === this.state.cat.length-1 ? <span>&#125;</span> : <span>&#125;&nbsp;&#44;</span> }
+                  {indexEl === cat.length-1 ? <span>&#125;</span> : <span>&#125;&nbsp;&#44;</span> }
                 </div>)
             }
             
         })
 
-        const prodArr = this.state.prod.map((el,index)=>{
+        const prodArr = prod.map((el,index)=>{
             return (<div className="text-left" key={el.id}>
               &#123;<br /> 
               <span>&#34;name&#34;</span>:<span>&#34;{el.name}&#34;&#44;</span><br />
@@ -195,20 +190,21 @@ class Data extends Component {
                        </div>)})}     
                   </Auxx>
               &#93;
-              {index===this.state.prod.length-1?<span>&#125;</span>:<span>&#125;&nbsp;&#44;</span>}
+              {index===prod.length-1?<span>&#125;</span>:<span>&#125;&nbsp;&#44;</span>}
               
             </div>)
         })
        
-        console.log("this.props DATA", this.props)
+    
      return (
          
       <div>
         
-          {this.state.loading ? this.state.error ? <p>Server error. Please refresh the page</p> :<Spinner /> :
+          {this.props.loadingProd ? this.props.error ? <p>Server error. Please refresh the page</p> :<Spinner /> :
                   <Auxx>
                       <div className="d-flex justify-content-between">
                       <button className="btn btn-primary" onClick={()=>this.copyTextHandler(this.state.catprod)}>Copy</button>
+                      <button className="btn btn-warning" onClick={()=>this.syncDataHandler()}><i className="fas fa-sync"></i></button>
                       <DataControllers 
                         buttonLanChangeHandler={this.buttonLanChangeHandler}
                         buttonArrList={this.state.buttonArrList} />
@@ -235,18 +231,30 @@ class Data extends Component {
     }
 }
 
+
+ 
 const mapStateToProps = (state) => {
 
-    return {
-
-    }
+  return {
+   
+    prodEN:state.reducerProd.prodArrEN,
+    prodDE:state.reducerProd.prodArrDE,
+    catEN:state.reducerCat.catEN,
+    catDE:state.reducerCat.catDE,
+    loadingProd:state.reducerProd.loading,
+    loadingCat:state.reducerCat.loading,
+    error:state.reducerProd.error
+  }
 
 }
 const mapDispatchToProps = (dispatch) => {
 
-  return {
-
-  }
+return {
+    getProdEN: ()=> dispatch(actions.syncProdEN()),
+    getProdDE: ()=> dispatch(actions.syncProdDE()),
+    getCatEN:  ()=> dispatch(actions.syncCatEN()),
+    getCatDE:  ()=> dispatch(actions.syncCatDE())
+}
 
 }
 

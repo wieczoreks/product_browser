@@ -28,7 +28,7 @@ const  reducerCat  = (state = initProd, action) => {
             case actionTypes.SYNC_CAT_FAILED:
                 return {
                     ...state,
-                    error:action.error
+                    error:true
                 }
             case actionTypes.UPDATE_CAT_EN:
                     return  {
