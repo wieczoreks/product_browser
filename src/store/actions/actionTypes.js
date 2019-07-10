@@ -11,4 +11,11 @@ export const SET_CAT_EN = "SET_CAT_EN";
 export const SET_CAT_DE = "SET_CAT_DE";
 export const UPDATE_CAT_EN = "UPDATE_CAT_EN";
 export const UPDATE_CAT_DE = "UPDATE_CAT_DE";
+/////////////////////////AUTH////////////////////////////////////////////////
+
+export const AUTH_START = "AUTH_START";
+export const AUTH_SUCCESS = "AUTH_SUCCESS";
+export const AUTH_FAIL = "AUTH_FAIL";
+
+
 

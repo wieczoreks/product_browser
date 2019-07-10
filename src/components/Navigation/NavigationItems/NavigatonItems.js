@@ -12,7 +12,7 @@ return (
             <NavigationItem link="/categories">Categories</NavigationItem>
             <NavigationItem link="/data">Data</NavigationItem>
             <NavigationItem link="/about">About</NavigationItem>
-            <NavigationItem link="/login">Login</NavigationItem>
+            <NavigationItem link="/auth">Authenticate</NavigationItem>
         </ul>
     
 );

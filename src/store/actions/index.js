@@ -17,3 +17,6 @@ export {
     syncUpdateCatDE
 
     } from './actionsCat';
+    export {
+        authSync
+        } from './actionsAuth';

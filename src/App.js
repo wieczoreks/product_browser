@@ -30,7 +30,7 @@ function App() {
           
           <Route path="/about" exact render={About} />
           <Route path="/data" exact component={Data} />
-          <Route path="/login" exact component={Auth} />
+          <Route path="/auth" exact component={Auth} />
           <Route path="/products" exact component={AsyncNewProductBrowser} />
           <Route path="/categories" exact render={()=><Suspense fallback={<div>Loading...</div>}><CategoryBrowser /></Suspense>} />
           <Route path="/en/products/:id/" exact component={ProductDetails} />
