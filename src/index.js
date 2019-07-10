@@ -8,7 +8,9 @@ import {createStore,combineReducers, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk';
 import reducerProd from './store/reducers/reducerProd';
 import reducerCat from './store/reducers/reducerCat';
+import reducerAuth from './store/reducers/reducerAuth';
 const reducer = combineReducers({
+    reducerAuth:reducerAuth,
     reducerProd:reducerProd,
     reducerCat:reducerCat
 })

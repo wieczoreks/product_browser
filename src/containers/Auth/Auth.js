@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import * as actions from '../../store/actions/index';
 import {connect} from 'react-redux';
+import Spinner from "../../UI/Spinner/Spinner";
 
 class Auth extends Component {
  
@@ -9,10 +10,14 @@ class Auth extends Component {
       super(props)
         this.state = {
             loginEmail:null,
-            loginPassword:null
+            loginPassword:null,
+            signUpCode:null,
+            signUpCodeFlag:false,
+            onSignUp:true,
         }
     }
     inputDataHandler = (e) => {
+        
         switch(e.target.id){
             case "loginEmail":
                 this.setState({loginEmail:e.target.value})
@@ -20,18 +25,60 @@ class Auth extends Component {
             case "loginPassword":
                 this.setState({loginPassword:e.target.value})
                 break;
+            case "signUpCode":
+            this.setState({signUpCode:e.target.value})
+            break;
         }
     }
     submitFormHandler = (e) => {
         e.preventDefault();
-        this.props.authSync(this.state.loginEmail, this.state.loginPassword)
-    }
+        let authentication;
+        let signUpCode = this.state.signUpCode;
+        let onSignUp = this.state.onSignUp
+        if(signUpCode ==="123!@#" && onSignUp===true){
+            authentication="signUp"
+            this.props.authSync(this.state.loginEmail, this.state.loginPassword,authentication) 
+        } else if (signUpCode !=="123!@#" && onSignUp===false){
+            authentication="signIn"
+            this.props.authSync(this.state.loginEmail, this.state.loginPassword,authentication) 
+        } else {
 
+            this.setState({signUpCodeFlag:true})
+            setTimeout(()=>{
+                this.setState({signUpCodeFlag:false})
+            },3000)
+        }
+        
+    }
+    signInFormHandler = (e) => {
+        
+        e.preventDefault();
+        this.setState((prevState)=>{
+            
+          return  {onSignUp:!prevState.onSignUp}
+        })
+    }
     render(){ 
-        console.log("render Auth", this.state.loginPassword,this.state.loginEmail)
+        let errorMessage=null;
+        if(this.props.error){
+            errorMessage=<span className="text-danger">{this.props.error.message}</span>
+            setTimeout(()=>{errorMessage=null},3000)
+        }
+        let spinner;
+        if(this.props.loading){
+            spinner=<Spinner />
+        }else{
+            spinner=null
+        }
      return (
          <div className="w-100 d-flex justify-content-center text-primary">
-            <form className="w-50 shadow p-5 m-5 " onSubmit={this.submitFormHandler}> 
+            
+            <form  className="w-80 shadow  p-5 m-5 "> 
+                <div style={{width:"100px",height:"10px",position:"absolute", top:0, right:0 }}>
+                    {spinner}
+                </div>
+                {errorMessage}
+                <h2>{this.state.onSignUp?"Create account":"Log in"}</h2>
                 <div className="form-group">
                     <label htmlFor="loginEmai">Email address</label>
                     <input 
@@ -43,10 +90,32 @@ class Auth extends Component {
                 </div>
                 <div className="form-group">
                     <label htmlFor="loginPassword">Password</label>
-                    <input type="password" className="form-control" id="loginPassword"  />
+                    <input 
+                    type="password" 
+                    className="form-control" 
+                    id="loginPassword"
+                    onChange = {this.inputDataHandler}  />
                 </div>
-                <span>{this.state.loginPassword}</span><span>{this.state.loginEmail}</span>
-                <button type="submit" className="btn btn-primary">Submit</button>
+                {this.state.onSignUp?(<div className="form-group">
+                    <label htmlFor="signUpCode">Enter signup code</label>
+                    <input 
+                    type="text" 
+                    className="form-control" 
+                    id="signUpCode"
+                    onChange = {this.inputDataHandler}  />
+                    {this.state.signUpCodeFlag?<small className="text-danger">Wrong Code</small>:null}
+                </div>):null}
+                
+                <button 
+                onClick={this.submitFormHandler} 
+                type="submit" 
+                className="btn btn-primary mr-2">{this.state.onSignUp ? <span>Create</span>:"Log in"}</button>
+                <span><i className="fas fa-arrows-alt-h"></i></span>
+                <button 
+                onClick={this.signInFormHandler} 
+                type="submit" 
+                className="btn btn-primary ml-2">{this.state.onSignUp ? <span><i className="fas fa-door-open"></i></span>:<span><i className="fas fa-user-plus pr-2"></i></span>}</button>
+                
             </form>
       </div>
       );
@@ -56,8 +125,14 @@ class Auth extends Component {
 
   const mapDispatchToProps = (dispatch) => {
     return {
-      authSync:(email, password) => dispatch(actions.authSync(email, password))
+      authSync:(email, password, authentication) => dispatch(actions.authSync(email, password, authentication))
+    }
+  }
+  const mapStateToProps = (state) => {
+    return {
+      loading:state.reducerAuth.loading,
+      error:state.reducerAuth.error
     }
   }
   
-  export default connect(null,mapDispatchToProps )(Auth);
+  export default connect(mapStateToProps,mapDispatchToProps )(Auth);

@@ -35,7 +35,7 @@ function App() {
           <Route path="/categories" exact render={()=><Suspense fallback={<div>Loading...</div>}><CategoryBrowser /></Suspense>} />
           <Route path="/en/products/:id/" exact component={ProductDetails} />
           <Route path="/de/products/:id/" exact component={ProductDetails} />
-          <Redirect from="/" to="/login" />
+          <Redirect from="/" to="/auth" />
           <Route component={FourOFour} />
           {/*<Redirect from="/" to="/about" />*/}
         </Switch>
