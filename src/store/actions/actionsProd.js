@@ -1,6 +1,13 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-products';
 
+export const clickedProd = (el) => {
+    return {
+        type:actionTypes.SET_CLICKED_PROD,
+        prod:el
+    }
+}
+
 const  setProdStateEN = (res) => {
     return {
         type:actionTypes.SET_PROD_EN,
@@ -15,10 +22,10 @@ export const syncProdState_FAILED = () => {
 }
 
 
-export const syncProdEN = () => {
+export const syncProdEN = (token) => {
    
     return (dispatch) => {
-        axios.get("/en.json").then((res)=>{
+        axios.get("/en.json?auth="+token).then((res)=>{
             let recArr = [];
             for(let key in res.data.products){
               recArr.push(res.data.products[key])
@@ -40,10 +47,10 @@ export const addNewProdEN = (arr)=>{
         prodArrEN:arr.prodArrEN
     }
 }
-export const syncUpdateProdArrEN = (arr) => {
-   
+export const syncUpdateProdArrEN = (arr,token) => {
+   console.log()
     return (dispatch) => {
-        axios.put("/en/products.json", arr ).then(resp=>{
+        axios.put("/en/products.json?auth="+token, arr ).then(resp=>{
             dispatch(addNewProdEN({
                 prodArrEN:arr
                 }))
@@ -63,11 +70,11 @@ const setProdStateDE = (res) => {
     }
 }
 
-export const syncProdDE = () => {
+export const syncProdDE = (token) => {
     
     return (dispatch) => {
         
-        axios.get("/de.json").then((res)=>{
+        axios.get("/de.json?auth="+token).then((res)=>{
             
             let recArr = [];
             for(let key in res.data.products){
@@ -90,10 +97,10 @@ export const addNewProdDE = (arr)=>{
         prodArrDE:arr.prodArrDE
     }
 }
-export const syncUpdateProdArrDE = (arr) => {
+export const syncUpdateProdArrDE = (arr,token) => {
    
     return (dispatch) => {
-        axios.put("/de/products.json", arr ).then(resp=>{
+        axios.put("/de/products.json?auth="+token, arr ).then(resp=>{
             dispatch(addNewProdDE({
                 prodArrDE:arr
                 }))

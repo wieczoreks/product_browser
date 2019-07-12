@@ -15,10 +15,10 @@ const  setCatStateEN = (res) => {
     }
 }
 
-export const syncCatEN = () => {
+export const syncCatEN = (token) => {
    
     return (dispatch) => {
-        axios.get("/en.json").then((res)=>{
+        axios.get("/en.json?auth="+token).then((res)=>{
                let recArr = [];
                 for(let key in res.data.category){
                  recArr.push(res.data.category[key])
@@ -42,10 +42,10 @@ export const syncCatEN = () => {
      }
  }
 
-export const syncUpdateCatEN = (arr) => {
+export const syncUpdateCatEN = (arr, token) => {
    
     return (dispatch) => {
-        axios.put("/en/category.json", arr ).then(resp=>{
+        axios.put("/en/category.json?auth="+token, arr ).then(resp=>{
             dispatch(updateCatEN({
                catEN:arr
                 }))
@@ -64,10 +64,10 @@ const  setCatStateDE = (res) => {
     }
 }
 
-export const syncCatDE = () => {
+export const syncCatDE = (token) => {
    
     return (dispatch) => {
-        axios.get("/de.json").then((res)=>{
+        axios.get("/de.json?auth="+token).then((res)=>{
                let recArr = [];
                 for(let key in res.data.category){
                  recArr.push(res.data.category[key])
@@ -91,10 +91,10 @@ export const updateCatDE = (arr)=>{
     }
 }
 
-export const syncUpdateCatDE = (arr) => {
+export const syncUpdateCatDE = (arr, token) => {
   
    return (dispatch) => {
-       axios.put("/de/category.json", arr ).then(resp=>{
+       axios.put("/de/category.json?auth="+token, arr ).then(resp=>{
            dispatch(updateCatDE({
               catDE:arr
                }))

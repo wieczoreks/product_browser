@@ -34,8 +34,8 @@ class ProductBrowser extends Component {
 
     componentDidMount() {
       
-      this.props.getArrEN();
-      this.props.getArrDE();
+      this.props.getArrEN(this.props.token);
+      this.props.getArrDE(this.props.token);
     
     }
 
@@ -61,18 +61,19 @@ class ProductBrowser extends Component {
       if(lan==="English"){
         copyArr = [...this.props.prodArrEN];
         copyArr.push(prod);
-        this.props.updateProductArrEN(copyArr);
+        this.props.updateProductArrEN(copyArr,this.props.token);
            
       }
       else if(lan==="German"){
         copyArr =[...this.props.prodArrDE];
         copyArr.push(prod);
-        this.props.updateProductArrDE(copyArr);
+        this.props.updateProductArrDE(copyArr, this.props.token);
       }
     }
 
     deleteProductHandler = (prod,lan) =>{
-      let copyArr;  
+      let copyArr;
+      console.log(prod,lan,"DELETE")  
       if(lan==="English"){
         copyArr = [...this.props.prodArrEN];
         copyArr.forEach( el => {
@@ -80,7 +81,7 @@ class ProductBrowser extends Component {
               copyArr.splice(copyArr.indexOf(el),1); 
           }                
       })
-       this.props.updateProductArrEN(copyArr);
+       this.props.updateProductArrEN(copyArr,this.props.token);
    
     }  else if(lan==="German"){
       copyArr = [...this.props.prodArrDE];
@@ -89,7 +90,7 @@ class ProductBrowser extends Component {
             copyArr.splice(copyArr.indexOf(el),1);
         }                
     })
-    this.props.updateProductArrDE(copyArr);
+    this.props.updateProductArrDE(copyArr,this.props.token);
     }
   }
     
@@ -105,7 +106,7 @@ class ProductBrowser extends Component {
           }                
         })
         
-        this.props.updateProductArrEN(copyArr);
+        this.props.updateProductArrEN(copyArr,this.props.token);
       }
       else if(lan==="German"){
         copyArr = [...this.props.prodArrDE];
@@ -115,12 +116,13 @@ class ProductBrowser extends Component {
               copyArr.push({...prod, id:prod.cid});
           }                
       })
-      this.props.updateProductArrDE(copyArr);
+      this.props.updateProductArrDE(copyArr, this.props.token);
       }
         
        
     }
     searchProdHandler = (name,type) => {
+      
         this.setState({searchName:name,searchBy:type})
     }
 
@@ -131,7 +133,7 @@ class ProductBrowser extends Component {
       this.setState({loading:true});
 
       let buttonArrList = [...this.state.buttonArrList];
-     console.log(bu.lan,"bu.lan")
+ 
       switch(bu.lan){
         case "EN":
           buttonArrList=[
@@ -153,14 +155,19 @@ class ProductBrowser extends Component {
             firebaseLan:"German" 
           })
         break;
+        default:
+        break;
       }
 
     }
-  
+    passProduct = (el) => {
+      this.props.clickedProd(el)
+    }
+
     render(){ 
         let filteredProducts;
-        const searchName  = this.state;
-        
+        const searchName  = this.state.searchName;
+        console.log(searchName ,"searchName ")
 
         if (this.state.firebaseLan==="English"){
           filteredProducts = this.props.prodArrEN;
@@ -230,8 +237,10 @@ class ProductBrowser extends Component {
                     <Products 
                       productEditHandler={this.productEditHandler}
                       lan={this.state.firebaseLan}
-                      prodArr={filteredProducts}/>
-                      
+                      prodArr={filteredProducts}
+                      passProduct={this.passProduct}
+                      />
+                     
                     <Pagination />
                   </Auxx>}
 
@@ -247,17 +256,20 @@ const mapStateToProps = (state) => {
     prodArrEN:state.reducerProd.prodArrEN,
     prodArrDE:state.reducerProd.prodArrDE,
     loading:state.reducerProd.loading,
-    error:state.reducerProd.error
+    error:state.reducerProd.error,
+    token:state.reducerAuth.idToken,
+    prod:state.reducerProd.prod,
   }
 
 }
 const mapDispatchToProps = (dispatch) => {
 
 return {
-    getArrEN:     ()=> dispatch(actionsProd.syncProdEN()),
-    getArrDE:     ()=> dispatch(actionsProd.syncProdDE()),
-    updateProductArrEN: (arr, prod) => dispatch(actionsProd.syncUpdateProdArrEN( arr, prod ) ),
-    updateProductArrDE: (arr, prod) => dispatch(actionsProd.syncUpdateProdArrDE( arr, prod) )
+    getArrEN: (token)=> dispatch(actionsProd.syncProdEN(token)),
+    getArrDE: (token)=> dispatch(actionsProd.syncProdDE(token)),
+    updateProductArrEN: (arr, token) => dispatch(actionsProd.syncUpdateProdArrEN( arr, token )),
+    updateProductArrDE: (arr, token) => dispatch(actionsProd.syncUpdateProdArrDE( arr, token)),
+    clickedProd: (el) => dispatch(actionsProd.clickedProd( el))
 }
 
 }

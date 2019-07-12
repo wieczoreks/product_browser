@@ -8,11 +8,13 @@ const NavigationItems = (props) => {
 return (
     
         <ul className={classes.NavigationItemsUL}>
-            <NavigationItem link="/products">Products</NavigationItem>
-            <NavigationItem link="/categories">Categories</NavigationItem>
-            <NavigationItem link="/data">Data</NavigationItem>
             <NavigationItem link="/about">About</NavigationItem>
-            <NavigationItem link="/auth">Authenticate</NavigationItem>
+            {props.authFlag?<NavigationItem link="/products">Products</NavigationItem>:null}
+            {props.authFlag?<NavigationItem link="/categories">Categories</NavigationItem>:null}
+            {props.authFlag?<NavigationItem link="/data">Data</NavigationItem>:null}
+             {props.authFlag
+                ?<NavigationItem link="/logout">Log out</NavigationItem>
+                :<NavigationItem link="/login">Login</NavigationItem>}
         </ul>
     
 );

@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import Auxx from '../../hoc/Auxx';
 import ToolbarAlt from '../../components/Navigation/ToolbarAlt/ToolbarAlt';
 import SideDrawer from '../Navigation/SideDrawer/SideDrawer';
+import {connect} from 'react-redux';
+
 
 class Layout extends Component {
       constructor(props){
@@ -23,19 +25,30 @@ class Layout extends Component {
             
             return (
             <Auxx>
-                  <div className="bg-secondary">
-                        <ToolbarAlt clicked={this.expandToolbarMenuHandler} />
+                  <div className="bg-secondary ">
+                        <ToolbarAlt 
+                              authFlag={this.props.auth}
+                              clicked={this.expandToolbarMenuHandler} />
                         <SideDrawer 
+                              authFlag={this.props.auth}
                               open={this.state.showSideDrawer} 
                               closed ={this.sideDrawerClosedHandler} />
                   </div>
-                  <main className="p-3 bg-light mt-5" test="test">
+                  <main className="p-3 bg-light mt-5" test="test" style={{height:"100vh"}}>
                         {this.props.children} 
                   </main>
-                  <footer className="p-4 bg-secondary">Footer</footer>   
+                 
+                  <footer className="bg-secondary footer " >Footer</footer>  
+               
             </Auxx>
             );
       }
 }
  
-export default Layout;
+const mapStateToProps = (state) => {
+      return {
+            auth:state.reducerAuth.idToken !== null
+      }
+}
+
+export default connect(mapStateToProps)(Layout);

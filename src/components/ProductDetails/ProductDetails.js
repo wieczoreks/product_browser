@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import axios from '../../axios-products';
 import {withRouter} from 'react-router-dom'
 import Spinner from '../../UI/Spinner/Spinner';
+import {connect} from 'react-redux';
+import * as actions from '../../store/actions/index';
 
 class ProductDetails extends Component {
  
@@ -35,7 +37,7 @@ class ProductDetails extends Component {
         
         if(this.props.match.params.id)
            
-            axios.get("/en.json").then(res=>{
+            axios.get("/en.json?auth="+this.props.token).then(res=>{
             
             let recArr = [];
 
@@ -63,7 +65,7 @@ class ProductDetails extends Component {
           }).catch(err=>{
               this.setState({errorEN:"English did not fetch"})
           })
-          axios.get("/de.json").then(res=>{
+          axios.get("/de.json?auth="+this.props.token).then(res=>{
             
             let recArr = [];
 
@@ -74,7 +76,7 @@ class ProductDetails extends Component {
             let el = recArr.filter(item=>{
                 return item.id === this.props.match.params.id
             })
-            
+            console.log("DE AXIOS",el)
            this.setState({
                loading:false,
                prodArrDE:recArr,
@@ -92,22 +94,20 @@ class ProductDetails extends Component {
         })
     }
 
-    navigateBackHandler=()=>{
-        this.props.history.push({pathname:"/products"})
-    }
-    
+
     render(){ 
-        console.log(this.props,"PROPS PRODDETAIL")
+        console.log(this.props.match.url,"this.props.match.params.url")
+        console.log(this.state,"STATE")
 
         let prod; 
         let content = <Spinner />
         if(this.state.prodEN.cid || this.state.prodDE.cid){
             if(this.props.match.url.includes("/en")){
                 prod = this.state.prodEN
-               
+                console.log(this.props.match.url.includes("/en"),prod,"INICLUDES EN")
             }
             if(this.props.match.url.includes("/de")){
-                
+                console.log(this.props.match.url.includes("/de"),prod,"INICLUDES DE")
                 prod = this.state.prodDE
             }
             content = (<div>
@@ -137,14 +137,34 @@ class ProductDetails extends Component {
         }
       
         
-     return   (
-     <div>
-         <button className="btn btn-primary" onClick={this.navigateBackHandler}>Back</button>
-        {content}
+     return   (<div>
+     {content}
       </div>)
     
 }
     }
 
- 
-export default withRouter(ProductDetails);
+    const mapStateToProps = (state) => {
+
+        return {
+         
+            // prodEN:state.reducerProd.prodArrEN,
+            // prodDE:state.reducerProd.prodArrDE,
+            // prod:state.reducerProd.prod,
+            // catEN:state.reducerCat.catEN,
+            // catDE:state.reducerCat.catDE,
+            token:state.reducerAuth.idToken
+        }
+      
+      }
+      const mapDispatchToProps = (dispatch) => {
+      
+      return {
+          getArrEN: (token)=> dispatch(actions.syncProdEN(token)),
+          getArrDE: (token)=> dispatch(actions.syncProdDE(token)),
+          
+      }
+      
+      }
+      
+      export default connect(mapStateToProps,mapDispatchToProps )(withRouter(ProductDetails));

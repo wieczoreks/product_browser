@@ -25,9 +25,17 @@ const  reducerAuth  = (state = initAuth, action) => {
                 }
         case actionTypes.AUTH_FAIL:
                 return {
-                   
+                    idToken:null,
+                    userId:null,
                     loading:false,
-                    error:action.error
+                    error:true
+                } 
+        case actionTypes.AUTH_LOGOUT:
+                return {
+                    idToken:null,
+                    userId:null,   
+                    loading:false,
+                    error:false
                 }         
         default:    
                 return state

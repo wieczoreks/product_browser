@@ -16,6 +16,9 @@ export const UPDATE_CAT_DE = "UPDATE_CAT_DE";
 export const AUTH_START = "AUTH_START";
 export const AUTH_SUCCESS = "AUTH_SUCCESS";
 export const AUTH_FAIL = "AUTH_FAIL";
+export const AUTH_LOGOUT = "AUTH_LOGOUT";
+/////////////
+export const SET_CLICKED_PROD="SET_CLICKED_PROD"
 
 
 

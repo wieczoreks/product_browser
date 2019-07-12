@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import * as actions from '../../store/actions/index';
 import {connect} from 'react-redux';
 import Spinner from "../../UI/Spinner/Spinner";
+import {Redirect} from 'react-router';
 
 class Auth extends Component {
  
@@ -13,9 +14,10 @@ class Auth extends Component {
             loginPassword:null,
             signUpCode:null,
             signUpCodeFlag:false,
-            onSignUp:true,
+            onSignUp:false,
         }
     }
+  
     inputDataHandler = (e) => {
         
         switch(e.target.id){
@@ -59,10 +61,11 @@ class Auth extends Component {
         })
     }
     render(){ 
+       
         let errorMessage=null;
         if(this.props.error){
             errorMessage=<span className="text-danger">{this.props.error.message}</span>
-            setTimeout(()=>{errorMessage=null},3000)
+         
         }
         let spinner;
         if(this.props.loading){
@@ -70,9 +73,13 @@ class Auth extends Component {
         }else{
             spinner=null
         }
+        let redirectOnAuth;
+        if(this.props.auth){
+            redirectOnAuth= <Redirect to="/about" />
+        }
      return (
          <div className="w-100 d-flex justify-content-center text-primary">
-            
+            {redirectOnAuth}
             <form  className="w-80 shadow  p-5 m-5 "> 
                 <div style={{width:"100px",height:"10px",position:"absolute", top:0, right:0 }}>
                     {spinner}
@@ -131,7 +138,8 @@ class Auth extends Component {
   const mapStateToProps = (state) => {
     return {
       loading:state.reducerAuth.loading,
-      error:state.reducerAuth.error
+      error:state.reducerAuth.error,
+      auth:state.reducerAuth.idToken !== null
     }
   }
   

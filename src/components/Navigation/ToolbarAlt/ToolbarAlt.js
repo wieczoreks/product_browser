@@ -13,7 +13,7 @@ return (
                 <Logo width="50px" height="100%" />
             </div>
             <nav className={classes.DesktopOnly}>
-                <NavigationItems />
+                <NavigationItems authFlag={props.authFlag} />
             </nav>
     </header>    
 );

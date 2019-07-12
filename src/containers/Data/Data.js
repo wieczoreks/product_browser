@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
-import Spinner from '../../UI/Spinner/Spinner';
 import Auxx from '../../hoc/Auxx'; 
-import axios from '../../axios-products';
 import DataControllers from '../../components/DataControllers/DataControllers' 
 import {connect} from 'react-redux';
 import * as actions from '../../store/actions/index';
-
+//import Spinner from '../../UI/Spinner/Spinner';
 
 class Data extends Component {
  
@@ -15,12 +13,12 @@ class Data extends Component {
 
       this.state = {
         lan:"English",
-        catEN:[],
-        catDE:[],
-        prodEN:[],
-        prodDE:[],
+        catEN:this.props.catEN,
+        catDE:this.props.catDE,
+        prodEN:this.props.prodArrEN,
+        prodDE:this.props.prodArrDE,
         catprod:"catprodEN",
-        
+        loading:true,
         buttonArrList:[
           {lan:"EN", active:true, id:"catprodEN"},
           {lan:"DE", active:false, id:"catprodDE"}
@@ -30,26 +28,20 @@ class Data extends Component {
 
     }
     componentDidMount() {
-      if(this.state.lan==="English"){
-        this.props.getCatEN();
-        this.props.getProdEN();
-      }else if (this.state.lan==="German"){
-        this.props.getCatDE();
-        this.props.getProdDE();
-      }
+   
      
        
   }
     copyTextHandler = (containerid)=>{
       
         if (document.selection) {
-            var range = document.body.createTextRange();
+            let range = document.body.createTextRange();
             range.moveToElementText(document.getElementById(containerid));
             range.select().createTextRange();
             document.execCommand("copy");
         
           } else if (window.getSelection) {
-            var range = document.createRange();
+            let range = document.createRange();
             range.selectNode(document.getElementById(containerid));
             window.getSelection().addRange(range);
             document.execCommand("copy");
@@ -74,15 +66,18 @@ class Data extends Component {
           ]
           this.setState({buttonArrList:buttonArrList, catDE:this.props.catDE,  prodDE:this.props.prodDE, lan:"German" })
         break;
+        default:
+          break;
       }
 
     }
     syncDataHandler = () => {
+     this.setState({loading:false})
+      this.props.getCatDE(this.props.token);
+      this.props.getProdDE(this.props.token);
+      this.props.getCatEN(this.props.token);
+      this.props.getProdEN(this.props.token);
       
-      this.props.getCatDE();
-     
-      
-      this.props.getProdDE();
     }
 
     render(){ 
@@ -100,7 +95,7 @@ class Data extends Component {
           cat = [];
           prod = [];
         }
-        console.log("RENDER", cat,prod)
+        
            
         
         const catArr = cat.map((el,indexEl)=>{
@@ -200,7 +195,7 @@ class Data extends Component {
          
       <div>
         
-          {this.props.loadingProd ? this.props.error ? <p>Server error. Please refresh the page</p> :<Spinner /> :
+          { this.props.error ? <p>Server error. Please refresh the page</p> :
                   <Auxx>
                       <div className="d-flex justify-content-between">
                       <button className="btn btn-primary" onClick={()=>this.copyTextHandler(this.state.catprod)}>Copy</button>
@@ -243,17 +238,19 @@ const mapStateToProps = (state) => {
     catDE:state.reducerCat.catDE,
     loadingProd:state.reducerProd.loading,
     loadingCat:state.reducerCat.loading,
-    error:state.reducerProd.error
+    error:state.reducerProd.error,
+    token:state.reducerAuth.idToken
+    
   }
 
 }
 const mapDispatchToProps = (dispatch) => {
 
 return {
-    getProdEN: ()=> dispatch(actions.syncProdEN()),
-    getProdDE: ()=> dispatch(actions.syncProdDE()),
-    getCatEN:  ()=> dispatch(actions.syncCatEN()),
-    getCatDE:  ()=> dispatch(actions.syncCatDE())
+    getProdEN: (token)=> dispatch(actions.syncProdEN(token)),
+    getProdDE: (token)=> dispatch(actions.syncProdDE(token)),
+    getCatEN:  (token)=> dispatch(actions.syncCatEN(token)),
+    getCatDE:  (token)=> dispatch(actions.syncCatDE(token))
 }
 
 }

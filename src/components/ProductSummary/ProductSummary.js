@@ -99,7 +99,7 @@ deleteProduct = ()=>{
   
   this.notificationHandler(`${prod.cid} deleted`);
   setTimeout(() => {
-  this.props.deleteProductHandler(prod, this.state.lan)
+  this.props.deleteProductHandler(prod, this.props.lan)
   this.props.timesHandler()
   
 },3000)  

@@ -22,7 +22,7 @@ const SideDrawer = (props) => {
                     <Logo width="50px" height="100%" />
                 </div>
                 <nav>
-                    <NavigationItems />
+                    <NavigationItems authFlag={props.authFlag} />
                 </nav>
             </div>
       </Auxx>

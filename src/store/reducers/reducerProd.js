@@ -6,6 +6,7 @@ const initProd = {
             prodArrDE:[],
             loading:true,
             error:false,
+            prod:null
 }
 
 const  reducerProd  = (state = initProd, action) => {
@@ -41,7 +42,12 @@ const  reducerProd  = (state = initProd, action) => {
                     ...state,
                     prodArrDE:action.prodArrDE,
                     error:false
-                }  
+                } 
+            case actionTypes.SET_CLICKED_PROD:
+                        return  {
+                    ...state,
+                    prod:action.prod
+            }  
             default:    
                 return state
     }

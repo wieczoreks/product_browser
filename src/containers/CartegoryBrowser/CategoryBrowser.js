@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import axios from '../../axios-products';
 import Spinner from '../../UI/Spinner/Spinner';
 import Auxx from '../../hoc/Auxx';
 import Modal from '../../UI/Modal/Modal';
@@ -29,8 +28,8 @@ class CategoryBrowser extends Component {
         }
     }
     componentDidMount() {
-        this.props.getArrEN();
-        this.props.getArrDE();
+        this.props.getArrEN(this.props.token);
+        this.props.getArrDE(this.props.token);
         this.setState({cat:this.props.catEN})
     }
     
@@ -217,9 +216,9 @@ class CategoryBrowser extends Component {
         }
         this.setState({cat:copyArr})
         if(lan==="English"){
-            this.props.updateCatEN(copyArr);  
+            this.props.updateCatEN(copyArr, this.props.token);  
         } else if(lan==="German"){
-            this.props.updateCatDE(copyArr);         
+            this.props.updateCatDE(copyArr, this.props.token);         
             
             
         }
@@ -324,9 +323,9 @@ class CategoryBrowser extends Component {
       }
       this.setState({cat:copyArr});
         if(lan==="English"){
-        this.props.updateCatEN(copyArr) 
+        this.props.updateCatEN(copyArr, this.props.token) 
       } else if(lan==="German"){
-        this.props.updateCatDE(copyArr)  
+        this.props.updateCatDE(copyArr,this.props.token)  
       }
     }
 
@@ -439,9 +438,9 @@ class CategoryBrowser extends Component {
      }
       this.setState({cat:copyArr});
       if(lan==="English"){
-       this.props.updateCatEN(copyArr)
+       this.props.updateCatEN(copyArr,this.props.token)
      } else if(lan==="German"){       
-       this.props.updateCatDE(copyArr)
+       this.props.updateCatDE(copyArr, this.props.token)
      }
     }
 
@@ -472,6 +471,8 @@ class CategoryBrowser extends Component {
             firebaseLan:"German" 
           })
         break;
+        default:
+          break;
       }
 
     }
@@ -540,17 +541,18 @@ const mapStateToProps = (state) => {
     catEN:state.reducerCat.catEN,
     catDE:state.reducerCat.catDE,
     loading:state.reducerCat.loading,
-    error:state.reducerCat.error
+    error:state.reducerCat.error,
+    token:state.reducerAuth.idToken
   }
 
 }
 const mapDispatchToProps = (dispatch) => {
 
 return {
-    getArrEN:     () => dispatch(actionsCat.syncCatEN()),
-    getArrDE:     () => dispatch(actionsCat.syncCatDE()),
-    updateCatEN: (arr) => dispatch(actionsCat.syncUpdateCatEN(arr) ),
-    updateCatDE: (arr) => dispatch(actionsCat.syncUpdateCatDE(arr) )
+    getArrEN:     (token) => dispatch(actionsCat.syncCatEN(token)),
+    getArrDE:     (token) => dispatch(actionsCat.syncCatDE(token)),
+    updateCatEN: (arr,token) => dispatch(actionsCat.syncUpdateCatEN(arr, token) ),
+    updateCatDE: (arr,token) => dispatch(actionsCat.syncUpdateCatDE(arr, token) )
 }
 
 }

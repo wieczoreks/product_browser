@@ -5,7 +5,8 @@ export {
     syncProdDE,
     syncProdState_FAILED,
     syncUpdateProdArrEN,
-    syncUpdateProdArrDE
+    syncUpdateProdArrDE,
+    clickedProd
     
 } from './actionsProd';
 
@@ -18,5 +19,7 @@ export {
 
     } from './actionsCat';
     export {
-        authSync
+        authSync,
+        logout,
+        authCheckState
         } from './actionsAuth';
