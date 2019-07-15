@@ -28,7 +28,7 @@ const  reducerAuth  = (state = initAuth, action) => {
                     idToken:null,
                     userId:null,
                     loading:false,
-                    error:true
+                    error:action.error
                 } 
         case actionTypes.AUTH_LOGOUT:
                 return {

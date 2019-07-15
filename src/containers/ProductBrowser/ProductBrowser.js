@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import Auxx from '../../hoc/Auxx'; 
-import Pagination from "../../components/Pagination/Pagination";
 import Products from "../../components/Products/Products";
 import Search from "../../components/Search/Search";
 import Modal from "../../UI/Modal/Modal";
@@ -18,6 +17,7 @@ class ProductBrowser extends Component {
     constructor(props){
         super(props)
         this.state = {
+          
             firebaseLan:"English",
             product:null,
             modalClicked:false,
@@ -28,6 +28,7 @@ class ProductBrowser extends Component {
               {lan:"EN", active:true, id:"catprodEN"},
               {lan:"DE", active:false, id:"catprodDE"}
               ],
+              error:null
         } 
     }
 
@@ -36,7 +37,7 @@ class ProductBrowser extends Component {
       
       this.props.getArrEN(this.props.token);
       this.props.getArrDE(this.props.token);
-    
+     
     }
 
     modalClosedNewProductHandler = () => {
@@ -61,6 +62,7 @@ class ProductBrowser extends Component {
       if(lan==="English"){
         copyArr = [...this.props.prodArrEN];
         copyArr.push(prod);
+       
         this.props.updateProductArrEN(copyArr,this.props.token);
            
       }
@@ -73,7 +75,7 @@ class ProductBrowser extends Component {
 
     deleteProductHandler = (prod,lan) =>{
       let copyArr;
-      console.log(prod,lan,"DELETE")  
+      
       if(lan==="English"){
         copyArr = [...this.props.prodArrEN];
         copyArr.forEach( el => {
@@ -166,13 +168,16 @@ class ProductBrowser extends Component {
 
     render(){ 
         let filteredProducts;
+        let catArr;
         const searchName  = this.state.searchName;
-        console.log(searchName ,"searchName ")
+        
 
         if (this.state.firebaseLan==="English"){
           filteredProducts = this.props.prodArrEN;
+          catArr = this.props.cidProdArrEN
         }else if (this.state.firebaseLan==="German"){
           filteredProducts = this.props.prodArrDE;
+          catArr = this.props.cidProdArrDE
         }
 
         if(searchName.length>0){
@@ -197,11 +202,13 @@ class ProductBrowser extends Component {
               
            }
           }
+        
      return (
       <Auxx> 
            
                 <Modal show={this.state.newProdClicked} clicked={this.modalClosedNewProductHandler}>
                     <NewProduct 
+                        cidProdArr={catArr}
                         newProductSubmitHandler={this.newProductSubmitHandler}
                         closedModal={this.modalClosedNewProductHandler}
                         lan={this.state.firebaseLan}
@@ -241,7 +248,7 @@ class ProductBrowser extends Component {
                       passProduct={this.passProduct}
                       />
                      
-                    <Pagination />
+                    
                   </Auxx>}
 
       </Auxx>
@@ -259,6 +266,8 @@ const mapStateToProps = (state) => {
     error:state.reducerProd.error,
     token:state.reducerAuth.idToken,
     prod:state.reducerProd.prod,
+    cidProdArrEN:state.reducerProd.cidProdArrEN,
+    cidProdArrDE:state.reducerProd.cidProdArrDE
   }
 
 }

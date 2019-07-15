@@ -9,9 +9,11 @@ export const clickedProd = (el) => {
 }
 
 const  setProdStateEN = (res) => {
+  
     return {
         type:actionTypes.SET_PROD_EN,
-        res:res
+        res:res,
+        
     }
 }
 export const syncProdState_FAILED = () => {
@@ -27,12 +29,18 @@ export const syncProdEN = (token) => {
     return (dispatch) => {
         axios.get("/en.json?auth="+token).then((res)=>{
             let recArr = [];
+            
             for(let key in res.data.products){
               recArr.push(res.data.products[key])
             }  
+            let cidArrEN=recArr.map(el=>{
+                return el.cid
+            })
+           
+
               dispatch(setProdStateEN({
                 prodArrEN:recArr, 
-                loading:false,
+                cidProdArrEN:cidArrEN
                 }))
                 
           }).catch(err=>{
@@ -48,7 +56,7 @@ export const addNewProdEN = (arr)=>{
     }
 }
 export const syncUpdateProdArrEN = (arr,token) => {
-   console.log()
+   
     return (dispatch) => {
         axios.put("/en/products.json?auth="+token, arr ).then(resp=>{
             dispatch(addNewProdEN({
@@ -80,11 +88,14 @@ export const syncProdDE = (token) => {
             for(let key in res.data.products){
               recArr.push(res.data.products[key])
             }  
+            let cidArrDE=recArr.map(el=>{
+                return el.cid
+            })
               dispatch(setProdStateDE({
                  
                 prodArrDE:recArr, 
                 loading:false,
-               
+                cidProdArrDE:cidArrDE
                 }))
           }).catch(err=>{
             dispatch(syncProdState_FAILED())

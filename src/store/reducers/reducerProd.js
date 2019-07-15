@@ -4,9 +4,11 @@ const initProd = {
             
             prodArrEN:[],
             prodArrDE:[],
+            cidProdArrEN:[],
+            cidProdArrDE:[],
             loading:true,
             error:false,
-            prod:null
+            
 }
 
 const  reducerProd  = (state = initProd, action) => {
@@ -16,7 +18,8 @@ const  reducerProd  = (state = initProd, action) => {
                 return {
                     ...state,
                     prodArrEN:action.res.prodArrEN,
-                    loading:action.loading,
+                    cidProdArrEN:action.res.cidProdArrEN,
+                    loading:false,
                     error:false
                 }
             case actionTypes.SET_PROD_DE:
@@ -24,18 +27,22 @@ const  reducerProd  = (state = initProd, action) => {
                     ...state,
                     prodArrDE:action.res.prodArrDE,
                     loading:action.loading,
+                    cidProdArrDE:action.res.cidProdArrDE,
                     error:false
                 }
             case actionTypes.SYNC_PROD_FAILED:
+                console.log("SYNC_PROD_FAILED")
                 return {
                     ...state,
-                    error:action.error
+                    error:true
                 }
             case actionTypes.UPDATE_NEW_PRODUCT_EN:
+                
                 return  {
                     ...state,
                     prodArrEN:action.prodArrEN,
-                    error:false
+                    error:false,
+                    loading:false,
                 } 
             case actionTypes.UPDATE_NEW_PRODUCT_DE:
                         return  {

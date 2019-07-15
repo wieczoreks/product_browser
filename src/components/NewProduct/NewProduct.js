@@ -19,11 +19,11 @@ class NewProduct extends Component {
         },
         notification:false,
         message:"",
-        
+        repeatedCID:false
     }
     }
 componentDidMount(){
-  console.log(this.props.lan,"DID MOUNT newProduct")
+
   
   this.clearHandler()
 }
@@ -33,8 +33,22 @@ componentDidMount(){
      ...this.state.product,
      subcategory:[...this.state.product.subcategory]
   }
+
+  if(e.target.id === "prodCID"){
+    
+    const arrCID = this.props.cidProdArr.filter(el=>{
+      return el== e.target.value
+    }
+      
+    )
    
-   
+    if(arrCID.length>0){
+      this.setState({repeatedCID:true})
+    }else{
+      this.setState({repeatedCID:false})
+    }
+  }
+  
   switch(e.target.id){
     
     case "prodName":
@@ -84,7 +98,7 @@ componentDidMount(){
       },
       notification:false,
       message:"",
-     
+      repeatedCID:false
   })
 }
 
@@ -159,6 +173,7 @@ render(){
             <div className="form-group d-flex flex-column align-items-start">
               <label htmlFor="prodCID">Product CID</label>
               <input onChange={this.newProductInputHandler} type="text" className="form-control" id="prodCID"  value={this.state.product.cid} required / >
+                {this.state.repeatedCID?<small className="text-danger">This CID value is in use please choose different one</small>:null}
             </div>
             <div className="form-group d-flex flex-column align-items-start">
               <label htmlFor="prodUrl">Product url</label>
@@ -177,7 +192,7 @@ render(){
               <input onChange={this.newProductInputHandler} type="text" className="form-control" id="categoryUrl"  value={this.state.product.subcategory[0].url}  required/ >
             </div>
             <div className="form-group d-flex justify-content-around">
-              <button onClick={this.submitHandler} type="submit" className="btn btn-success">Add</button>
+              {this.state.repeatedCID?<button onClick={this.submitHandler} disabled type="submit" className="btn btn-success">Add</button>:<button onClick={this.submitHandler} type="submit" className="btn btn-success">Add</button>}
               <button onClick={this.clearHandler} className="btn btn-danger">Clear</button>
             </div>
 </form>

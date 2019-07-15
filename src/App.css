@@ -1,6 +1,10 @@
 .App {
   text-align: center;
 }
+#Outer{
+  min-height:100vh;
+  
+}
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;

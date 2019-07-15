@@ -23,9 +23,36 @@ export const syncCatEN = (token) => {
                 for(let key in res.data.category){
                  recArr.push(res.data.category[key])
                  }
+                 let newcidArr=[];
+                 
+                 recArr.forEach(el=>{
+                    newcidArr.push(el.cid);
+                
+                    if(el.hasOwnProperty("cat1")){
+                         el.cat1.forEach(elcat1=>{
+                            newcidArr.push(elcat1.cid);
+                            
+                            if(elcat1.hasOwnProperty("cat2")){
+                                
+                                elcat1.cat2.forEach(elcat2=>{
+                                    newcidArr.push(elcat2.cid);
+                                    
+                                    if(elcat2.hasOwnProperty("cat3")){
+                                        elcat2.cat3.forEach(elcat3=>{
+                                            newcidArr.push(elcat3.cid)
+                                           
+                                        })
+                                    }
+                                })
+                            } 
+                        })
+                    }
+                })
+                
                  dispatch(setCatStateEN({              
                     catEN:recArr, 
                     loading:false,
+                    cidArrEN:newcidArr
                     }))
                  
                  }).catch(err=>{
@@ -72,8 +99,34 @@ export const syncCatDE = (token) => {
                 for(let key in res.data.category){
                  recArr.push(res.data.category[key])
                  }
+                 let newcidArr=[];
+                 
+                 recArr.forEach(el=>{
+                    newcidArr.push(el.cid);
+                
+                    if(el.hasOwnProperty("cat1")){
+                         el.cat1.forEach(elcat1=>{
+                            newcidArr.push(elcat1.cid);
+                            
+                            if(elcat1.hasOwnProperty("cat2")){
+                                
+                                elcat1.cat2.forEach(elcat2=>{
+                                    newcidArr.push(elcat2.cid);
+                                    
+                                    if(elcat2.hasOwnProperty("cat3")){
+                                        elcat2.cat3.forEach(elcat3=>{
+                                            newcidArr.push(elcat3.cid)
+                                           
+                                        })
+                                    }
+                                })
+                            } 
+                        })
+                    }
+                })
                  dispatch(setCatStateDE({              
                     catDE:recArr, 
+                    cidArrDE:newcidArr,
                     loading:false,
                     }))
                  

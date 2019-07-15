@@ -14,6 +14,7 @@ import {connect} from "react-redux";
 import * as actions from "./store/actions/index";
 import Login from './containers/Auth/Login/Login';
 import Spinner from './UI/Spinner/Spinner';
+import './App.css'
 
 const CategoryBrowser = React.lazy(()=>{
   return import("./containers/CartegoryBrowser/CategoryBrowser")
@@ -34,7 +35,7 @@ class App extends Component {
    
   return (
   <BrowserRouter>
-    <div className=" container-fluid text-center">
+    <div className=" container-fluid text-center bg-light" id="Outer">
      <Layout >
      
        <Switch>

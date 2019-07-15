@@ -4,9 +4,9 @@ import Auxx from '../../hoc/Auxx';
 import Modal from '../../UI/Modal/Modal';
 import CategorySummary from '../../components/CategorySummary/CategorySummary';
 import Categories from "../../components/Categories/Categories";
-//import CategoryControls from '../../components/CategoryControls/CategoryControls';
+import axios from '../../axios-products';
 import NewCategory from '../../components/NewCategory/NewCategory';
-//import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import {connect} from 'react-redux';
 import * as actionsCat from '../../store/actions/index';
 import DataControllers from '../../components/DataControllers/DataControllers';
@@ -478,18 +478,23 @@ class CategoryBrowser extends Component {
     }
     render(){
      let categories;
+     let catArr;
       if(this.state.firebaseLan === "English"){
-        categories = this.props.catEN
+        categories = this.props.catEN;
+        catArr = this.props.cidCatArrEN;
      } 
      if(this.state.firebaseLan === "German"){
-        categories = this.props.catDE
+        categories = this.props.catDE;
+        catArr = this.props.cidCatArrDE
    } 
+   
     return (  
         <Auxx>
                 <Modal show={this.state.newCatClicked} clicked={this.modalClosedNewCategoryHandler}>
                     <NewCategory
                         lan={this.state.firebaseLan}
-                        str={this.state.str} 
+                        str={this.state.str}
+                        cidCatArr={catArr}
                         newCategorySubmitHandler={this.newCategorySubmitHandler}
                         closedModal={this.modalClosedNewCategoryHandler}
                         />
@@ -542,7 +547,9 @@ const mapStateToProps = (state) => {
     catDE:state.reducerCat.catDE,
     loading:state.reducerCat.loading,
     error:state.reducerCat.error,
-    token:state.reducerAuth.idToken
+    token:state.reducerAuth.idToken,
+    cidCatArrEN:state.reducerCat.cidCatArrEN,
+    cidCatArrDE:state.reducerCat.cidCatArrDE
   }
 
 }
@@ -552,9 +559,10 @@ return {
     getArrEN:     (token) => dispatch(actionsCat.syncCatEN(token)),
     getArrDE:     (token) => dispatch(actionsCat.syncCatDE(token)),
     updateCatEN: (arr,token) => dispatch(actionsCat.syncUpdateCatEN(arr, token) ),
-    updateCatDE: (arr,token) => dispatch(actionsCat.syncUpdateCatDE(arr, token) )
+    updateCatDE: (arr,token) => dispatch(actionsCat.syncUpdateCatDE(arr, token) ),
+    
 }
 
 }
 
-export default connect(mapStateToProps,mapDispatchToProps )(CategoryBrowser);
+export default connect(mapStateToProps,mapDispatchToProps )(withErrorHandler(CategoryBrowser,axios));

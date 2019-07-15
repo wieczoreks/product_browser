@@ -38,9 +38,10 @@ const withErrorHandler = (WrappedComponent, axios ) => {
         dissmissError = () => {
             this.setState({error:null}); 
         }
-
+        
         render(){
-        return (
+            
+            return (
             <Auxx>
                 <Modal 
                     show={this.state.error}

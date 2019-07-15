@@ -3,6 +3,8 @@ import Auxx from '../../hoc/Auxx';
 import DataControllers from '../../components/DataControllers/DataControllers' 
 import {connect} from 'react-redux';
 import * as actions from '../../store/actions/index';
+import axios from '../../axios-products';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 //import Spinner from '../../UI/Spinner/Spinner';
 
 class Data extends Component {
@@ -255,4 +257,4 @@ return {
 
 }
 
-export default connect(mapStateToProps,mapDispatchToProps )(Data);
+export default connect(mapStateToProps,mapDispatchToProps)(withErrorHandler(Data,axios));

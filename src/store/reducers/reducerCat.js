@@ -4,6 +4,8 @@ const initProd = {
             
             catEN:[],
             catDE:[],
+            cidCatArrEN:[],
+            cidCatArrDE:[],
             loading:true,
             error:false,
 }
@@ -15,6 +17,7 @@ const  reducerCat  = (state = initProd, action) => {
                 return {
                     ...state,
                     catEN:action.res.catEN,
+                    cidCatArrEN:action.res.cidArrEN,
                     loading:action.loading,
                     error:false
                 }
@@ -22,6 +25,7 @@ const  reducerCat  = (state = initProd, action) => {
                 return {
                     ...state,
                     catDE:action.res.catDE,
+                    cidCatArrDE:action.res.cidArrDE,
                     loading:action.loading,
                     error:false
                 }

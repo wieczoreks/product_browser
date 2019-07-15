@@ -3,7 +3,7 @@ import Auxx from '../../hoc/Auxx';
 import ToolbarAlt from '../../components/Navigation/ToolbarAlt/ToolbarAlt';
 import SideDrawer from '../Navigation/SideDrawer/SideDrawer';
 import {connect} from 'react-redux';
-
+import classes from './Layout.module.css'
 
 class Layout extends Component {
       constructor(props){
@@ -25,7 +25,7 @@ class Layout extends Component {
             
             return (
             <Auxx>
-                  <div className="bg-secondary ">
+                  <div className="bg-secondary">
                         <ToolbarAlt 
                               authFlag={this.props.auth}
                               clicked={this.expandToolbarMenuHandler} />
@@ -34,11 +34,11 @@ class Layout extends Component {
                               open={this.state.showSideDrawer} 
                               closed ={this.sideDrawerClosedHandler} />
                   </div>
-                  <main className="p-3 bg-light mt-5" test="test" style={{height:"100vh"}}>
+                  <main className="p-3 bg-light my-5" id="test" >
                         {this.props.children} 
                   </main>
                  
-                  <footer className="bg-secondary footer " >Footer</footer>  
+                  <footer id="footer" className={["bg-secondary",classes.Footer].join(" ")} ><a href="https://github.com/productbrowserteam/product_browser"><i className="fab fa-github fa-2x"></i></a><a href="https://codepen.io/wieczors/"><i className="fab fa-codepen fa-2x"></i></a></footer>  
                
             </Auxx>
             );

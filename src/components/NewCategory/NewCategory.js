@@ -16,14 +16,29 @@ class NewCategory extends Component {
             },
         notification:false,
         message:"",
-        
+        repeatedCID:false
     }
     }
 
 
  newCategoryInputHandler = (e) =>{
    const cat = {...this.state.category}
-   
+   if(e.target.id === "catCID"){
+     console.log(this.props.cidCatArr,"this.props.cidCatArr");
+  
+    const arrCID = this.props.cidCatArr.filter(el=>{
+      return el== e.target.value
+    }
+      
+    )
+    console.log(arrCID,"arrCID")
+    if(arrCID.length>0){
+      this.setState({repeatedCID:true})
+    }else{
+      this.setState({repeatedCID:false})
+    }
+  }
+
   switch(e.target.id){
 
     case "catName":
@@ -56,7 +71,7 @@ class NewCategory extends Component {
           },
         notification:false,
         message:"",
-
+        repeatedCID:false
     })
 }
 
@@ -115,6 +130,7 @@ render(){
             <div className="form-group d-flex flex-column align-items-start">
               <label htmlFor="catCID">Category CID</label>
               <input onChange={this.newCategoryInputHandler} type="text" className="form-control" id="catCID"  value={this.state.category.cid} required / >
+              {this.state.repeatedCID?<small className="text-danger">This CID value is in use please choose different one</small>:null}
             </div>
             <div className="form-group d-flex flex-column align-items-start">
               <label htmlFor="catUrl">Category url</label>
